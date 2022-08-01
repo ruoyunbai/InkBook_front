@@ -18,7 +18,7 @@ const routes:Array<RouteRecordRaw>=[
         children:[
             {
                 name:'project',
-                path:"/",
+                path:"/project",
                 component:()=>import('../views/project/index.vue'),
                 meta:{
                     title:"首页",
@@ -36,8 +36,17 @@ const routes:Array<RouteRecordRaw>=[
             },
             {
                 name:'prototype',
-                path:"/prototype",
+                path:"prototype",
                 component:()=>import('../views/prototype/index.vue'),
+                meta:{
+                    title:"首页",
+                    transition:"animate__bounceIn"
+                },
+            },
+            {
+                name:'graph',
+                path:"graph",
+                component:()=>import('../views/graph/index.vue'),
                 meta:{
                     title:"首页",
                     transition:"animate__bounceIn"
