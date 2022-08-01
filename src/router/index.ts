@@ -17,15 +17,6 @@ const routes:Array<RouteRecordRaw>=[
         }
     },
     {
-        name:'DoQuestion',
-        path:"/block",
-        component:()=>import('../views/doQuestion/index.vue'),
-        meta:{
-            title:"首页",
-            transition:"animate__bounceIn"
-        }
-    },
-    {
         name:'PersonalInfo',
         path:"/PersonalInfo",
         component:()=>import('../views/PersonalInfo/index.vue'),

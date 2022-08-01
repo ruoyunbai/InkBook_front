@@ -16,56 +16,8 @@
           <n-layout>
             <n-layout-header content-style="padding: 48px;"></n-layout-header>
             <n-layout-content content-style="padding: 18px;"></n-layout-content>
-            <n-layout-content content-style="padding:0px;padding-top: 5px;">
-              <n-grid :cols="11">
-                <n-gi offset="1">
-                  <div class="level">Lev {{ Level }}</div>
-                </n-gi>
-                <n-gi offset="3">
-                  <div class="level">Lev {{ Level + 1 }}</div>
-                </n-gi>
-              </n-grid>
-            </n-layout-content>
-            <n-layout-content content-style="padding: 2px;">
-              <n-grid :cols="11">
-                <n-gi offset="1" span="5">
-                  <div style="padding-top: 6px">
-                    <n-progress
-                      type="line"
-                      status="warning"
-                      :percentage="percentage"
-                      :show-indicator="false"
-                      :indicator-placement="'inside'"
-                    />
-                  </div>
-                </n-gi>
 
-                <n-gi offset="1" span="4">
-                  <n-button
-                    round
-                    strong
-                    color="#7C76BB"
-                    ghost
-                    style="margin-right: 25px"
-                    @click="routerToLevel"
-                    v-show="isSelf"
-                  >
-                    <p class="buttonText2">查看等级权限</p>
-                  </n-button>
 
-                  <n-button
-                    round
-                    strong
-                    color="#7C76BB"
-                    ghost
-                    @click="routerToExperience"
-                    v-show="isSelf"
-                  >
-                    <p class="buttonText2">经验值获取规则</p>
-                  </n-button>
-                </n-gi>
-              </n-grid>
-            </n-layout-content>
 
             <n-layout-content content-style="padding: 40px 40px 30px 40px;">
               <n-grid :cols="16">
@@ -154,16 +106,7 @@
           </n-layout>
         </n-layout>
       </n-space>
-      <n-space vertical align="center" v-show="!isSelf && isadmin">
-        <n-button
-          class="ban"
-          @click="handleValidateButtonClick3"
-          size="large"
-          v-show="!isSelf && isadmin"
-        >
-          <p class="buttonText3">禁言用户</p>
-        </n-button>
-      </n-space>
+
 
       <n-grid :cols="12" v-show="isSelf">
         <n-gi offset="1">
@@ -244,226 +187,7 @@
       </n-grid>
       <n-divider />
 
-      <n-space vertical size="large" class="downDivider"
-        ><!--和layout has-sider组合使用-->
-        <n-layout has-sider>
-          <n-layout content-style="padding: 0px 100px 15px 120px;">
-            <n-layout-header>
-              <div>
-                <n-icon size="40">
-                  <svg
-                    width="38"
-                    height="29"
-                    viewBox="0 0 38 29"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M4.97689 15.8968C3.66827 14.19 3.20959 12.1721 3.68699 10.222C4.16439 8.27198 5.54503 6.52393 7.56961 5.30619C9.59418 4.08845 12.1234 3.48482 14.6822 3.60865C17.2411 3.73249 19.6535 4.57527 21.4664 5.97873C23.2793 7.38218 24.368 9.24973 24.528 11.2306C24.6879 13.2116 23.9082 15.1695 22.3352 16.7368C20.7621 18.3042 18.5041 19.373 15.9851 19.7426C13.4661 20.1121 10.8595 19.757 8.65474 18.744L5.02067 19.5462C4.87094 19.5788 4.7127 19.5799 4.56222 19.5494C4.41174 19.519 4.27445 19.4581 4.16447 19.3729C4.05448 19.2878 3.97578 19.1815 3.93645 19.065C3.89711 18.9485 3.89857 18.826 3.94067 18.7101L4.97689 15.8968Z"
-                      stroke="#594545"
-                      stroke-width="1.34409"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M13.4415 19.8737C13.9559 21.009 14.7896 22.0417 15.8824 22.8972C16.9752 23.7526 18.2999 24.4095 19.7606 24.8203C21.2213 25.2311 22.7817 25.3856 24.329 25.2726C25.8762 25.1597 27.3718 24.7821 28.7075 24.1671V24.1671L32.3416 24.9692C32.4914 25.0018 32.6496 25.003 32.8001 24.9725C32.9506 24.9421 33.0878 24.8811 33.1978 24.796C33.3078 24.7109 33.3865 24.6046 33.4258 24.4881C33.4652 24.3716 33.4637 24.2491 33.4216 24.1332L32.3854 21.3199C33.3105 20.1177 33.8188 18.751 33.8611 17.3521C33.9033 15.9532 33.4781 14.5695 32.6266 13.3352C31.7751 12.1009 30.5261 11.0578 29.0008 10.307C27.4755 9.55623 25.7255 9.12316 23.9205 9.0498"
-                      stroke="#594545"
-                      stroke-width="1.34409"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </n-icon>
-                <span class="subtitle">&nbsp;&nbsp;已发布的帖子</span>
-              </div>
-            </n-layout-header>
-            <n-layout-content content-style="padding: 0px 30px 0px 0px;">
-              <!-- 帖子  -->
-              <Posting
-                v-for="(item, i) in onpoList"
-                :key="i"
-                :onePost="item"
-              ></Posting>
-              <!-- <Post v-show="IfRead" :onePost="posttest"></Post> -->
-              <n-space vertical align="center">
-                <n-pagination
-                  v-model:page="posPage"
-                  :item-count="npost"
-                  :page-size="3"
-                  class="pageNum"
-                  :on-update:page="posPageHandler"
-                >
-                  <template #prev>
-                    <n-icon>
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M15 6L9 12L15 18"
-                          stroke="#242730"
-                          stroke-opacity="0.36"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </n-icon>
-                  </template>
-                  <template #next>
-                    <n-icon>
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M9 6L15 12L9 18"
-                          stroke="#242730"
-                          stroke-opacity="0.36"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </n-icon>
-                  </template>
-                </n-pagination>
-              </n-space>
-            </n-layout-content>
-          </n-layout>
 
-          <n-layout-sider :width="500" content-style="padding-right:134px;">
-            <n-layout-content
-              content-style="padding-top: 11px;padding-bottom:10px;"
-            >
-              <n-icon size="25">
-                <svg
-                  width="17"
-                  height="20"
-                  viewBox="0 0 17 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12.8591 8.6C12.8591 7.64522 12.3593 6.72955 11.4697 6.05442C10.5801 5.37928 9.37354 5 8.11545 5C6.85736 5 5.6508 5.37928 4.76119 6.05442C3.87159 6.72955 3.37182 7.64522 3.37182 8.6C3.37182 12.8 1 14 1 14H15.2309C15.2309 14 12.8591 12.8 12.8591 8.6Z"
-                    stroke="#808080"
-                    stroke-width="1.34409"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M9.55145 17.7383C9.41134 17.9458 9.21023 18.1181 8.96825 18.2378C8.72628 18.3576 8.45194 18.4206 8.1727 18.4206C7.89346 18.4206 7.61912 18.3576 7.37715 18.2378C7.13517 18.1181 6.93406 17.9458 6.79395 17.7383"
-                    stroke="#808080"
-                    stroke-width="1.34409"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <circle
-                    cx="11.8887"
-                    cy="5.04032"
-                    r="4.36828"
-                    fill="#77C5EA"
-                    stroke="white"
-                    stroke-width="1.34409"
-                  />
-                </svg>
-              </n-icon>
-              <span class="subtitle2"
-                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消息通知</span
-              >
-            </n-layout-content>
-            <n-layout-content>
-              <!-- 评论了...赞了...回复了... -->
-
-              <n-card content-style="padding: 0;">
-                <n-tabs
-                  type="segment"
-                  :animated="true"
-                  :on-update:value="switchTab"
-                >
-                  <n-tab-pane name="SystemNotif" tab="系统消息">
-                    <Sysmes
-                      v-for="(item, i) in onsysmesList"
-                      :key="i"
-                      :Notif="item"
-                    ></Sysmes>
-                  </n-tab-pane>
-                  <n-tab-pane name="LoveNotif" tab="点赞">
-                    <Notification
-                      v-for="(item, i) in onlikeList"
-                      :key="i"
-                      :Notif="item"
-                    ></Notification>
-                  </n-tab-pane>
-                  <n-tab-pane name="CommentNotif" tab="评论">
-                    <Notification
-                      v-for="(item, i) in oncomList"
-                      :key="i"
-                      :Notif="item"
-                    ></Notification>
-                  </n-tab-pane>
-                </n-tabs>
-                <n-space vertical align="center">
-                  <n-pagination
-                    v-model:item-count="mesat"
-                    :page-size="5"
-                    class="pageNum"
-                    v-model:page="mesPage"
-                    :on-update:page="mesPageHandler"
-                  >
-                    <template #prev>
-                      <n-icon>
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M15 6L9 12L15 18"
-                            stroke="#242730"
-                            stroke-opacity="0.36"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </n-icon>
-                    </template>
-                    <template #next>
-                      <n-icon>
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M9 6L15 12L9 18"
-                            stroke="#242730"
-                            stroke-opacity="0.36"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </n-icon>
-                    </template>
-                  </n-pagination>
-                </n-space>
-              </n-card>
-            </n-layout-content>
-          </n-layout-sider>
-        </n-layout>
-      </n-space>
 
       <n-divider />
       <!-- <template #footer> -->
@@ -491,52 +215,6 @@
           </template>
         </el-dialog>
         <n-layout has-sider>
-          <n-layout-sider
-            :width="800"
-            content-style="padding-left:134px;"
-            style="position: relative"
-          >
-            <n-layout-content content-style="padding: 15px;">
-              <span class="subtitle"
-                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;新手礼包</span
-              >
-            </n-layout-content>
-            <n-space vertical align="center">
-              <n-image
-                src="svg/普通用户个人信息svg/Group39799.svg"
-                style="padding-bottom: 20px"
-              ></n-image>
-            </n-space>
-            <n-image
-              src="svg/普通用户个人信息svg/check.svg"
-              class="check"
-              style="top: 126px"
-              id="check1"
-            ></n-image>
-            <n-image
-              src="svg/普通用户个人信息svg/check.svg"
-              class="check"
-              style="top: 192px"
-              id="check2"
-              v-show="check2"
-            ></n-image>
-            <n-image
-              src="svg/普通用户个人信息svg/check.svg"
-              class="check"
-              style="top: 257px"
-              id="check3"
-              v-show="check3"
-            ></n-image>
-            <div class="expText" style="left: 472px; top: 125px" id="exp51">
-              +5
-            </div>
-            <div class="expText" style="left: 491px; top: 195px" id="exp52">
-              +5
-            </div>
-            <div class="expText" style="left: 469px; top: 259px" id="exp53">
-              +5
-            </div>
-          </n-layout-sider>
 
           <n-layout content-style="padding: 15px;padding-right:134px;">
             <n-image
@@ -552,25 +230,7 @@
         ><!--和layout has-sider组合使用-->
         <n-layout has-sider v-show="isadmin && isSelf">
           <n-layout-sider :width="500" content-style="padding-left:134px;">
-            <n-layout-content content-style="padding: 15px;">
-              <n-icon size="18">
-                <svg
-                  width="24"
-                  height="19"
-                  viewBox="0 0 24 19"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11.859 0C8.71379 0 5.69746 1.00089 3.47349 2.78253C1.24942 4.56404 0 6.98048 0 9.5C0 12.0195 1.24942 14.4359 3.47349 16.2175C5.69738 17.9991 8.71387 19 11.859 19C15.0042 19 18.0206 17.9991 20.2446 16.2175C22.4686 14.436 23.7181 12.0195 23.7181 9.5C23.7181 7.83249 23.1701 6.19423 22.1293 4.75003C21.0883 3.30584 19.5914 2.10668 17.7885 1.27272C15.9857 0.438965 13.9406 0 11.859 0ZM13.9598 13.4879L13.8152 13.8757C13.7908 13.9433 13.7408 14.0032 13.6723 14.0472C12.856 14.5487 11.8102 14.7456 10.8005 14.588L10.8091 14.5786C10.7828 14.5749 10.7565 14.5716 10.7302 14.5663C10.313 14.4833 9.95397 14.2711 9.73229 13.9761C9.51043 13.6812 9.44392 13.3278 9.54749 12.9936L10.6742 9.35584C10.9443 8.48378 9.75036 8.69132 9.25534 8.81126C9.2148 8.82093 9.17079 8.81205 9.14085 8.78793C9.11107 8.76394 9.09998 8.72869 9.11223 8.69622L9.25683 8.30842C9.28131 8.24083 9.33128 8.18092 9.39977 8.13692C10.2162 7.63543 11.2618 7.43847 12.2717 7.59607C12.2717 7.59607 12.3341 7.60482 12.3655 7.61105C12.7828 7.69401 13.1416 7.90633 13.3633 8.20123C13.5851 8.49611 13.6516 8.84957 13.5481 9.18369L12.3633 13.0091C12.3104 13.6669 13.3599 13.4836 13.8167 13.3728C13.8573 13.3631 13.9014 13.372 13.9312 13.3961C13.9612 13.4201 13.9721 13.4554 13.9598 13.4879ZM12.9154 7.07541C12.4657 7.07541 12.0344 6.93228 11.7164 6.67767C11.3984 6.42294 11.2198 6.07745 11.2198 5.71719C11.2198 5.35698 11.3984 5.01145 11.7164 4.75685C12.0344 4.50213 12.4657 4.35898 12.9154 4.35898C13.3651 4.35898 13.7962 4.50211 14.1142 4.75672C14.4322 5.01144 14.6109 5.35694 14.6109 5.71719C14.6109 6.07741 14.4322 6.42294 14.1142 6.67767C13.7962 6.93227 13.3651 7.07541 12.9154 7.07541Z"
-                    fill="#5AA8D7"
-                  />
-                </svg>
-              </n-icon>
-              <span class="subtitle"
-                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已禁言的用户
-              </span>
-            </n-layout-content>
+
 
             <n-space vertical align="center">
               <n-space vertical>
@@ -683,13 +343,8 @@ import {
   useMessage,
   FormRules,
 } from "naive-ui";
-import Header from "../../components/block/header/index.vue";
-import Main from "../../components/block/main/index.vue";
-import Post from "../../components/block/post/OuterPost/index.vue";
-import Posting from "../../components/posting/index.vue";
-import Notification from "../../components/Notification/index.vue";
-import Sysmes from "../../components/sysmes/index.vue";
-import buser from "../../components/banneduser/index.vue";
+import Header from "../../views/layout/header/index.vue";
+
 
 import { useUserStore } from "../../store/User";
 import { useBlockStore } from "../../store/Block";

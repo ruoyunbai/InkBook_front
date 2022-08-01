@@ -3,18 +3,18 @@
     <n-grid :cols="36" style="margin-top: 14px">
       <n-gi></n-gi>
       <n-gi>
-        <n-image preview-disabled width="80" src="index\neural 1.png" />
+
       </n-gi>
       <n-gi span="1"></n-gi>
       <n-gi :span="5">
         <div style="height: 5px"></div>
-        <n-image preview-disabled height="55" src="index\top nav bar.png" />
+
       </n-gi>
       <n-gi span="3"> </n-gi>
       <n-gi span="12">
         <div style="height: 10px"></div>
         <n-input
-          placeholder="在整个论坛搜索帖子内容"
+          placeholder="搜索"
           round
           size="large"
           style="
