@@ -8,7 +8,9 @@
                 @expand="collapsed = false">
                 <div style="height: 30px;"></div>
                <n-space justify="center">
-                    <n-image src="svg\主页svg\Icon-1.svg"></n-image>
+                    <n-image 
+                    preview-disabled
+                    src="svg\主页svg\Icon-1.svg"></n-image>
                     <p class="title">
                          InkBook
                     </p>
@@ -18,6 +20,7 @@
                     <n-space 
                     vertical>
                          <n-image width=56
+                         preview-disabled
                          height="56"
                          style="margin:32px 0px 0px 0px"
                           src="svg\\主页svg\\Avatar.svg" />
