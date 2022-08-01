@@ -1,6 +1,6 @@
 <template>
   <n-layout-header>
-    <n-grid :cols="36" style="margin-top: 14px">
+    <n-grid :cols="36" style="margin-top: 14px ;height: 500px">">
       <n-gi></n-gi>
       <n-gi>
 
@@ -13,20 +13,7 @@
       <n-gi span="3"> </n-gi>
       <n-gi span="12">
         <div style="height: 10px"></div>
-        <n-input
-          placeholder="搜索"
-          round
-          size="large"
-          style="
-            border-radius: 8px;
-            background: #e8e8e8;
-            border: 1px solid #ebebeb;
-          "
-        >
-          <template #prefix>
-            <n-icon :component="Search" />
-          </template>
-        </n-input>
+
       </n-gi>
       <n-gi span="5"> </n-gi>
       <n-gi>
@@ -49,12 +36,7 @@
       </n-gi>
       <n-gi span="2"></n-gi>
       <n-gi>
-        <!-- <n-avatar v-if="User.Login"
-                  @click="router.push('/PersonalInfo')"
-      round
-      :size="48"
-      src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-    /> -->
+
         <div style="height: 10px"></div>
         <div>
           <n-button
