@@ -2,32 +2,40 @@
      <n-layout has-sider>
           <n-layout-sider content-style="padding: 24px;
       backgroundColor:rgb(255,255,255)" 
-      :width="240"
-       bordered
- 
-        >
-
-                <n-h2 class="title">
-                    InkBook
-               </n-h2>
-
+      :width="240" bordered
+       :collapsed-width="64"
+               @collapse="collapsed = true"
+                @expand="collapsed = false">
+                <div style="height: 30px;"></div>
+               <n-space justify="center">
+                    <n-image src="svg\主页svg\Icon-1.svg"></n-image>
+                    <p class="title">
+                         InkBook
+                    </p>
+               </n-space>
+               <div style="height: 30px;"></div>
                <div class="user">
-                    <n-space vertical>
-                         <n-image width=100 src="svg\\主页svg\\Avatar.svg" />
-                         <br>
-                         卡片内容
+                    <n-space 
+                    vertical>
+                         <n-image width=56
+                         height="56"
+                         style="margin:32px 0px 0px 0px"
+                          src="svg\\主页svg\\Avatar.svg" />
+                         <p class="name"  style="margin:10px 0px 0px 0px">Name</p>
+                         <p class="state">state</p>
+                         <div style="height:15px"></div>
                     </n-space>
                </div>
-               <n-menu 
-               :collapsed="collapsed"
-          :collapsed-width="64"
-          :collapsed-icon-size="20"
-               :options="menuOptions" @update:value="handleUpdateValue"
-                    :default-expanded-keys="defaultExpandedKeys" @update:expanded-keys="handleUpdateExpandedKeys" />
+               <n-menu :collapsed="collapsed" 
+               :collapsed-width="64"
+               :collapsed-icon-size="40" 
+               :options="menuOptions"
+                    @update:value="handleUpdateValue" 
+                    :default-expanded-keys="defaultExpandedKeys"
+                    @update:expanded-keys="handleUpdateExpandedKeys" />
           </n-layout-sider>
           <n-layout content-style="padding: 24px;
-
-      backgroundColor:rgb(245, 181, 68, 0.1)">
+               backgroundColor:rgb(245, 181, 68, 0.1)">
                <router-view></router-view>
           </n-layout>
 
@@ -44,34 +52,27 @@ import Content from './Content/index.vue'
 import axios from 'axios';
 import { useUserStore } from '../../store/User'
 import { onMounted, reactive } from '@vue/runtime-core';
-import { defineComponent, h, Component } from 'vue'
+import { defineComponent, h, Component,ref } from 'vue'
 import { NIcon, NImage, useMessage } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
-import {
-     BookOutline as BookIcon,
-     PersonOutline as PersonIcon,
-     WineOutline as WineIcon,
-     HomeOutline as HomeIcon
-} from '@vicons/ionicons5'
-function renderIcon(icon: Component) {
-     return () => h(NIcon, null, { default: () => h(icon) })
-}
+
+const collapsed = ref(false)
 const defaultExpandedKeys = [2]
 const message = useMessage()
 const User = useUserStore()
 const menuOptions: MenuOption[] = reactive(menuLists[0])
-let last=-1
+let last = -1
 // const menuOptions: MenuOption[] = reactive(menuList)
 const handleUpdateValue = (key: string, item: MenuOption) => {
-     
+
      menuOptions[0] =
-               menuLists[7][0]
+          menuLists[7][0]
      menuOptions[1] =
-               menuLists[7][1]
+          menuLists[7][1]
      menuOptions[2] =
-     menuLists[5][2]
-     let n=Number(key)
+          menuLists[5][2]
+     let n = Number(key)
      switch (n) {
           case 1: menuOptions[0] =
                menuLists[1][0]
@@ -79,7 +80,7 @@ const handleUpdateValue = (key: string, item: MenuOption) => {
           case 2: menuOptions[1] =
                menuLists[2][1]
                break;
-          case 3: menuOptions[1]=
+          case 3: menuOptions[1] =
                menuLists[3][1]
                break;
           case 4: menuOptions[1] =
@@ -126,6 +127,27 @@ onMounted(()=>{
 </script>
 
 <style scoped>
+.state{
+     opacity: 0.4000000059604645;
+color: #091B3D;
+font-family: Sk-Modernist;
+font-weight: regular;
+font-size: 12px;
+line-height: 16px;
+letter-spacing: 0px;
+text-align: center;
+
+}
+.name{
+     color: #091B3D;
+font-family: Sk-Modernist;
+font-weight: bold;
+font-size: 16px;
+line-height: 26px;
+letter-spacing: 0px;
+text-align: center;
+
+}
 .title {
      color: #000000;
      font-family: Inria Sans;
@@ -133,8 +155,10 @@ onMounted(()=>{
      font-size: 24px;
      line-height: 34px;
      letter-spacing: 0px;
+     position:relative;
+     left:-5px;
      /* text-align: center; */
-     margin: 44px
+     margin: 0px 0px 0 0 ;
 }
 
 .user {
