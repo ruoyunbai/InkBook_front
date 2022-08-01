@@ -1,12 +1,16 @@
 <template>
      <n-layout has-sider>
           <n-layout-sider content-style="padding: 24px;
-      margin:0;
-      backgroundColor:rgb(255,255,255)" :width="240">
+      backgroundColor:rgb(255,255,255)" 
+      :width="240"
+       bordered
+      
+ 
+        >
 
-               <div class="title">
+                <n-h2 class="title">
                     InkBook
-               </div>
+               </n-h2>
 
                <div class="user">
                     <n-space vertical>
@@ -15,7 +19,11 @@
                          卡片内容
                     </n-space>
                </div>
-               <n-menu :options="menuOptions" @update:value="handleUpdateValue"
+               <n-menu 
+               :collapsed="collapsed"
+          :collapsed-width="64"
+          :collapsed-icon-size="20"
+               :options="menuOptions" @update:value="handleUpdateValue"
                     :default-expanded-keys="defaultExpandedKeys" @update:expanded-keys="handleUpdateExpandedKeys" />
           </n-layout-sider>
           <n-layout content-style="padding: 24px;
@@ -126,7 +134,7 @@ onMounted(()=>{
      font-size: 24px;
      line-height: 34px;
      letter-spacing: 0px;
-     text-align: center;
+     /* text-align: center; */
      margin: 44px
 }
 
