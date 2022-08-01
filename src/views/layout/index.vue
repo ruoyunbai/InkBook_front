@@ -41,8 +41,13 @@
           <n-space justify="center"
           >
           <n-image
+     height="65"
           preview-disabled
-          src="svg\主页svg\Upgrade.svg"></n-image></n-space>
+          src="svg\主页svg\icon-1.5s-45px.gif"></n-image>
+          <!-- <n-image
+          preview-disabled
+          src="svg\主页svg\Upgrade.svg"></n-image> -->
+          </n-space>
           </n-layout-sider>
           <n-layout content-style="padding: 24px;
                backgroundColor:rgb(245, 181, 68, 0.1)">
