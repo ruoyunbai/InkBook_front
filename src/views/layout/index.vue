@@ -4,7 +4,6 @@
       backgroundColor:rgb(255,255,255)" 
       :width="240"
        bordered
-      
  
         >
 
@@ -28,7 +27,7 @@
           </n-layout-sider>
           <n-layout content-style="padding: 24px;
 
-      backgroundColor:rgb(0,255,255)">
+      backgroundColor:rgb(245, 181, 68, 0.1)">
                <router-view></router-view>
           </n-layout>
 
@@ -141,7 +140,7 @@ onMounted(()=>{
 .user {
      /* opacity: 0.10000000149011612; */
      border-radius: 16px;
-     background: rgb(245, 181, 68, 0.2);
+     background: rgb(245, 181, 68, 0.1);
      text-align: center;
 }
 
