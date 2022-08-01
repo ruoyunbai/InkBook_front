@@ -70,29 +70,7 @@ const routes:Array<RouteRecordRaw>=[
             transition:"animate__bounceIn"
         }
     },
-    {
-        name:'greenbirdFly',
-        path:'/greenbird',
-        component:()=>import('../views/greenbirdFly/index.vue'),
-    },
-    {
-        name:'Level',
-        path:"/level",
-        component:()=>import('../views/Level/index.vue'),
-        meta:{
-            title:"等级权限",
-            transition:"animate__bounceIn"
-        }
-    },
-    {
-        name:'Experience',
-        path:"/experience",
-        component:()=>import('../views/Experience/index.vue'),
-        meta:{
-            title:"经验值获取方法",
-            transition:"animate__bounceIn"
-        }
-    }
+
 ]
 const router=createRouter({
     history:createWebHashHistory(),

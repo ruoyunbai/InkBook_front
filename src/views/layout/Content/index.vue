@@ -1,5 +1,5 @@
 <template>
-  <n-layout-content 
+  <n-layout-content
   :naitive-sceoll="false"
   content-style="padding: 24px;">
     <div id="grid1">
@@ -201,7 +201,7 @@
         </n-gi>
 
 
-   
+
     </n-grid>
   </n-layout-content>
 </template>
@@ -214,7 +214,6 @@ import { useBlockStore } from "../../../store/Block";
 import { gsap } from "gsap";
 import { TextPlugin } from "gsap/TextPlugin";
 import { random } from "gsap/all";
-import Post from './post/post.vue'
 import axios from 'axios'
 
 gsap.registerPlugin(TextPlugin);
@@ -229,7 +228,7 @@ const routerToBlock = (id: number) => {
   Block.section = id;
   Block.block = blocks[id];
   router.push("/block");
-  
+
 };
 
 const enterBlock = (section: number) => {
@@ -727,7 +726,7 @@ const getPosts = (clear: boolean = true) => {
     // ],
   }).then(function (response) {
     // 处理成功情况
-   
+
     if (response.data?.success) {
        console.log(response.data.data)
 
@@ -735,7 +734,7 @@ const getPosts = (clear: boolean = true) => {
       if (response.data.data != null)
         for (i = 0; i < response.data.data.length; i++) {
           let temp = reactive({
-  
+
             title: response.data.data[i].post.title,
             // watches: response.data.data[i].post.views,
             // // comments: response.data[i].,
@@ -758,7 +757,7 @@ const getPosts = (clear: boolean = true) => {
             like_status: response.data.data[i].like_status,
             // src: response.data.data[i].user.avatar_url,
           });
-  
+
           // if(response.data.data[i].user.avatar_url=="")temp.src="http://43.138.77.133:81/media/avatars/default.jpg"
           posts.push(temp);
         }
