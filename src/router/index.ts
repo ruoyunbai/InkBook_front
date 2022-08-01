@@ -1,0 +1,102 @@
+import {createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw} from 'vue-router'
+import Index from '../views/layout/index.vue'
+declare module 'vue-router'{
+    interface RouteMeta{
+        title:string,
+        transition:string
+    }
+}
+const routes:Array<RouteRecordRaw>=[
+    {
+        name:'Index',
+        path:"/",
+        component:Index,
+        meta:{
+            title:"首页",
+            transition:"animate__bounceIn"
+        }
+    },
+    {
+        name:'DoQuestion',
+        path:"/block",
+        component:()=>import('../views/doQuestion/index.vue'),
+        meta:{
+            title:"首页",
+            transition:"animate__bounceIn"
+        }
+    },
+    {
+        name:'PersonalInfo',
+        path:"/PersonalInfo",
+        component:()=>import('../views/PersonalInfo/index.vue'),
+        meta:{
+            title:"首页",
+            transition:"animate__bounceIn"
+        }
+    },
+    {
+        name:'ChangeProfile',
+        path:"/changeProfile",
+        component:()=>import('../views/PersonalInfo/changeProfile.vue'),
+        meta:{
+            title:"首页",
+            transition:"animate__bounceIn"
+        }
+    },
+    {
+        name:'ChangePassword',
+        path:"/changePassword",
+        component:()=>import('../views/PersonalInfo/changePassword.vue'),
+        meta:{
+            title:"首页",
+            transition:"animate__bounceIn"
+        }
+    },
+    {
+        name:'SignUp',
+        path:"/signUp",
+        component:()=>import('../views/signUp/index.vue'),
+        meta:{
+            title:"首页",
+            transition:"animate__bounceIn"
+        }
+    },
+    {
+        name:'LogIn',
+        path:"/logIn",
+        component:()=>import('../views/logIn/index.vue'),
+        meta:{
+            title:"首页",
+            transition:"animate__bounceIn"
+        }
+    },
+    {
+        name:'greenbirdFly',
+        path:'/greenbird',
+        component:()=>import('../views/greenbirdFly/index.vue'),
+    },
+    {
+        name:'Level',
+        path:"/level",
+        component:()=>import('../views/Level/index.vue'),
+        meta:{
+            title:"等级权限",
+            transition:"animate__bounceIn"
+        }
+    },
+    {
+        name:'Experience',
+        path:"/experience",
+        component:()=>import('../views/Experience/index.vue'),
+        meta:{
+            title:"经验值获取方法",
+            transition:"animate__bounceIn"
+        }
+    }
+]
+const router=createRouter({
+    history:createWebHashHistory(),
+    routes
+})
+
+export default  router
