@@ -36,17 +36,24 @@
                     @update:value="handleUpdateValue" 
                     :default-expanded-keys="defaultExpandedKeys"
                     @update:expanded-keys="handleUpdateExpandedKeys" />
+          
+          <div style="height:100px"></div>
+          <n-space justify="center"
+          >
+          <n-image
+          preview-disabled
+          src="svg\主页svg\Upgrade.svg"></n-image></n-space>
           </n-layout-sider>
           <n-layout content-style="padding: 24px;
                backgroundColor:rgb(245, 181, 68, 0.1)">
                <router-view></router-view>
+
           </n-layout>
 
           <!-- :naitive-sceoll="false"> -->
 
      </n-layout>
 </template>
-
 <script setup lang="ts">
 import { menuList, menuLists } from "./menuList"
 import Header from './Header/index.vue'

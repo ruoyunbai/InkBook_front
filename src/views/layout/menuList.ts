@@ -23,7 +23,7 @@ const menuList: MenuOption[] = [
         icon: () => h(
             NImage,
             {
-                previewDisabled: true,previewDisabled:true,  src: 'svg\\主页svg\\Group-1.svg'
+               previewDisabled:true,  src: 'svg\\主页svg\\Group-1.svg'
             }
         )
     },
@@ -33,7 +33,7 @@ const menuList: MenuOption[] = [
             icon: () => h(
                 NImage,
                 {
-                    previewDisabled:true,  previewDisabled:true,  src: 'svg\\主页svg\\Group-2.svg'
+                    previewDisabled:true,  src: 'svg\\主页svg\\Group-2.svg'
                 }
             ),
                 children: [
@@ -55,7 +55,7 @@ const menuList: MenuOption[] = [
                         icon: () => h(
                             NImage,
                             {
-                                previewDisabled:true,  previewDisabled:true,  src: 'svg\\主页svg\\Group-3.svg'
+                                previewDisabled:true,  src: 'svg\\主页svg\\Group-3.svg'
                             }
                         )
 
@@ -78,7 +78,7 @@ const menuList: MenuOption[] = [
                         icon: () => h(
                             NImage,
                             {
-                                previewDisabled:true,  previewDisabled:true,  src: 'svg\\主页svg\\Group-4.svg'
+                                 previewDisabled:true,  src: 'svg\\主页svg\\Group-4.svg'
                             }
                         )
 
