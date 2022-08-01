@@ -5,6 +5,10 @@ import router from './router/index'
 import {createPinia,PiniaPluginContext} from 'pinia'
 import axios from 'axios'
 
+// @ts-ignore
+import VueDragResize from 'vue-drag-resize'
+
+
 import  'animate.css';
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -40,7 +44,7 @@ const getStorage=(key:string)=>{
 }
 const piniaPlugin=(options:Options)=>{
   return (context:PiniaPluginContext)=>{
- 
+
   //   console.log(context)
     const {store}=context
     const data=getStorage(`${options?.key ??__piniaKey__}-${store.$id}`)
@@ -73,4 +77,4 @@ axios.defaults.transformRequest = [function (data) {
 
 // store.use(piniaPlugin)
 // store.use(piniaPluginPersist)
-createApp(App).use(naive).use(store).use(ElementPlus).use(VMdEditor).use(router).mount('#app')
+createApp(App).use(naive).use(store).use(ElementPlus).use(VueDragResize).use(router).mount('#app')

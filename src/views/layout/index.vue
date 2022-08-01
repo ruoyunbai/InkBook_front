@@ -1,20 +1,32 @@
-<template>
+<template>     
+    <n-layout has-sider>
+      <n-layout-sider content-style="padding: 24px;
+      margin:0;
+      backgroundColor:rgb(255,255,255)"
+       :width="240">
+     <div style="
+     backgroundColor:rgb(0,122,122);
+     textAlign:center">
+     <n-space vertical>
+      <n-image 
+      width=100
+      src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+      />
+     <br>
+    卡片内容
+    </n-space>
+     </div>
+       
+      </n-layout-sider>
+      <n-layout content-style="padding: 24px;
 
-     <n-layout
-      :naitive-sceoll="false">
-          <div>
-               <Header></Header>
-               <n-layout id="layout"
-                  :naitive-sceoll="false"
-             >
-                    <!-- <Menu></Menu> -->
-                    <Content></Content>
-
-               </n-layout>
-          </div>
+      backgroundColor:rgb(0,255,255)">
+      <router-view></router-view>
+      </n-layout>
+  
+      <!-- :naitive-sceoll="false"> -->
+        
      </n-layout>
-
-
 </template>
 
 <script setup lang="ts">

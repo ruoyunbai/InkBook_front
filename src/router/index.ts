@@ -14,7 +14,54 @@ const routes:Array<RouteRecordRaw>=[
         meta:{
             title:"首页",
             transition:"animate__bounceIn"
-        }
+        },
+        children:[
+            {
+                name:'project',
+                path:"/",
+                component:()=>import('../views/project/index.vue'),
+                meta:{
+                    title:"首页",
+                    transition:"animate__bounceIn"
+                },
+            },
+            {
+                name:'group',
+                path:"/group",
+                component:()=>import('../views/group/index.vue'),
+                meta:{
+                    title:"首页",
+                    transition:"animate__bounceIn"
+                },
+            },
+            {
+                name:'prototype',
+                path:"/prototype",
+                component:()=>import('../views/prototype/index.vue'),
+                meta:{
+                    title:"首页",
+                    transition:"animate__bounceIn"
+                },
+            },
+            {
+                name:'document',
+                path:"/document",
+                component:()=>import('../views/document/index.vue'),
+                meta:{
+                    title:"首页",
+                    transition:"animate__bounceIn"
+                },
+            },
+            {
+                name:'trash',
+                path:"/trash",
+                component:()=>import('../views/trash/index.vue'),
+                meta:{
+                    title:"首页",
+                    transition:"animate__bounceIn"
+                },
+            },
+        ]
     },
     {
         name:'PersonalInfo',
@@ -61,6 +108,7 @@ const routes:Array<RouteRecordRaw>=[
             transition:"animate__bounceIn"
         }
     },
+   
 
 ]
 const router=createRouter({
