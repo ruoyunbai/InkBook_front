@@ -9,8 +9,10 @@
                 <div style="height: 30px;"></div>
                <n-space justify="center">
                     <n-image 
+                    height="30"
                     preview-disabled
-                    src="svg\主页svg\Icon-1.svg"></n-image>
+                    @mouseenter="reloadenter()"
+                    :src=cubeSrc></n-image>
                     <p class="title">
                          InkBook
                     </p>
@@ -71,13 +73,25 @@ import { defineComponent, h, Component,ref } from 'vue'
 import { NIcon, NImage, useMessage } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
-
+const cubeSrc=ref("svg\\主页svg\\icon-1.2s-47px.gif")
 const collapsed = ref(false)
 const defaultExpandedKeys = [2]
 const message = useMessage()
 const User = useUserStore()
 const menuOptions: MenuOption[] = reactive(menuLists[0])
 let last = -1
+let cnt0=0
+const reloadenter=()=>{
+     if(cnt0==0){ cubeSrc.value="svg\\主页svg\\icon-1.3s-47px2.gif"
+     cnt0=1}else{
+           cubeSrc.value="svg\\主页svg\\icon-1.3s-47px1.gif"
+     cnt0=0
+     }
+    
+}
+const reloadout=()=>{
+     cubeSrc.value="svg\\主页svg\\icon-1.3s-47px1.gif"
+}
 // const menuOptions: MenuOption[] = reactive(menuList)
 const handleUpdateValue = (key: string, item: MenuOption) => {
 
