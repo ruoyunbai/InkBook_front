@@ -9,3 +9,5 @@ declare module '*.vue' {
 declare module '@kangc/v-md-editor/lib/theme/github.js'
 declare module '@kangc/v-md-editor'
 declare module '@kangc/v-md-editor/lib/plugins/emoji/index'
+declare module  'vue-drag-resize'
+declare module 'vue-email-editor'

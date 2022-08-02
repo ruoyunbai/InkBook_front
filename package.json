@@ -19,7 +19,8 @@
     "svg-sprite-loader": "^6.0.11",
     "vditor": "^3.8.13",
     "vue": "^3.2.25",
-    "vue-drag-resize": "^1.5.4",
+    "vue-drag-resize": "^2.0.3",
+    "vue-email-editor": "^2.0.0",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
