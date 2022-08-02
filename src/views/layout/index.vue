@@ -3,7 +3,8 @@
           <n-layout-sider content-style="padding: 24px;
       backgroundColor:rgb(255,255,255)" 
       :width="240" bordered
-       :collapsed-width="64"
+       :collapsed-width="0"
+        show-trigger="bar"
                @collapse="collapsed = true"
                 @expand="collapsed = false">
                 <div style="height: 30px;"></div>
@@ -51,7 +52,7 @@
           src="svg\主页svg\Upgrade.svg"></n-image> -->
           </n-space>
           </n-layout-sider>
-          <n-layout content-style="padding: 24px;
+          <n-layout content-style="padding: 10px;
                backgroundColor:rgb(245, 181, 68, 0.1)">
                <router-view></router-view>
 

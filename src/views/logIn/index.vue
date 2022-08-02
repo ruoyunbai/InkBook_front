@@ -168,42 +168,33 @@ const handleValidateButtonClick = (e: MouseEvent) => {
   e.preventDefault()
   formRef.value?.validate((errors) => {
     if (!errors) {
-         axios.post('/user/login', {
-        username:modelRef.value.name,
-        password:modelRef.value.password,
-      })
-        .then(function (response) {
-          // 处理成功情况
-          console.log(response.data)
-          if(response.data?.status){
-              message.success('登录成功')
-              User.Login=true;
-              User.Id=response.data.data.user_id;
-              localStorage.setItem("login","true")//本地
-              localStorage.setItem("user_ID",response.data.data.user_id)
-              localStorage.setItem("id",response.data.data.user_id)
-              console.log(localStorage.getItem("login"))
-              console.log(localStorage.getItem("user_ID"))
-              User.avatar=response.data.data.avatar_url
-              User.level=response.data.data.user_level
-              if(User.Id == 9982443)
-              {
-                User.isadmin = true
-              }
-              else{
-                User.isadmin = false;
-              }
-              // User.Name=modelRef.value.name,
-              // User.Id=response.data.data.user_id,
-              // localStorage.setItem("name",modelRef.value.name!=null?modelRef.value.name:"")
-              
-              router.push("/")
-          }else{
-             message.error(response.data.message)
-          }
-          console.log(response.data)
+         axios({
+        url: axios.defaults.baseURL + "/login",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+              username:modelRef.value.name,
+              password:modelRef.value.password,
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log(response.data);
+
+        if (response.data?.success) {
+
         }
-        )
+
+      }
+      )
 
       
     } else {

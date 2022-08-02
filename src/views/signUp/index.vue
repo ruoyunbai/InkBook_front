@@ -50,7 +50,7 @@
                 <n-row :gutter="[0, 24]">
                   <n-col :span="24">
                     <div>
-                      <n-button size="large" block :disabled="modelRef.name=== null || modelRef.password == null
+                      <n-button size="large" block :disabled="modelRef.name === null || modelRef.password == null
                         || modelRef.reenteredPassword == null || modelRef.reenteredPassword != modelRef.password
                       " round type="warning" @click="handleValidateButtonClick">
                         注册
@@ -192,41 +192,39 @@ const handleValidateButtonClick = (e: MouseEvent) => {
   e.preventDefault()
   formRef.value?.validate((errors) => {
     if (!errors) {
-      axios.post('/user/register', {
-        username:modelRef.value.name,
-        password1:modelRef.value.password,
-        password2:modelRef.value.reenteredPassword,
-        email:modelRef.value.email
+      axios({
+        url: axios.defaults.baseURL + "/register",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+              username:modelRef.value.name,
+              password:modelRef.value.password,
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log(response.data);
 
-      })
-        .then(function (response) {
-          // 处理成功情况
-          console.log(response.data)
-          if(response.data?.status){
-              message.success('注册成功')
-              router.push({
-                path:"/greenbird",
-                query:{
-                  modifying:'false',
-                  name:modelRef.value.name,
-                  password:modelRef.value.password
-                }
-          })
-          }else{
-             message.error('注册失败')
-          }
+        if (response.data?.success) {
 
-        })
+        }
 
-      
+      }
+      )
 
-      console.log("yes")
-    } else {
-      console.log(errors)
-      message.error('注册失败')
     }
-  })
+  }
+  )
 }
+
 
 
 

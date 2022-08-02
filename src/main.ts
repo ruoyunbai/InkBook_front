@@ -23,7 +23,8 @@ import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
 import '@kangc/v-md-editor/lib/theme/style/github.css';
 import hljs from 'highlight.js';
 import createEmojiPlugin from '@kangc/v-md-editor/lib/plugins/emoji/index';
-
+import 'vue-fabric/dist/vue-fabric.min.css';
+import { Fabric } from 'vue-fabric';
 VMdEditor.use(githubTheme, {
   Hljs: hljs,
 });
@@ -77,4 +78,4 @@ axios.defaults.transformRequest = [function (data) {
 
 // store.use(piniaPlugin)
 // store.use(piniaPluginPersist)
-createApp(App).use(naive).use(store).use(ElementPlus).use(VueDragResize).use(router).mount('#app')
+createApp(App).use(naive).use(Fabric).use(store).use(ElementPlus).use(VueDragResize).use(router).mount('#app')
