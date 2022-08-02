@@ -211,7 +211,7 @@ import {
 import { Plus } from '@element-plus/icons-vue'
 
 import type { UploadProps } from 'element-plus'
-import Header from "../../components/block/header/index.vue";
+// import Header from "../../components/block/header/index.vue";
 import Main from "../../components/block/main/index.vue";
 import axios from 'axios'
 
