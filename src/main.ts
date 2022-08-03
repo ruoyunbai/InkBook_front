@@ -66,15 +66,22 @@ store.use(piniaPlugin({
 
 axios.defaults.baseURL = 'http://43.138.77.133:8889/api/v1';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-
-axios.defaults.transformRequest = [function (data) {
-  let ret = ''
-  for (let it in data) {
-    ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-  }
-  return ret
-}]
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.headers.post['Content-Type']="application/json"
+// axios.defaults.transformRequest = [function (data) {
+//   let ret = ''
+//   for (let it in data) {
+//     ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+//   }
+//   return ret
+// }]
+axios.defaults.transformRequest=[
+  function (data, headers) {
+    let data1 = JSON.stringify(data);
+    console.log(data1);
+    return data1;
+  },
+]
 
 // store.use(piniaPlugin)
 // store.use(piniaPluginPersist)

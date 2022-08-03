@@ -1,72 +1,70 @@
-<template>    
+<template>
   <n-layout>
 
     <Header :Login="true" :Register="false">
     </Header>
 
-      <n-layout-content content-style="background:#FAFAFA">
-        <n-grid cols="2">
-          <n-gi>
-            <n-image preview-disabled :height="imageHeight" :width="imageWidth" src="svg\注册登录界面svg\Image.svg"></n-image>
-          </n-gi>
+    <n-layout-content content-style="background:#FAFAFA">
+      <n-grid cols="2">
+        <n-gi>
+          <n-image preview-disabled :height="imageHeight" :width="imageWidth" src="svg\注册登录界面svg\Image.svg"></n-image>
+        </n-gi>
 
-          <n-gi>
-            <div style="height:80px"></div>
-            <n-space>
-              <div style="width: 80px"></div>
-              <div class="title">登录</div>
-            </n-space>
-            <div style="height:15px"></div>
-            <n-space>
-              <div style="width: 80px"></div>
-              <div class="subtitle">Express your everyday!</div>
-            </n-space>
-            <div style="height:20px"></div>
+        <n-gi>
+          <div style="height:80px"></div>
+          <n-space>
+            <div style="width: 80px"></div>
+            <div class="title">登录</div>
+          </n-space>
+          <div style="height:15px"></div>
+          <n-space>
+            <div style="width: 80px"></div>
+            <div class="subtitle">Express your everyday!</div>
+          </n-space>
+          <div style="height:20px"></div>
 
-            <n-space>
-              <div style="width: 80px"></div>
-              <div style="width: 400px">
-                <n-form size="large" :show-label=false ref="formRef" :model="modelRef" :rules="rules">
-                  <n-form-item path="name" label="用户名">
-                    <n-input v-model:value="modelRef.name" placeholder="用户名" @keydown.enter.prevent />
-                  </n-form-item>
-
-
-
-                  <n-form-item path="password" label="密码">
-                    <n-input v-model:value="modelRef.password" type="password" @input="handlePasswordInput"
-                      @keydown.enter.prevent placeholder="密码" />
-                  </n-form-item>
+          <n-space>
+            <div style="width: 80px"></div>
+            <div style="width: 400px">
+              <n-form size="large" :show-label=false ref="formRef" :model="modelRef" :rules="rules">
+                <n-form-item path="name" label="用户名">
+                  <n-input v-model:value="modelRef.name" placeholder="用户名" @keydown.enter.prevent />
+                </n-form-item>
 
 
-                  <n-row :gutter="[0, 24]">
-                    <n-col :span="24">
-                      <div>
-                        <n-button size="large" block 
-                        :disabled="modelRef.name === null||
-                        modelRef.password==null
-                        ||modelRef.name==''||
-                        modelRef.password==''" round type="warning"
-                          @click="handleValidateButtonClick">
-                          登录
-                        </n-button>
-                      </div>
-                    </n-col>
-                  </n-row>
+
+                <n-form-item path="password" label="密码">
+                  <n-input v-model:value="modelRef.password" type="password" @input="handlePasswordInput"
+                    @keydown.enter.prevent placeholder="密码" />
+                </n-form-item>
 
 
-                </n-form>
-              </div>
+                <n-row :gutter="[0, 24]">
+                  <n-col :span="24">
+                    <div>
+                      <n-button size="large" block :disabled="modelRef.name === null ||
+                      modelRef.password == null
+                      || modelRef.name == '' ||
+                      modelRef.password == ''" round type="warning" @click="handleValidateButtonClick">
+                        登录
+                      </n-button>
+                    </div>
+                  </n-col>
+                </n-row>
 
-            </n-space>
 
-          </n-gi>
-        </n-grid>
-      </n-layout-content>
-      <n-layout-content content-style="padding: 24px;">
+              </n-form>
+            </div>
 
-      </n-layout-content>
-  
+          </n-space>
+
+        </n-gi>
+      </n-grid>
+    </n-layout-content>
+    <n-layout-content content-style="padding: 24px;">
+
+    </n-layout-content>
+
 
 
 
@@ -87,8 +85,8 @@ import { ref, onMounted, computed, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios';
 
-import {useUserStore} from '../../store/User'
-const User=useUserStore()
+import { useUserStore } from '../../store/User'
+const User = useUserStore()
 
 
 interface ModelType {
@@ -99,7 +97,7 @@ const formRef = ref<FormInst | null>(null)
 const rPasswordFormItemRef = ref<FormItemInst | null>(null)
 // const message = useMessage()
 const modelRef = ref<ModelType>({
-  name: null, 
+  name: null,
   password: null
 })
 
@@ -159,24 +157,24 @@ const rules: FormRules = {
 
 
 const handlePasswordInput = () => {
-  
+
 }
 
-const router=useRouter();
+const router = useRouter();
 const message = useMessage()
 const handleValidateButtonClick = (e: MouseEvent) => {
   e.preventDefault()
   formRef.value?.validate((errors) => {
     if (!errors) {
-         axios({
+      axios({
         url: axios.defaults.baseURL + "/login",
         method: "post",
         headers: {
           "Content-Type": "application/json",
         },
         data: {
-              username:modelRef.value.name,
-              password:modelRef.value.password,
+          username: modelRef.value.name,
+          password: modelRef.value.password,
         },
         transformRequest: [
           function (data, headers) {
@@ -190,16 +188,44 @@ const handleValidateButtonClick = (e: MouseEvent) => {
         console.log(response.data);
 
         if (response.data?.success) {
+          User.token=response.data.token
+          axios({
+            url: axios.defaults.baseURL + "/info",
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization":User.token
+            },
+            data: {
 
+            },
+            transformRequest: [
+              function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+              },
+            ],
+          }).then(function (response) {
+            // 处理成功情况
+            console.log(response.data);
+
+            if (response.data?.success) {
+
+            }
+
+          }
+          )
         }
+
 
       }
       )
 
-      
+
     } else {
       console.log(errors)
-       message.error('密码错误')
+      message.error('密码错误')
     }
   })
 
@@ -213,7 +239,7 @@ const imageWidth = ref(500);
 const totalWidth = ref(500);
 const totalHeight = ref(500);
 onMounted(() => {
-  modelRef.value.name=""
+  modelRef.value.name = ""
   let x: HTMLElement = <HTMLElement>document.body.parentNode;
   if (x != null) {
     x.style.overflowY = "hidden";

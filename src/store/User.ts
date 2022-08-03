@@ -8,6 +8,7 @@ export const useUserStore = defineStore( Names.User,{
     state:()=>{
         return {
             Login:false,
+            token:"",
             Id:0,
             avatar:"http://43.138.77.133:81/media/avatars/default.jpg",
             level:1,

@@ -7,7 +7,6 @@
         </n-space>
       </n-gi>
       <n-gi>
-
       </n-gi>
       <n-gi>
         
@@ -17,9 +16,28 @@
       </n-gi>
       <n-gi span="5">
         <n-space>
-        <n-button v-on:click="saveDesign">Save Design</n-button>
-        <n-button v-on:click="exportHtml">Export HTML</n-button>
+        <n-button type="warning"
+        strong secondary
+        v-on:click="saveDesign">保存设计</n-button>
+        <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
+     
      </n-space> 
+     </n-gi>
+     <n-gi span="2">
+      <n-input
+      v-model:value="minHeight"
+      placeholder="高"
+      :min="-3"
+      :max="5"
+    />
+     </n-gi>
+     <n-gi span="2">
+      <n-input-number
+      v-model:value="minHeight"
+      placeholder="宽"
+      :min="-3"
+      :max="5"
+    />
      </n-gi>
     </n-grid>
   </n-card>
@@ -29,8 +47,9 @@
 
 <div>
   <EmailEditor displayMode='web' 
-  style="height:1000px" 
-  :min-height="minHeight" :project-id="projectId" :locale="locale"
+  style="height:590px" 
+  :min-height="minHeight" 
+  :project-id="projectId" :locale="locale"
     ref="emailEditor" v-on:load="editorLoaded()"
     display-mod="web"
      v-on:ready="editorReady()" />
@@ -43,7 +62,7 @@
 import { ref, reactive,onMounted } from 'vue'
 import { EmailEditor } from 'vue-email-editor';
 import type { UploadInst, UploadFileInfo } from 'naive-ui'
-
+// import * as Automerge from 'automerge'
 const options = reactive([
     {
         label: "Everybody's Got Something to Hide Except Me and My Monkey",
@@ -77,6 +96,14 @@ const editorLoaded = () => {
 emailEditor.value.editor.addEventListener('image:uploaded', function(data: any) {
   console.log("传过来了")
 })
+emailEditor.value.editor.addEventListener('design:updated', function(data: { type: any; item: any; changes: any; }) {
+  // Design is updated by the user
+  console.log("data",data)
+  var type = data.type; // body, row, content
+  var item = data.item;
+  var changes = data.changes;
+  console.log('design:updated', type, item, changes);
+})
 emailEditor.value.editor.registerCallback('selectImage', function (data: any, done: (arg0: { url: string; }) => void) {
   // Open your image library
 
@@ -100,7 +127,16 @@ emailEditor.value.editor.registerCallback('selectImage', function (data: any, do
 // called when the editor has finished loading
 const editorReady = () => {
   console.log('editorReady');
-
+  minHeight.value="1000px"
+   emailEditor.value.editor.setBodyValues({
+  backgroundColor: "#e7e7e7",
+  contentWidth: "900px", // or percent "50%"
+  fontFamily: {
+    label: "Helvetica",
+    value: "'Helvetica Neue', Helvetica, Arial, sans-serif"
+  },
+  preheaderText: "Hello World"
+});
 }
 
 const saveDesign = () => {
@@ -108,6 +144,16 @@ const saveDesign = () => {
     console.log('saveDesign', design);
     // a=design
   });
+   emailEditor.value.editor.setBodyValues({
+  backgroundColor: "#e7e7e7",
+  contentWidth: "200px", // or percent "50%"
+  fontFamily: {
+    label: "Helvetica",
+    value: "'Helvetica Neue', Helvetica, Arial, sans-serif"
+  },
+  preheaderText: "Hello World"
+});
+minHeight.value="600px"
 }
 const exportHtml = () => {
   emailEditor.value.editor.exportHtml((data: any) => {
@@ -118,3 +164,39 @@ const exportHtml = () => {
 
 
 </script>
+
+<style scoped lang="less">
+.choose {
+    border-width: 0px;
+
+    :deep(.n-base-selection__border) {
+        border-width: 0px;
+        //  background-color: aqua;
+    }
+
+    :deep(.n-base-selection--selected) {
+        border-width: 0px;
+    }
+
+    :deep(.n-base-selection__border:hover) {
+        border-width: 0px;
+        //  background-color: aqua;
+    }
+
+    :deep(.n-base-selection-input__content){
+      font-family: 'Inria Sans';
+font-style: normal;
+font-weight: 700;
+font-size: 24px;
+line-height: 34px;
+/* identical to box height, or 142% */
+
+
+color: rgba(9, 27, 61, 0.5);
+    }
+
+
+
+
+}
+</style>
