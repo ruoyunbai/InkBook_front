@@ -24,11 +24,11 @@
       <n-gi span="1">
       </n-gi>
       <n-gi span="3">
-        <n-button
+        <el-button
             round
             color="#2772F0"
             size="large"
-            @click=""
+            @click="dialogCreateVisible = true"
         >
           <template #icon>
             <n-icon>
@@ -38,8 +38,9 @@
           <div class="commonText">
             新建项目
           </div>
-        </n-button>
+        </el-button>
       </n-gi>
+
     </n-grid>
     <div class="headTitle" style="text-align: left">
       &emsp;
@@ -218,11 +219,39 @@
 
   </n-space>
 
+  <el-dialog v-model="dialogCreateVisible" title="新建项目信息">
+                <el-form :model="form">
+                <el-form-item label="项目名称" :label-width="formLabelWidth">
+                    <el-input v-model="form.name" autocomplete="off" placeholder="请输入项目名称"/>
+                </el-form-item>
+                <el-form-item label="项目描述" :label-width="formLabelWidth">
+                    <el-input v-model="form.region" placeholder="请输入项目描述"/>
+                </el-form-item>
+                </el-form>
+                <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="dialogCreateVisible = false">取消</el-button>
+                    <el-button type="primary" @click="dialogCreateVisible = false"
+                    >确定</el-button
+                    >
+                </span>
+                </template>
+            </el-dialog>
+
 </template>
 
 
 <script setup lang = "ts">
 import Card from "../../components/project.vue";
+import { reactive, ref } from 'vue'
+
+const dialogCreateVisible = ref(false)
+const formLabelWidth = '140px'
+
+const form = reactive({
+  name: '',
+  region: '',
+})
 </script>
 
   <style scoped>

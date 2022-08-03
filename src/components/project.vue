@@ -1,101 +1,66 @@
 <template>
     <div class="user" style="background:#EDF5ED">
-                  <n-space
-                      vertical>
-                    <p class="name"  style="margin:20px 10px 10px 30px">项目名称</p>
-                    <p class="state" style="margin:0px 10px 10px 30px">项目描述</p>
-                    <div style="height:15px"></div>
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        @click="routerToPersonalInfo"
-                    >
-                      
-                    <router-link to="/projectDetail" style="text-decoration: none">
-                        <p class="buttonText2">
-                            进入项目
-                        </p>    
-                    </router-link>
-                    
-                    </n-button>
+        <n-space vertical>
+            <p class="name"  style="margin:20px 10px 10px 30px">{{form.name}}</p>
+            <p class="state" style="margin:0px 10px 10px 30px">{{form.region}}</p>
+            <div style="height:15px"></div>
+            <n-button
+                round
+                size="large"
+                color="#DADADA"
+                ghost
+                @click="routerToPersonalInfo"
+            >
+                <router-link to="/projectDetail" style="text-decoration: none">
+                    <p class="buttonText2">进入项目</p>    
+                </router-link>
+            </n-button>
 
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        style="margin:5px 10px 10px 10px"
-                        @click="showPromptBox"
+            <n-button
+                round
+                size="large"
+                color="#DADADA"
+                ghost
+                style="margin:5px 10px 10px 10px"
+                @click="dialogEditVisible = true"
+            >
+                <p class="buttonText2">编辑信息</p>
+            </n-button>
+
+            <el-dialog v-model="dialogEditVisible" title="修改项目信息">
+                <el-form :model="form">
+                <el-form-item label="项目名称" :label-width="formLabelWidth">
+                    <el-input v-model="form.name" autocomplete="off" placeholder="请输入项目名称"/>
+                </el-form-item>
+                <el-form-item label="项目描述" :label-width="formLabelWidth">
+                    <el-input v-model="form.region" placeholder="请输入项目描述"/>
+                </el-form-item>
+                </el-form>
+                <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="dialogEditVisible = false">取消</el-button>
+                    <el-button type="primary" @click="dialogEditVisible = false"
+                    >确定</el-button
                     >
-                      <p class="buttonText2">编辑信息</p>
-                    </n-button>
-                    
-                  </n-space>
-                </div>
+                </span>
+                </template>
+            </el-dialog>
+        
+        </n-space>
+    </div>
 </template>
 
-<script>
-  export default {
-    methods: {
-      open() {
-        this.$prompt('请输入项目名称', '编辑项目信息', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-        }).then(({ value }) => {
-          this.$message({
-            type: 'success',
-            message: '项目名称是 ' + value
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消修改'
-          });       
-        });
-      }
-    }
-  }
-// import $ from "jquery";
-// export default {
-//   data() {
-//     return {};
-//   },
-//   mounted() {
-//     console.log("输出this.$layer", this.$layer);
-//   },
-//   methods: {
-//     showPromptBox() {
-//       this.$layer.prompt(
-//         {
-//           title: "个人信息",
-//           formType: 0, //输入框类型，支持0（文本）默认1（密码）2（多行文本）
-//           value: "", //初始时的值，默认空字符
-//           maxlength: 140, //可输入文本的最大长度，默认500
-//           area: ["400px", "270px"], //自定义文本域宽高
-//           scrollbar: false,
-//         },
-//         (age, index) => {
-//           if ($("#username").val() == "" || age == "") {
-//             this.$message.warning("姓名和年龄不能为空");
-//             return;
-//           } else {
-//             console.log(
-//               `获取弹框的信息 姓名：${$("#username").val()} 年龄：${age}`
-//             );
-//             this.$layer.close(index);
-//           }
-//         }
-//       );
-//       // 往class=vl-input元素前插入
-//       $(".vl-input").before(
-//         `<div style="margin-bottom:8px">姓名</div><input id="username" data-v-6c69dd9a type="text" style="margin-bottom:10px" class="vl-input"/><div style="margin-bottom:8px">年龄</div>`
-//       );
-//     },
-//   },
-// };
+<script lang="ts" setup>
+import { reactive, ref } from 'vue'
 
+
+const dialogEditVisible = ref(false)
+const formLabelWidth = '140px'
+
+const form = reactive({
+  name: '未命名项目',
+  region: '暂无项目描述',
+})
 </script>
 
 <style>
@@ -133,6 +98,17 @@
     line-height: 26px;
     letter-spacing: 0px;
     text-align: left;
-
   }
+    .el-button--text {
+    margin-right: 15px;
+    }
+    .el-select {
+    width: 300px;
+    }
+    .el-input {
+    width: 300px;
+    }
+    .dialog-footer button:first-child {
+    margin-right: 10px;
+    }
 </style>
