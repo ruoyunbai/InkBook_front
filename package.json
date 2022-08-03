@@ -11,6 +11,7 @@
     "@hocuspocus/provider": "^1.0.0-alpha.39",
     "@kangc/v-md-editor": "^2.3.15",
     "@tiptap/extension-collaboration": "^2.0.0-beta.38",
+    "@tiptap/extension-collaboration-cursor": "^2.0.0-beta.37",
     "@tiptap/starter-kit": "^2.0.0-beta.191",
     "@tiptap/vue-3": "^2.0.0-beta.96",
     "@types/fabric": "^4.5.11",
