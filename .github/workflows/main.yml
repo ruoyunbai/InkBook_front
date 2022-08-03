@@ -34,7 +34,7 @@ jobs:
           echo test, and deploy your project.
       - name: install
         run: |
-          npm install
+          npm install --legacy-peer-deps
       - name: build
         run: |  
           npm run build
