@@ -37,7 +37,8 @@ jobs:
           npm install --legacy-peer-deps
       - name: build
         run: |  
-          npm run build
+          export NODE_OPTIONS="--max-old-space-size=8192"
+          npm run build 
           
       - name: deploy file to server
         uses: wlixcc/SFTP-Deploy-Action@v1.0 
