@@ -45,7 +45,7 @@ jobs:
           # source to copy from
           source: ./src
           # destination to download on server
-          target:  ~/front/ 
+          target:  /home/front/ 
      
   
    
