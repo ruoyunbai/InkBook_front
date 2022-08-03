@@ -343,7 +343,7 @@ import {
   useMessage,
   FormRules,
 } from "naive-ui";
-import Header from "../../views/layout/header/index.vue";
+import Header from "../layout/header/index.vue";
 
 
 import { useUserStore } from "../../store/User";
