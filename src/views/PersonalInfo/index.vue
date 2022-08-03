@@ -1,5 +1,5 @@
 <template>
-  <Header></Header>
+  <!-- <Header></Header> -->
   <n-layout embedded content-style="padding: 15px 40px 15px 40px;"
     ><!--背景暗一些 突出上面的卡片-->
     <div class="card">
@@ -343,7 +343,7 @@ import {
   useMessage,
   FormRules,
 } from "naive-ui";
-import Header from "../layout/header/index.vue";
+// import Header from "../layout/header/index.vue";
 
 
 import { useUserStore } from "../../store/User";
