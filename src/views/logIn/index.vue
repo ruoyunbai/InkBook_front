@@ -197,7 +197,7 @@ const handleValidateButtonClick = (e: MouseEvent) => {
               "Authorization":User.token
             },
             data: {
-
+                
             },
             transformRequest: [
               function (data, headers) {

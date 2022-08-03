@@ -24,19 +24,23 @@
      </n-space> 
      </n-gi>
      <n-gi span="2">
-      <n-input
-      v-model:value="minHeight"
+      <n-input-number
+      v-model:value="height"
+      @update:value="changeHeight"
       placeholder="高"
-      :min="-3"
-      :max="5"
+      :min="300"
+      :step="20 "
+      :max="3000"
     />
      </n-gi>
      <n-gi span="2">
       <n-input-number
-      v-model:value="minHeight"
+      v-model:value="width"
       placeholder="宽"
-      :min="-3"
-      :max="5"
+      @update:value="changeWidth"
+      :step="20 "
+      :min="10"
+      :max="900"
     />
      </n-gi>
     </n-grid>
@@ -47,7 +51,7 @@
 
 <div>
   <EmailEditor displayMode='web' 
-  style="height:590px" 
+  style="height:300px" 
   :min-height="minHeight" 
   :project-id="projectId" :locale="locale"
     ref="emailEditor" v-on:load="editorLoaded()"
@@ -59,9 +63,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive,onMounted } from 'vue'
+import { ref, reactive,onMounted,computed,watch } from 'vue'
 import { EmailEditor } from 'vue-email-editor';
 import type { UploadInst, UploadFileInfo } from 'naive-ui'
+
+const height=ref(500)
+const width=ref(500)
+
+const changeHeight=(event: FocusEvent)=>{
+    if(height.value!=null){
+      minHeight.value=height.value+"px"
+      console.log("minHeight:",minHeight.value)
+    }
+}
+const changeWidth=(event: FocusEvent)=>{
+  emailEditor.value.editor.setBodyValues({
+  backgroundColor: "#e7e7e7",
+  contentWidth: width.value+"px", // or percent "50%"
+  fontFamily: {
+    label: "Helvetica",
+    value: "'Helvetica Neue', Helvetica, Arial, sans-serif"
+  },
+  preheaderText: "Hello World"
+});
+}
 // import * as Automerge from 'automerge'
 const options = reactive([
     {
@@ -76,6 +101,10 @@ const options = reactive([
     const value = ref(null)
 const emailEditor = ref()
 const minHeight = ref('500px')
+watch(minHeight,(newVal,oldVal)=>{
+  height.value=Number(newVal.slice(0,-2))
+}
+)
 const locale = ref('en')
 const projectId = ref(0) // replace with your project id
 // const tools=reactive( {
@@ -127,10 +156,10 @@ emailEditor.value.editor.registerCallback('selectImage', function (data: any, do
 // called when the editor has finished loading
 const editorReady = () => {
   console.log('editorReady');
-  minHeight.value="1000px"
+
    emailEditor.value.editor.setBodyValues({
   backgroundColor: "#e7e7e7",
-  contentWidth: "900px", // or percent "50%"
+  contentWidth: width.value+"px", // or percent "50%"
   fontFamily: {
     label: "Helvetica",
     value: "'Helvetica Neue', Helvetica, Arial, sans-serif"
@@ -144,16 +173,17 @@ const saveDesign = () => {
     console.log('saveDesign', design);
     // a=design
   });
-   emailEditor.value.editor.setBodyValues({
-  backgroundColor: "#e7e7e7",
-  contentWidth: "200px", // or percent "50%"
-  fontFamily: {
-    label: "Helvetica",
-    value: "'Helvetica Neue', Helvetica, Arial, sans-serif"
-  },
-  preheaderText: "Hello World"
-});
-minHeight.value="600px"
+    
+//    emailEditor.value.editor.setBodyValues({
+//   backgroundColor: "#e7e7e7",
+//   contentWidth: "200px", // or percent "50%"
+//   fontFamily: {
+//     label: "Helvetica",
+//     value: "'Helvetica Neue', Helvetica, Arial, sans-serif"
+//   },
+//   preheaderText: "Hello World"
+// });
+// minHeight.value="600px"
 }
 const exportHtml = () => {
   emailEditor.value.editor.exportHtml((data: any) => {
