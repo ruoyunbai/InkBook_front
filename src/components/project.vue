@@ -12,7 +12,9 @@
                         ghost
                         @click="routerToPersonalInfo"
                     >
-                      <p class="buttonText2">进入项目</p>
+                      <p class="buttonText2">
+                          <router-link to="/projectDetail">进入项目</router-link>
+                        </p>
                     </n-button>
 
                     <n-button
