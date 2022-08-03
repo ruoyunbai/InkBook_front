@@ -25,6 +25,10 @@ import hljs from 'highlight.js';
 import createEmojiPlugin from '@kangc/v-md-editor/lib/plugins/emoji/index';
 import 'vue-fabric/dist/vue-fabric.min.css';
 import { Fabric } from 'vue-fabric';
+// import ElementUI from 'element-ui';
+// import { ElementTiptapPlugin } from 'element-tiptap';
+// import 'element-ui/lib/theme-chalk/index.css';
+// import 'element-tiptap/lib/index.css';
 VMdEditor.use(githubTheme, {
   Hljs: hljs,
 });
@@ -85,4 +89,5 @@ axios.defaults.transformRequest=[
 
 // store.use(piniaPlugin)
 // store.use(piniaPluginPersist)
-createApp(App).use(naive).use(Fabric).use(store).use(ElementPlus).use(VueDragResize).use(router).mount('#app')
+createApp(App).use(naive).use(Fabric).use(store).use(ElementPlus)
+.use(VueDragResize).use(router).mount('#app')
