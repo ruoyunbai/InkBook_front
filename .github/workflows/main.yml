@@ -35,6 +35,8 @@ jobs:
       - name: install
         run: |
           npm install
+      - name: build
+        run: |  
           npm run build
           
       - name: deploy file to server
