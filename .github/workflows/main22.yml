@@ -1,4 +1,6 @@
-name: CI3
+# This is a basic workflow to help you get started with Actions
+
+name: CI
 
 # Controls when the workflow will run
 on:
@@ -30,23 +32,19 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-      - name: scp-deployer
-  # You may pin to the exact commit or the version.
-  # uses: siva1024/scp-deployer@595af961c23bfad4cc7c1bcdfe9b57fb840e7cb9
-        uses: siva1024/scp-deployer@v1.0
-        with:
-          # ssh remote host
-          host: '${{ secrets.SERVER_IP }}'
-          # ssh remote user
-          username: ubuntu
-          # ssh remote port
-          # ssh remote password
-          password: '${{ secrets.SSH_PRIVATE_KEY }}'
-          # source to copy from
-          source: ./src
-          # destination to download on server
-          target:  /home/ubuntu/front/ 
-     
-  
-   
-     
+      - name: install
+        run: |
+          npm install --legacy-peer-deps
+      - name: build
+        run: |  
+          export NODE_OPTIONS="--max-old-space-size=8192"
+          npm run build 
+          
+      - name: deploy file to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.0 
+        with:  
+          username: 'ubuntu'   #ssh user name
+          server: '${{ secrets.SERVER_IP }}' #引用之前创建好的secret
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} #引用之前创建好的secret
+          local_path: './build/*'  # 对应我们项目build的文件夹路径
+          remote_path: '/var/www/vue-app'
