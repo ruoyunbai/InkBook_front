@@ -1,5 +1,5 @@
 <template>
-  <Header></Header>
+  <!-- <Header></Header> -->
   <n-layout embedded content-style="padding: 15px 40px 15px 40px;"
     ><!--背景暗一些 突出上面的卡片-->
     <n-card
@@ -235,7 +235,7 @@ import {
 } from "naive-ui";
 import { ref } from "vue";
 import { ElMessageBox } from "element-plus";
-import Header from "../../components/block/header/index.vue";
+// import Header from "../../components/block/header/index.vue";
 import Main from "../../components/block/main/index.vue";
 import axios from "axios";
 const message = useMessage();
