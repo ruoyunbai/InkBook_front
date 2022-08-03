@@ -5,10 +5,10 @@
 </script>-->
 
 <template>
-    <n-space vertical size="large">
-        <n-layout>
+    <n-space vertical size="large" >
+        <n-layout style="margin: 20px">
         <n-layout-header class="projectTitle">
-            <n-grid x-gap="12" :cols="4">
+            <n-grid x-gap="12" :cols="4" >
                 <n-gi style="display: flex;">
                     <n-image width=32 src="svg\\主页svg\\Icons\\Setting - 5.svg" />
                     <span style="margin-left: 15px; padding-top: -10px;">项目名称</span>
@@ -17,15 +17,20 @@
                 </n-gi>
                 <n-gi style="margin-top: -1px">
                     <span>
-                        <n-input round placeholder="搜索文件">
+                        <n-input
+                        v-model:value="tagInput"
+                        ref="inputInstRef" 
+                        round 
+                        clearable 
+                        placeholder="搜索文件">
                             <template #prefix>
-                                <n-image width=24 src="svg\\主页svg\\⭐️ Icons L.svg" />
+                                <n-image width=24 src="svg\\主页svg\\projectDetail\\⭐️ Icons L.svg" />
                             </template>
                         </n-input>
                     </span>
                 </n-gi>
                 <n-gi style="margin-top: -8px">
-                    <n-button color=#2772F0 class="button">管理文件</n-button>
+                    <n-button color=#2772F0 class="button" @click="show_delete">管理文件</n-button>
                 </n-gi>
             </n-grid>
             
@@ -39,7 +44,7 @@
                         type="textarea"
                         placeholder="项目内容简介"
                         rows="5"
-                        style="font-family: Inria Sans; font-size: 20px;"
+                        style="font-family: Inria Sans; font-size: 16px;"
                     />
                 </n-space>
             </div>
@@ -66,8 +71,28 @@
                 <n-gi>
                     <div class="section">
                         <div class="item">
-                            <n-image width=26.5 height=23.5 src="svg\\主页svg\\ItemIcon.svg" />
-                            设计原型名称
+                            <div>
+                                <n-grid x-gap="0" :cols="10" style="padding-top: 5px;">
+                                    <n-gi span="1">
+                                        <n-image width=26.5 height=23.5 src="svg\\主页svg\\projectDetail\\ItemIcon.svg" />
+                                    </n-gi>
+                                    <n-gi span="8">
+                                        <div display="inline">设计原型名称</div>
+                                    </n-gi>
+                                    <n-gi span="1" align="right">
+                                        <n-button 
+                                            v-show="showDelete"
+                                            quaternary circle ghost
+                                            type="error"
+                                            size="tiny"
+                                            color="white">
+                                            <n-icon size="24" color="red">
+                                                <CancelOutlined />
+                                            </n-icon>
+                                        </n-button>
+                                    </n-gi>
+                                </n-grid>
+                            </div>
                         </div>
                         <div class="btnspace">
                             <n-button color=#4B9F47 class="button">新建原型</n-button>
@@ -79,8 +104,30 @@
                 <n-gi>
                     <div class="section" style="background-color: rgb(246, 134, 106, 0.2)">
                         <div class="item">
-                            <n-image width=26.5 height=23.5 src="svg\\主页svg\\ItemIcon.svg" />
-                            图文件名称
+                            <div>
+                                <n-grid x-gap="0" :cols="10" style="padding-top: 5px;">
+                                    <n-gi span="1">
+                                        <n-image width=26.5 height=23.5 src="svg\\主页svg\\projectDetail\\ItemIcon.svg" />
+                                    </n-gi>
+                                    <n-gi span="8">
+                                        <div display="inline">图文件名称</div>
+                                    </n-gi>
+                                    <n-gi span="1" align="right">
+                                        <n-button 
+                                            v-show="show_delete"
+                                            quaternary circle ghost
+                                            type="error"
+                                            size="tiny"
+                                            color="white">
+                                            <n-icon size="24" color="red">
+                                                <CancelOutlined />
+                                            </n-icon>
+                                        </n-button>
+                                    </n-gi>
+                                </n-grid>
+                            </div>
+                            
+                            
                         </div>
                         <div class="btnspace">
                             <n-button color=#F6866A class="button">新建图文件</n-button>
@@ -91,8 +138,28 @@
                 <n-gi>
                     <div class="section" style="background-color: rgb(255, 190, 92, 0.2)">
                         <div class="item">
-                            <n-image width=26.5 height=23.5 src="svg\\主页svg\\ItemIcon.svg" />
-                            文档名称
+                            <div>
+                                <n-grid x-gap="0" :cols="10" style="padding-top: 5px;">
+                                    <n-gi span="1">
+                                        <n-image width=26.5 height=23.5 src="svg\\主页svg\\projectDetail\\ItemIcon.svg" />
+                                    </n-gi>
+                                    <n-gi span="8">
+                                        <div display="inline">文档名称</div>
+                                    </n-gi>
+                                    <n-gi span="1" align="right">
+                                        <n-button 
+                                            v-show="show_delete"
+                                            quaternary circle ghost
+                                            type="error"
+                                            size="tiny"
+                                            color="white">
+                                            <n-icon size="24" color="red">
+                                                <CancelOutlined />
+                                            </n-icon>
+                                        </n-button>
+                                    </n-gi>
+                                </n-grid>
+                            </div>
                         </div>
                         <div class="btnspace">
                             <n-button color=#F5B544 class="button">新建文档</n-button>
@@ -109,19 +176,50 @@
 
 </template>
 
-<script lang="ts">
-import { SearchOutline } from '@vicons/ionicons5'
+<script>
 //import { defineComponent } from 'vue'
 import { defineComponent, ref } from 'vue'
-
+import { CancelOutlined } from '@vicons/material'
+import { Delete } from '@element-plus/icons-vue'
 export default defineComponent({
+  data: {
+    showDelete: false,
+    buttonMessage:"管理文件",
+  },
+  components: {
+    CancelOutlined
+  },
   setup () {
     return {
-      value: ref(null)
+      value: ref(null),
+      CancelOutlined
     }
-  }
+  },
+  methods: {
+    show_delete(){
+        this.showDelete = !this.showDelete;
+    }
+  },
+    //动态删除批量绑定数据
+    /*batchDel(index) {
+        if (this.batchForm.length <= 1) {
+            this.batchForm[index].value = "";
+            this.batchForm[index].index = 0;
+            this.batchFormNum = 0;
+        } else {
+        //先删除当前下标的数据
+            this.batchForm.splice(index, 1);
+            let num = [];
+        //循环找出所有下标,不找出最大值，不根据顺序删除会报错
+            this.batchForm.forEach((item) => {
+            num.push(item.index);
+            });
+            //查出数组中最大值，赋值给batchFormNum 
+            this.batchFormNum = Math.max(...num);
+        }
+    }
+  },*/
 })
-
 
 </script>
 
@@ -129,12 +227,12 @@ export default defineComponent({
 .projectTitle{
     display: flex;
     /*justify-content: center;*/
-    align-items: baseline;
+    align-items: center;
 
     background-color: rgb(245, 181, 68, 0.1);
     font-family: Inria Sans;
     font-weight: bold;
-    font-size: 32px;
+    font-size: 28px;
 }
 .button {
     border-radius: 10px;
@@ -150,7 +248,7 @@ export default defineComponent({
     border-radius: 16px;
     background-color: white;
     /*width: 1130px;*/
-    height: 177px;
+    height: 175px;
     margin-top: 10px;
     padding: 25px;
 }
@@ -162,7 +260,7 @@ export default defineComponent({
     text-align: left;
     font-family: Inria Sans;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .section {
@@ -184,7 +282,7 @@ export default defineComponent({
 
     font-family: Inria Sans;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 16px;
 }
 .btnspace {
     display: flex;
@@ -200,7 +298,7 @@ export default defineComponent({
     border-radius: 10px;
 
     font-family: Inria Sans;
-    font-size: 20px;
+    font-size: 16px;
     text-align: left;
 
     height: 45px;
