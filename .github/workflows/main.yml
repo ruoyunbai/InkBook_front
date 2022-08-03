@@ -1,4 +1,4 @@
- name: CI2
+name: CI2
 
 # Controls when the workflow will run
 on:
