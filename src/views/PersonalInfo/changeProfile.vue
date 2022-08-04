@@ -214,9 +214,10 @@ import type { UploadProps } from 'element-plus'
 // import Header from "../../components/block/header/index.vue";
 import Main from "../../components/block/main/index.vue";
 import axios from 'axios'
+import { useUserStore } from "../../store/User";
+const User=useUserStore()
 
-
-
+const isSelf=ref(true)
 let t2 =  localStorage.getItem("user_ID");
 const message = useMessage()
 const router = useRouter()
@@ -247,22 +248,44 @@ const Email: any = ref("")
 const Level: any = ref("")
 onMounted(() => {
     let t2 = localStorage.getItem("user_ID");
-    axios.post('/user/info',{user_id:t2,})
-            .then(function (response) {
-                console.log(response)
-                if (response.data?.status) {
-                    Name.value = response.data.data.user_name;
-                    Age.value = response.data.data.age;
-                    Gender.value = response.data.data.sex;
-                    Email.value = response.data.data.email;
-                    Level.value = response.data.data.user_level;
-                    Ava.value = response.data.data.avatar_url;
-                    console.log(response.data.data)
-                }
-                else {
-                    message.error('查询失败...')
-                }
-                })  
+  axios({
+        url: axios.defaults.baseURL + "/user/info",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+           "Authorization":User.token
+        },
+        data: {
+          user_id:1,
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+      console.log("response",response);
+      if (response.data?.success) {
+        console.log(response.data)
+        let poster=response.data.poster
+        Name.value = poster.Username;
+        Age.value = poster.Age;
+        Gender.value = poster.sex;
+        Email.value =poster.email;
+
+        // Ava.value = response.data.data.avatar_url;
+       
+
+       
+      } else {
+        message.error("查询失败...");
+      }
+      isSelf.value = true;
+    
+     
+    }); 
       console.log("yes")
 })
 const modelRef = ref<ModelType>({

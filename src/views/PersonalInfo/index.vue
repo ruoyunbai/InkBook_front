@@ -502,503 +502,48 @@ onMounted(() => {
   } else {
     isadmin.value = false;
   }
-  axios.post("post/get_banned_users").then(function (response) {
-    console.log(response);
-    let i = 0;
-    if (response.data?.success) {
-      if (response.data.data != null)
-        for (i = 0; i < response.data.data.length; i++) {
-          let temp = reactive({
-            avatar: response.data.users[i].avatar_url,
-            name: response.data.users[i].name,
-          });
-          banlist.push(temp);
-        }
-      for (i = 0; i < 4; ++i) {
-        if (i >= banlist.length) {
-          break;
-        }
-        onbanList.push(banlist[i]);
-      }
-      console.log(banlist);
-    } else {
-      message.error("查询失败...");
-    }
-  });
+  
 
-  if (t2 == in_id) {
-    axios.post("/user/info", { user_id: t2 }).then(function (response) {
-      console.log(response);
-      if (response.data?.status) {
-        Name.value = response.data.data.user_name;
-        Age.value = response.data.data.age;
-        Gender.value = response.data.data.sex;
-        Email.value = response.data.data.email;
-        Level.value = response.data.data.level;
-        Ava.value = response.data.data.avatar_url;
-        Exp.value = response.data.data.exp;
-        isGreen.value = response.data.data.isnoob;
-        console.log(response.data.data);
-        console.log(response.data.data.avatar_url);
-        console.log(Level.value);
-        console.log(Ava.value);
+ 
+   axios({
+        url: axios.defaults.baseURL + "/user/info",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+           "Authorization":User.token
+        },
+        data: {
+          user_id:1,
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+      console.log("response",response);
+      if (response.data?.success) {
+        console.log(response.data)
+        let poster=response.data.poster
+        Name.value = poster.Username;
+        Age.value = poster.Age;
+        Gender.value = poster.sex;
+        Email.value =poster.email;
+      
+        // Ava.value = response.data.data.avatar_url;
+       
 
-        switch (Level.value) {
-          case 0:
-            percentage.value = 0;
-            console.log("bug:basic Level is 1!");
-            break;
-          case 1:
-            percentage.value = ((Exp.value * 100) / 30).toFixed();
-
-            break;
-          case 2:
-            percentage.value = ((Exp.value * 100) / 60).toFixed();
-            break;
-          case 3:
-            percentage.value = ((Exp.value * 100) / 150).toFixed();
-            break;
-          case 4:
-            percentage.value = ((Exp.value * 100) / 450).toFixed();
-            break;
-          case 5:
-            percentage.value = ((Exp.value * 100) / 1050).toFixed();
-            break;
-          case 6:
-            percentage.value = ((Exp.value * 100) / 2100).toFixed();
-            break;
-          case 7:
-            percentage.value = ((Exp.value * 100) / 3600).toFixed();
-            break;
-          case 8:
-            percentage.value = ((Exp.value * 100) / 5500).toFixed();
-            break;
-          case 9:
-            percentage.value = ((Exp.value * 100) / 10500).toFixed();
-            break;
-          default:
-            console.log("bad Level" + percentage.value + " " + Level.value);
-        }
+       
       } else {
         message.error("查询失败...");
       }
       isSelf.value = true;
       console.log(isGreen.value);
-      if (isGreen.value && !isadmin.value) {
-        axios.post("/portal/get_green", { user_id: t2 }).then((response) => {
-          console.log(response.data);
-          check2.value = response.data.completeuserinfo;
-          check3.value = response.data.uploaduseravatar;
-          if (check2.value && check3.value) {
-            greenOut.value = true;
-            axios.post("/portal/check_noob", { user_id: t2 });
-          }
-        });
-      }
+     
     });
-    axios
-    .post("portal/get_user_message", {
-      user_id: t2,
-      offset: 0,
-      length: 100,
-    })
-    .then(function (response) {
-      console.log(response);
-      if (response.data?.success) {
-        nsysmes.value = response.data.count;
-        console.log(nsysmes);
-        let i = 0;
-        if (response.data.data != null)
-          for (i = 0; i < response.data.data.length; i++) {
-            let temp = reactive({
-              type: response.data.data[i].type,
-              exp: response.data.data[i].times,
-              time: response.data.data[i].date,
-            });
-            sysmeslist.push(temp);
-          }
-        console.log(sysmeslist);
-        for (i = 0; i < 5; ++i) {
-          if (i >= sysmeslist.length) {
-            break;
-          }
-          onsysmesList.push(sysmeslist[i]);
-        }
-        mesat.value = nsysmes.value;
-      } else {
-        message.error("查询失败...");
-      }
-    });
-  axios
-    .post("portal/get_notifications", {
-      user_id: t2,
-      offset: 0,
-      length: 100,
-      type: 0, //点赞
-    })
-    .then(function (response) {
-      console.log(response.data);
-      if (response.data?.success) {
-        nlike.value = response.data.count;
-        console.log(nlike);
-        // polist.values = response.data.data;
-        let i = 0;
-        // if (countt == 0) {
-        //   message.success("你还没有发表过帖子");
-        // }
-        if (response.data.data != null)
-          for (i = 0; i < response.data.data.length; i++) {
-            let temp = reactive({
-              title: response.data.data[i].notification.title,
-              time: response.data.data[i].notification.create_time,
-              username: response.data.data[i].notification.username,
-              type: response.data.data[i].notification.type,
-              user_avatar: response.data.data[i].user_avatar,
-            });
-            likelist.push(temp);
-          }
-        console.log(likelist);
-        for (i = 0; i < 5; ++i) {
-          if (i >= likelist.length) {
-            break;
-          }
-          onlikeList.push(likelist[i]);
-        }
-      } else {
-        message.error("查询失败...");
-      }
-    });
-
-  axios
-    .post("portal/get_notifications", {
-      user_id: t2,
-      offset: 0,
-      length: 100,
-      type: 1, //评论
-    })
-    .then(function (response) {
-      console.log(response);
-      if (response.data?.success) {
-        ncomment.value = response.data.count;
-        console.log(nlike);
-        // polist.values = response.data.data;
-        let i = 0;
-        if (response.data.data != null) countt = response.data.data.length;
-        console.log(countt);
-        // if (countt == 0) {
-        //   message.success("你还没有发表过帖子");
-        // }
-        if (response.data.data != null)
-          for (i = 0; i < response.data.data.length; i++) {
-            let temp = reactive({
-              title: response.data.data[i].notification.title,
-              time: response.data.data[i].notification.create_time,
-              username: response.data.data[i].notification.username,
-              type: response.data.data[i].notification.type,
-              user_avatar: response.data.data[i].user_avatar,
-            });
-            comlist.push(temp);
-          }
-        console.log(comlist);
-        for (i = 0; i < 5; ++i) {
-          if (i >= comlist.length) {
-            break;
-          }
-          oncomList.push(comlist[i]);
-        }
-      } else {
-        message.error("查询失败...");
-      }
-    });
-
-  axios
-    .post("post/get_user_posts", {
-      user_id: t2,
-      offset: 0,
-      length: 100,
-    })
-    .then(function (response) {
-      console.log(response);
-      if (response.data?.success) {
-        npost.value = response.data.count;
-        console.log(npost);
-        // polist.values = response.data.data;
-        let i = 0;
-        if (response.data.data != null) countt = response.data.data.length;
-        console.log(countt);
-        if (countt == 0) {
-          message.success("你还没有发表过帖子");
-        }
-        if (response.data.data != null)
-          for (i = 0; i < response.data.data.length; i++) {
-            let temp = reactive({
-              tags: response.data.data[i].tags.map((tag: any) => {
-                return tag.name;
-              }),
-              title: response.data.data[i].post.title,
-              content: response.data.data[i].post.content,
-              watches: response.data.data[i].post.views,
-              comments: response.data.data[i].post.comment,
-              ups: response.data.data[i].post.like,
-            });
-            polist.push(temp);
-          }
-        console.log(polist);
-        for (i = 0; i < 3; ++i) {
-          if (i >= polist.length) {
-            break;
-          }
-          onpoList.push(polist[i]);
-        }
-      } else {
-        message.error("查询失败...");
-      }
-    });
-
-  axios.post("portal/get_banned_users").then(function (response) {
-    console.log(response);
-    let i = 0;
-    if (response.data?.success) {
-      if (response.data.users != null)
-        for (i = 0; i < response.data.users.length; i++) {
-          let temp = reactive({
-            avatar: response.data.users[i].avatar_url,
-            name: response.data.users[i].user_name,
-            user_id:response.data.users[i].user_id,
-          });
-          banlist.push(temp);
-        }
-        for(i=0;i<4;++i)
-        {
-          if(i>=banlist.length)
-          {
-            break;
-          }
-          onbanList.push(banlist[i])
-        }
-      console.log(banlist);
-    } else {
-      message.error("查询已禁言用户失败...");
-    }
-  });
-
-
-  } else {
-    axios.post("/user/info", { user_id: in_id }).then(function (response) {
-      console.log(response);
-      if (response.data?.status) {
-        Name.value = response.data.data.user_name;
-        Age.value = response.data.data.age;
-        Gender.value = response.data.data.sex;
-        Email.value = response.data.data.email;
-        Level.value = response.data.data.level;
-        Ava.value = response.data.data.avatar_url;
-        Exp.value = response.data.data.exp;
-        console.log(response.data.data);
-        console.log(response.data.data.avatar_url);
-        console.log(Level.value);
-        console.log(Ava.value);
-
-        switch (Level.value) {
-          case 0:
-            percentage.value = 0;
-            console.log("bug:basic Level is 1!");
-            break;
-          case 1:
-            percentage.value = ((Exp.value * 100) / 30).toFixed();
-            break;
-          case 2:
-            percentage.value = ((Exp.value * 100) / 60).toFixed();
-            break;
-          case 3:
-            percentage.value = ((Exp.value * 100) / 150).toFixed();
-            break;
-          case 4:
-            percentage.value = ((Exp.value * 100) / 450).toFixed();
-            break;
-          case 5:
-            percentage.value = ((Exp.value * 100) / 1050).toFixed();
-            break;
-          case 6:
-            percentage.value = ((Exp.value * 100) / 2100).toFixed();
-            break;
-          case 7:
-            percentage.value = ((Exp.value * 100) / 3600).toFixed();
-            break;
-          case 8:
-            percentage.value = ((Exp.value * 100) / 5500).toFixed();
-            break;
-          case 9:
-            percentage.value = ((Exp.value * 100) / 10500).toFixed();
-            break;
-          default:
-            console.log("bad Level" + percentage.value + " " + Level.value);
-        }
-      } else {
-        message.error("查询失败...");
-      }
-      isSelf.value = false;
-    });
-    axios
-    .post("portal/get_user_message", {
-      user_id: in_id,
-      offset: 0,
-      length: 100,
-    })
-    .then(function (response) {
-      console.log(response);
-      if (response.data?.success) {
-        nsysmes.value = response.data.count;
-        console.log(nsysmes);
-        let i = 0;
-        if (response.data.data != null)
-          for (i = 0; i < response.data.data.length; i++) {
-            let temp = reactive({
-              type: response.data.data[i].type,
-              exp: response.data.data[i].times,
-              time: response.data.data[i].date,
-            });
-            sysmeslist.push(temp);
-          }
-        console.log(sysmeslist);
-        for (i = 0; i < 5; ++i) {
-          if (i >= sysmeslist.length) {
-            break;
-          }
-          onsysmesList.push(sysmeslist[i]);
-        }
-        mesat.value = nsysmes.value;
-      } else {
-        message.error("查询失败...");
-      }
-    });
-  axios
-    .post("portal/get_notifications", {
-      user_id: in_id,
-      offset: 0,
-      length: 100,
-      type: 0, //点赞
-    })
-    .then(function (response) {
-      console.log(response.data);
-      if (response.data?.success) {
-        nlike.value = response.data.count;
-        console.log(nlike);
-        // polist.values = response.data.data;
-        let i = 0;
-        // if (countt == 0) {
-        //   message.success("你还没有发表过帖子");
-        // }
-        if (response.data.data != null)
-          for (i = 0; i < response.data.data.length; i++) {
-            let temp = reactive({
-              title: response.data.data[i].notification.title,
-              time: response.data.data[i].notification.create_time,
-              username: response.data.data[i].notification.username,
-              type: response.data.data[i].notification.type,
-              user_avatar: response.data.data[i].user_avatar,
-            });
-            likelist.push(temp);
-          }
-        console.log(likelist);
-        for (i = 0; i < 5; ++i) {
-          if (i >= likelist.length) {
-            break;
-          }
-          onlikeList.push(likelist[i]);
-        }
-      } else {
-        message.error("查询失败...");
-      }
-    });
-
-  axios
-    .post("portal/get_notifications", {
-      user_id: in_id,
-      offset: 0,
-      length: 100,
-      type: 1, //评论
-    })
-    .then(function (response) {
-      console.log(response);
-      if (response.data?.success) {
-        ncomment.value = response.data.count;
-        console.log(nlike);
-        // polist.values = response.data.data;
-        let i = 0;
-        if (response.data.data != null) countt = response.data.data.length;
-        console.log(countt);
-        // if (countt == 0) {
-        //   message.success("你还没有发表过帖子");
-        // }
-        if (response.data.data != null)
-          for (i = 0; i < response.data.data.length; i++) {
-            let temp = reactive({
-              title: response.data.data[i].notification.title,
-              time: response.data.data[i].notification.create_time,
-              username: response.data.data[i].notification.username,
-              type: response.data.data[i].notification.type,
-              user_avatar: response.data.data[i].user_avatar,
-            });
-            comlist.push(temp);
-          }
-        console.log(comlist);
-        for (i = 0; i < 5; ++i) {
-          if (i >= comlist.length) {
-            break;
-          }
-          oncomList.push(comlist[i]);
-        }
-      } else {
-        message.error("查询失败...");
-      }
-    });
-
-  axios
-    .post("post/get_user_posts", {
-      user_id: in_id,
-      offset: 0,
-      length: 100,
-    })
-    .then(function (response) {
-      console.log(response);
-      if (response.data?.success) {
-        npost.value = response.data.count;
-        console.log(npost);
-        // polist.values = response.data.data;
-        let i = 0;
-        if (response.data.data != null) countt = response.data.data.length;
-        console.log(countt);
-        if (countt == 0) {
-          message.success("你还没有发表过帖子");
-        }
-        if (response.data.data != null)
-          for (i = 0; i < response.data.data.length; i++) {
-            let temp = reactive({
-              tags: response.data.data[i].tags.map((tag: any) => {
-                return tag.name;
-              }),
-              title: response.data.data[i].post.title,
-              content: response.data.data[i].post.content,
-              watches: response.data.data[i].post.views,
-              comments: response.data.data[i].post.comment,
-              ups: response.data.data[i].post.like,
-            });
-            polist.push(temp);
-          }
-        console.log(polist);
-        for (i = 0; i < 3; ++i) {
-          if (i >= polist.length) {
-            break;
-          }
-          onpoList.push(polist[i]);
-        }
-      } else {
-        message.error("查询失败...");
-      }
-    });
-
-  }
+  
   expTween();
   console.log(isadmin);
   console.log(isSelf);
@@ -1015,22 +560,7 @@ const handleValidateButtonClick3 = (e: MouseEvent) => {
   console.log("test");
   //if (!errors) {
   // console.log(t1.toString)
-  axios
-    .post("/portal/ban_user", {
-      user_id: in_id,
-    })
-    .then(function (response) {
-      // 处理成功情况
-      console.log(response.data);
-      if (response.data?.success) {
-        message.success("禁言成功！！");
-        //User.Login=true;
-        //localStorage.setItem("login","true")
-      } else {
-        message.error("禁言失败:(");
-      }
-      console.log(response.data);
-    });
+ 
 };
 
 //  } else {
@@ -1077,7 +607,7 @@ const message = useMessage();
 const UserExit = () => {
   message.success("退出成功");
   User.Login = false;
-  localStorage.setItem("login", "false");
+  localStorage.setItem("Login", "false");
   localStorage.setItem("user_ID", "null");
   router.push("/");
 };
