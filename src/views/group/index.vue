@@ -24,28 +24,6 @@
   <div id="title">全部成员</div>
 
   <div id="group_panel">
-<!--    <div id="panel_title">-->
-<!--      <div class="title_font first">昵称</div>-->
-<!--      <div class="title_font second">姓名</div>-->
-<!--      <div class="title_font third">邮箱</div>-->
-<!--      <div class="title_font forth">身份</div>-->
-<!--      <div class="title_font fifth">操作</div>-->
-<!--    </div>-->
-<!--    <div id="panel_line"></div>-->
-<!--&lt;!&ndash;    admin&ndash;&gt;-->
-<!--    <div class="person">-->
-<!--      <div class="content_font first_c">Aer</div>-->
-<!--      <div class="content_font second_c">某某</div>-->
-<!--      <div class="content_font third_c">19241036@buaa.edu.cn</div>-->
-<!--      <div class="content_font forth_c">管理员</div>-->
-<!--    </div>-->
-<!--&lt;!&ndash;    member&ndash;&gt;-->
-<!--    <div class="person">-->
-<!--      <div class="content_font first_c">Aer</div>-->
-<!--      <div class="content_font second_c">某某</div>-->
-<!--      <div class="content_font third_c">19241036@buaa.edu.cn</div>-->
-<!--      <div class="content_font forth_c">管理员</div>-->
-<!--    </div>-->
     <el-table
         :data="admin"
         style="width: 90%"
@@ -103,11 +81,43 @@ import { reactive, ref, toRefs } from "vue";
 import { ElMessageBox } from "element-plus";
 import Dialog from "./dialog.vue";
 import Detail from "./detail.vue";
+import {onMounted} from "vue/dist/vue";
 
 export default {
   components: { Dialog, Detail },
+  mounted(){
+    this.getGroupMember()
+  },
+  methods: {
+    getGroupMember(){
+      axios({
+        url: axios.defaults.baseURL + "/get_group_members",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization":User.token
+        },
+        data: {
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+            // 处理成功情况
+            console.log(response.data);
 
+            if (response.data?.success) {
+            }
+          }
+      )
+    }
+  },
   setup() {
+
     const data = reactive({
       dialogShow: false, // 新增/编辑弹框
       detailShow: false, // 详情弹窗
@@ -176,6 +186,34 @@ export default {
             .catch(() => {
               // catch error
             });
+        axios({
+          url: axios.defaults.baseURL + "/remove_member",
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization":User.token
+          },
+          data: {
+            // group_id: ;
+            // user_id: ;
+          },
+          transformRequest: [
+            function (data, headers) {
+              let data1 = JSON.stringify(data);
+              console.log(data1);
+              return data1;
+            },
+          ],
+        }).then(function (response) {
+              // 处理成功情况
+              console.log(response.data);
+
+              if (response.data?.success) {
+
+              }
+
+            }
+        )
       },
       handleSure(val) {
         this.dialogVisible = false;
@@ -187,6 +225,35 @@ export default {
         const index = data.studentInfo.findIndex((item) => item.id === val.id);
         data.studentInfo.splice(index, 1);
         data.admin.push(val);
+        axios({
+          url: axios.defaults.baseURL + "/set_member_status",
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization":User.token
+          },
+          data: {
+            // group_id: ;
+            // status: 1;
+            // user_id: ;
+          },
+          transformRequest: [
+            function (data, headers) {
+              let data1 = JSON.stringify(data);
+              console.log(data1);
+              return data1;
+            },
+          ],
+        }).then(function (response) {
+              // 处理成功情况
+              console.log(response.data);
+
+              if (response.data?.success) {
+
+              }
+
+            }
+        )
       },
 
       // 添加行
@@ -197,8 +264,36 @@ export default {
         //data.formData["id"] = data.studentInfo.length + 1;
         let id=data.studentInfo.length + 1;
         let nickname=data.formData["nickname"];
-        let newdata={id:id,nickname:nickname};
+        let newdata={id:id,nickname:nickname,};
         data.studentInfo.push(newdata);
+        axios({
+          url: axios.defaults.baseURL + "/add_member",
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization":User.token
+          },
+          data: {
+            // group_id: ;
+            // user_id: ;
+          },
+          transformRequest: [
+            function (data, headers) {
+              let data1 = JSON.stringify(data);
+              console.log(data1);
+              return data1;
+            },
+          ],
+        }).then(function (response) {
+              // 处理成功情况
+              console.log(response.data);
+
+              if (response.data?.success) {
+
+              }
+
+            }
+        )
       },
       // 编辑行
       editRow(val) {
@@ -215,6 +310,8 @@ export default {
     return { ...toRefs(data), ...method };
   },
 };
+
+
 </script>
 
 <style scoped>
