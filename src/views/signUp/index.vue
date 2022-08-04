@@ -4,7 +4,7 @@
     <Header :Login="false" :Register="true">
     </Header>
 
-    <n-layout-content content-style="background:#FAFAFA">
+    <n-layout-content  content-style="background:rgb(245,181,68,0.1);">
       <n-grid cols="2">
         <n-gi>
           <n-image preview-disabled :width="imageWidth" :height="imageHeight" src="login/1 56.png"></n-image>

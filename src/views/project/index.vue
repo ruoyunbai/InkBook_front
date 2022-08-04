@@ -279,6 +279,7 @@
 import { useRouter } from 'vue-router'
 import {ref} from 'vue'
 const tagInput=ref("")
+
 const router = useRouter();
 const routerToPersonalInfo=()=>{
     router.push({

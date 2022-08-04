@@ -1,13 +1,12 @@
 <template>
   <n-layout>
-
     <Header :Login="true" :Register="false">
     </Header>
 
-    <n-layout-content content-style="background:#FAFAFA">
+    <n-layout-content content-style="background:rgb(245,181,68,0.1);">
       <n-grid cols="2">
         <n-gi>
-          <n-image preview-disabled :height="imageHeight" :width="imageWidth" src="svg\注册登录界面svg\Image.svg"></n-image>
+          <n-image preview-disabled :height="imageHeight" :width="imageWidth" src="svg\logIn\Illustration.svg"></n-image>
         </n-gi>
 
         <n-gi>
@@ -19,7 +18,7 @@
           <div style="height:15px"></div>
           <n-space>
             <div style="width: 80px"></div>
-            <div class="subtitle">Express your everyday!</div>
+            <div class="subtitle">加入墨书，与团队一起高效协作！</div>
           </n-space>
           <div style="height:20px"></div>
 
@@ -80,7 +79,7 @@ import {
   useMessage,
   FormRules
 } from 'naive-ui'
-import { ref, onMounted, computed, onUnmounted } from 'vue'
+import { ref, onMounted, computed, onUnmounted,onBeforeMount } from 'vue'
 
 import { useRouter } from 'vue-router'
 import axios from 'axios';
@@ -185,6 +184,7 @@ const handleValidateButtonClick = (e: MouseEvent) => {
         ],
       }).then(function (response) {
         // 处理成功情况
+        console.log("response",response)
         console.log(response.data);
 
         if (response.data?.success) {
