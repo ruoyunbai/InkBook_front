@@ -3,15 +3,17 @@ import { defineStore } from 'pinia'
 import { Names } from './store-namespace'
 
  
-export const useBlockStore = defineStore( Names.Block,{
+export const useProtoStore = defineStore("Proto",{
     // id:"user",
     state:()=>{
         return {
-            current:1,
-            block:"source",
-            section:0,
-            search:false,
-            searchText:"",
+            project:[],
+            Login:false,
+            token:"",
+            Id:0,
+            avatar:"http://43.138.77.133:81/media/avatars/default.jpg",
+            level:1,
+            isadmin:false
         }
     },
     // getters:{

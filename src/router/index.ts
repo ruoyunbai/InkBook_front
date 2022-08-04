@@ -47,6 +47,24 @@ const routes:Array<RouteRecordRaw>=[
                 },
             },
             {
+                name:'dnd',
+                path:"dnd",
+                component:()=>import('../views/prototype/vue3dnd.vue'),
+                meta:{
+                    title:"首页",
+                    transition:"animate__bounceIn"
+                },
+            },
+            {
+                name:'test',
+                path:"test",
+                component:()=>import('../test.vue'),
+                meta:{
+                    title:"首页",
+                    transition:"animate__bounceIn"
+                },
+            },
+            {
                 name:'graph',
                 path:"graph",
                 component:()=>import('../views/graph/index.vue'),

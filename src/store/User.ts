@@ -6,7 +6,7 @@ import { Names } from './store-namespace'
 export const useUserStore = defineStore( Names.User,{
     // id:"user",
     state:()=>{
-        return {
+        return {  
             Login:false,
             token:"",
             Id:0,

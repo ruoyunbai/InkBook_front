@@ -1,24 +1,19 @@
 <template>
 <n-space>
-        <VueDragResize :isActive="true" z="999"
+        <VueDragResize :isActive="false" z="999"
         :stickSize="12"
-         v-on:resizing="resize" v-on:dragging="resize">
-            <h3>Hello World!</h3>
-            <p>{{ top }} х {{ left }} </p>
-            <p>{{ width }} х {{ height }}</p>
-             <n-button type="tertiary">
-      Tertiary
-    </n-button>
-     <n-button type="primary">
+      
+         v-on:resizing="resize" v-on:dragging="resize">                  
+    <n-button type="primary">
       Primary
-    </n-button>
-    <n-button type="info">
-      Info
     </n-button>
     
         </VueDragResize>
 
-         <VueDragResize>
+     <VueDragResize :isActive="true" z="999"
+        :stickSize="10"
+        :preventActiveBehavior="true"
+         v-on:resizing="resize" v-on:dragging="resize"> 
     <n-image
     width="100"
     src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
@@ -50,6 +45,7 @@
          <VueDragResize>
              <n-h1>{{value}}</n-h1>
          </VueDragResize>
+         
     </n-space>
      <n-input
       v-model:value="value"
