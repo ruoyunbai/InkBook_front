@@ -89,7 +89,8 @@ import { ref, onMounted, computed, onUnmounted } from 'vue'
 import axios from 'axios'
 
 import { useRouter } from 'vue-router'
-
+import { useUserStore } from '../../store/User'
+const User = useUserStore()
 
 const options = computed(() => {
   return ['@buaa.edu.cn', '@126.com', '@gmail.com', '@163.com', '@qq.com'].map((suffix) => {
@@ -197,6 +198,7 @@ const handleValidateButtonClick = (e: MouseEvent) => {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+           "Authorization":User.token
         },
         data: {
               username:modelRef.value.name,

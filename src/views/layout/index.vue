@@ -81,12 +81,12 @@ import { NIcon, NImage, useMessage } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
 import { useRouter } from 'vue-router'
-onBeforeMount(()=>{
-    let l=localStorage.getItem("Login")
-    if(l!="true"){
-    router.push('/logIn')
-  }
-})
+// onBeforeMount(()=>{
+//     let l=localStorage.getItem("Login")
+//     if(l!="true"){
+//     router.push('/logIn')
+//   }
+// })
 onBeforeUnmount(()=>{
     User.Login=true
 })
