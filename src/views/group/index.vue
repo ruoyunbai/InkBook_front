@@ -6,7 +6,7 @@
       <el-row>
         <el-col span="8">
           <el-form-item class="add_mem_input">
-            <el-input  v-model="formData.nickname"></el-input>
+            <el-input  v-model="formData.Username"></el-input>
           </el-form-item>
         </el-col>
         <el-col span="8">
@@ -30,47 +30,42 @@
         :header-cell-style="{'text-align':'center', height:'80px'}"
         :row-style="{height:'55px'}"
         :cell-style="{'text-align':'center'}">
-      <el-table-column prop="nickname" label="昵称" />
-      <el-table-column prop="name" label="姓名" />
-      <el-table-column prop="email" label="邮箱" />
-      <el-table-column label="身份">管理员</el-table-column>
+      <el-table-column prop="Username" label="昵称" />
+      <el-table-column prop="RealName" label="姓名" />
+      <el-table-column prop="Email" label="邮箱" />
+      <el-table-column label="Status" label="职务">
+        <span v-if="row.Status == 1">普通会员</span>
+        <span v-if="row.Status == 2">管理员</span>
+        <span v-if="row.Status == 3">创建者</span>
+      </el-table-column>
       <el-table-column fixed="right" label="操作">
-        <template #default="{row}">
+        <template #default="{ row }">
+          <!-- <el-button type="text" size="small" @click="handleDetail(row)"
+            >查看</el-button
+          > -->
+          <el-button type="text" size="small" @click="handlejiru(row)"
+          >加入管理员</el-button
+          >
+          <!--  <el-button type="text" size="small" @click="handleEdit(row)"
+            >编辑</el-button
+          > -->
+          <el-button type="text" size="small" @click="handleDel(row)"
+          >删除</el-button
+          >
         </template>
       </el-table-column>
 
     </el-table>
-    <el-table
-        :data="studentInfo"
-        :show-header="false"
-        :header-cell-style="{'text-align':'center'}"
-        :cell-style="{'text-align':'center'}"
-        :row-style="{height:'55px'}"
-        style="width: 90%">
-      <el-table-column prop="nickname"   />
-      <el-table-column prop="name"  />
-      <el-table-column prop="email"  />
-      <el-table-column   label="身份">普通成员</el-table-column>
-      <el-table-column fixed="right" >
-        <template #default="{row}">
-          <el-button type="text" size="small" @click="handleDel(row)">
-            <n-image class="operate_img" src="svg/group_svg/trash.svg" />
-          </el-button>
-          <el-button type="text" size="small" @click="handlejiru(row)">
-            <n-image class="operate_img" src="svg/group_svg/manage.svg" />
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <Dialog
-        v-if="dialogShow"
-        v-model:dialogShow="dialogShow"
-        :rowInfo="rowInfo"
-        :title="title"
-        :arrayNum="studentInfo.length"
-        @addRow="addRow"
-        @editRow="editRow"
-    />
+
+<!--    <Dialog-->
+<!--        v-if="dialogShow"-->
+<!--        v-model:dialogShow="dialogShow"-->
+<!--        :rowInfo="rowInfo"-->
+<!--        :title="title"-->
+<!--        :arrayNum="studentInfo.length"-->
+<!--        @addRow="addRow"-->
+<!--        @editRow="editRow"-->
+<!--    />-->
     <!-- 详情弹窗 -->
     <Detail v-if="detailShow" :rowInfo="rowInfo" @closeDetail="closeDetail" />
   </div>
@@ -81,81 +76,60 @@ import { reactive, ref, toRefs } from "vue";
 import { ElMessageBox } from "element-plus";
 import Dialog from "./dialog.vue";
 import Detail from "./detail.vue";
-import {onMounted} from "vue/dist/vue";
 
 export default {
   components: { Dialog, Detail },
-  mounted(){
-    this.getGroupMember()
-  },
-  methods: {
-    getGroupMember(){
-      axios({
-        url: axios.defaults.baseURL + "/get_group_members",
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization":User.token
-        },
-        data: {
-        },
-        transformRequest: [
-          function (data, headers) {
-            let data1 = JSON.stringify(data);
-            console.log(data1);
-            return data1;
-          },
-        ],
-      }).then(function (response) {
-            // 处理成功情况
-            console.log(response.data);
-
-            if (response.data?.success) {
-            }
-          }
-      )
+  mounted() {
+    //localStorage.setItem("token","");
+    let token = localStorage.getItem("token");
+    if (token) {
+      // 判断当前的token是否存在
+      console.log("ceshi", token);
+    } else {
+      this.$router.push({ name: "login" });
     }
+    this.getstudent();
   },
-  setup() {
 
+  setup() {
     const data = reactive({
       dialogShow: false, // 新增/编辑弹框
       detailShow: false, // 详情弹窗
       rowInfo: {}, // 新增/编辑的数据
       title: "", // 是新建还是修改
       formData: {},
+      group_id: 1,
       admin: [
         {
           id: 1,
-          nickname:"A",
-          name: "AA",
-          email: "AAA@qq.com",
-          identity:"管理员",
-
+          nickname: "昵称1",
+          name: "星星",
+          email: "qwr@qq.com",
+          identity: "管理员",
         },
         {
           id: 2,
-          nickname:"B",
-          name: "BB",
-          email: "BBB11@qq.com",
-          identity:"管理员",
-
+          nickname: "昵称2",
+          name: "月亮",
+          email: "qwr11@qq.com",
+          identity: "管理员",
         },
       ],
       studentInfo: [
         {
           id: 1,
-          nickname:"C",
-          name: "CC",
-          email: "CCC@qq.com",
-          identity:"普通会员",
+          nickname: "昵称1",
+          name: "星星",
+          email: "qwr@qq.com",
+          identity: "普通会员",
+          sex: "女",
         },
         {
           id: 2,
-          nickname:"D",
-          name: "DD",
-          email: "DDD@qq.com",
-          identity:"普通会员",
+          nickname: "昵称2",
+          name: "月亮",
+          email: "qwr11@qq.com",
+          identity: "普通会员",
         },
       ],
     });
@@ -175,85 +149,69 @@ export default {
         data.rowInfo = val;
       },
       handleDel(val) {
-        ElMessageBox.confirm("真的要删除他吗:(", "提示", {
-          confirmButtonText: "确定",
+        let that = this;
+        ElMessageBox.confirm("你确定删除这个学生的信息吗?", "提示", {
+          confirmButtonText: "确认",
           cancelButtonText: "取消",
           type: "warning",
         })
             .then(() => {
-              method.handleSure(val);
+              let params = {
+                group_id: data.group_id,
+                user_id: val.UserID,
+              };
+
+              that.$request.post("/group/remove_member", params).then((res) => {
+                if (res.data.code == 0) {
+                  console.log("删除信息是", res.data);
+                } else {
+                  console.log("登录信息是2", res);
+                }
+              });
+              // method.handleSure(val);
             })
             .catch(() => {
               // catch error
             });
-        axios({
-          url: axios.defaults.baseURL + "/remove_member",
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization":User.token
-          },
-          data: {
-            // group_id: ;
-            // user_id: ;
-          },
-          transformRequest: [
-            function (data, headers) {
-              let data1 = JSON.stringify(data);
-              console.log(data1);
-              return data1;
-            },
-          ],
-        }).then(function (response) {
-              // 处理成功情况
-              console.log(response.data);
-
-              if (response.data?.success) {
-
-              }
-
-            }
-        )
       },
       handleSure(val) {
-        this.dialogVisible = false;
+        /* this.dialogVisible = false;
         const index = data.studentInfo.findIndex((item) => item.id === val.id);
-        data.studentInfo.splice(index, 1);
+        data.studentInfo.splice(index, 1); */
+        let that = this;
+        let params = {
+          group_id: data.group_id,
+          user_id: val.UserID,
+        };
+
+        that.$request.post("/group/remove_member", params).then((res) => {
+          if (res.data.code == 0) {
+            console.log("删除信息是", res.data);
+          } else {
+            console.log("登录信息是2", res);
+          }
+        });
       },
       handlejiru(val) {
-        this.dialogVisible = false;
+        /* this.dialogVisible = false;
         const index = data.studentInfo.findIndex((item) => item.id === val.id);
         data.studentInfo.splice(index, 1);
-        data.admin.push(val);
-        axios({
-          url: axios.defaults.baseURL + "/set_member_status",
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization":User.token
-          },
-          data: {
-            // group_id: ;
-            // status: 1;
-            // user_id: ;
-          },
-          transformRequest: [
-            function (data, headers) {
-              let data1 = JSON.stringify(data);
-              console.log(data1);
-              return data1;
-            },
-          ],
-        }).then(function (response) {
-              // 处理成功情况
-              console.log(response.data);
+        data.admin.push(val); */
+        let that = this;
+        let params = {
+          group_id: data.group_id,
+          status: 2,
+          user_id: val.UserID,
+        };
 
-              if (response.data?.success) {
-
-              }
-
-            }
-        )
+        that.$request.post("/group/set_member_status", params).then((res) => {
+          if (res.data.code == 0) {
+            console.log("加入管理员", res.data);
+          } else {
+            console.log("登录信息是2", res);
+          }
+        });
+        this.getstudent();
       },
 
       // 添加行
@@ -261,39 +219,20 @@ export default {
         data.studentInfo.push(val);
       },
       addRow1() {
-        //data.formData["id"] = data.studentInfo.length + 1;
-        let id=data.studentInfo.length + 1;
-        let nickname=data.formData["nickname"];
-        let newdata={id:id,nickname:nickname,};
-        data.studentInfo.push(newdata);
-        axios({
-          url: axios.defaults.baseURL + "/add_member",
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization":User.token
-          },
-          data: {
-            // group_id: ;
-            // user_id: ;
-          },
-          transformRequest: [
-            function (data, headers) {
-              let data1 = JSON.stringify(data);
-              console.log(data1);
-              return data1;
-            },
-          ],
-        }).then(function (response) {
-              // 处理成功情况
-              console.log(response.data);
+        let that = this;
+        let params = {
+          group_id: data.group_id,
+          username: data.formData["Username"],
+        };
 
-              if (response.data?.success) {
-
-              }
-
-            }
-        )
+        that.$request.post("/group/add_member", params).then((res) => {
+          if (res.data.code == 0) {
+            console.log("add信息是", res.data);
+          } else {
+            console.log("登录信息是2", res);
+          }
+        });
+        this.getstudent();
       },
       // 编辑行
       editRow(val) {
@@ -301,6 +240,38 @@ export default {
             (item, index) => item.id === val.id
         );
         data.studentInfo.splice(index, 1, val);
+      },
+      getstudent() {
+        let that = this;
+        /*  let params = {
+          group_id: 1,
+
+        }; */
+        // this.$request.post("/group/get_group_members", params).then((res) => {
+        that.$request.post("/group/get_groups").then((res) => {
+          if (res.data.code == 0) {
+            console.log("列表是", res.data);
+            data.group_id = res.data.groups[0].GroupID;
+            console.log("group_id是", data.group_id);
+            let params = {
+              group_id: data.group_id,
+            };
+
+            that.$request
+                .post("/group/get_group_members", params)
+                .then((res) => {
+                  if (res.data.code == 0) {
+                    console.log("此团对成员", res.data);
+                    data.studentInfo = res.data.members;
+                  } else {
+                    console.log("登录信息是20", res);
+                  }
+                }); // localStorage.setItem("token",res.data.token);
+            //  this.$router.push({name:'home'})
+          } else {
+            console.log("信息是2", res);
+          }
+        });
       },
       // 关闭详情弹窗
       closeDetail() {
@@ -311,8 +282,6 @@ export default {
   },
 };
 
-
-</script>
 
 <style scoped>
 /deep/ .el-table__body .el-table__row.hover-row td{
