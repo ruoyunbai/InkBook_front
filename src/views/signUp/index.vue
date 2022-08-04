@@ -7,7 +7,7 @@
     <n-layout-content  content-style="background:rgb(245,181,68,0.1);">
       <n-grid cols="2">
         <n-gi>
-          <n-image preview-disabled :width="imageWidth" :height="imageHeight" src="login/1 56.png"></n-image>
+          <n-image preview-disabled :width="imageWidth" :height="imageHeight" src="svg\signUp\Illustration.svg"></n-image>
         </n-gi>
 
         <n-gi>
@@ -19,7 +19,7 @@
           <div style="height:15px"></div>
           <n-space>
             <div style="width: 80px"></div>
-            <div class="subtitle">加入论坛，获得更多功能和特权</div>
+            <div class="subtitle">加入墨书，与团队一起高效合作</div>
           </n-space>
           <div style="height:20px"></div>
 
@@ -214,7 +214,9 @@ const handleValidateButtonClick = (e: MouseEvent) => {
         console.log(response.data);
 
         if (response.data?.success) {
-
+            router.push('logIn')
+        }else{
+          message.error(response.data?.message)
         }
 
       }

@@ -5,10 +5,10 @@
       <n-gi span="7">
 
       </n-gi>
-
+<!-- v-model:value="" -->
       <n-gi span="5">
         <n-input
-            v-model:value="tagInput"
+            
             ref="inputInstRef"
             placeholder="搜索项目"
             clearable
@@ -24,10 +24,11 @@
       <n-gi span="1">
       </n-gi>
       <n-gi span="3">
-        <n-button
+        <el-button
             round
             color="#2772F0"
             size="large"
+            @click="dialogCreateVisible = true"
         >
           <template #icon>
             <n-icon>
@@ -37,8 +38,9 @@
           <div class="commonText">
             新建项目
           </div>
-        </n-button>
+        </el-button>
       </n-gi>
+
     </n-grid>
     <div class="headTitle" style="text-align: left">
       &emsp;
@@ -68,198 +70,29 @@
             <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
 
               <n-grid-item>
-                <div class="user" style="background:#EDF5ED">
-                  <n-space
-                      vertical>
-                    <p class="name"  style="margin:20px 10px 10px 30px">项目名称</p>
-                    <p class="state" style="margin:0px 10px 10px 30px">项目描述</p>
-                    <div style="height:15px"></div>
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        @click=""
-                    >
-                      <p class="buttonText2">进入项目</p>
-                    </n-button>
-
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        style="margin:5px 10px 10px 10px"
-                        @click="routerToPersonalInfo"
-                    >
-                      <p class="buttonText2">编辑信息</p>
-                    </n-button>
-
-                  </n-space>
-                </div>
-
-              </n-grid-item>
-              <n-grid-item>
-                <div class="user" style="background:#FCEEE9">
-                  <n-space
-                      vertical>
-                    <p class="name"  style="margin:20px 10px 10px 30px">项目名称</p>
-                    <p class="state" style="margin:0px 10px 10px 30px">项目描述</p>
-                    <div style="height:15px"></div>
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        @click=""
-                    >
-                      <p class="buttonText2">进入项目</p>
-                    </n-button>
-
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        style="margin:5px 10px 10px 10px"
-                        @click="routerToPersonalInfo"
-                    >
-                      <p class="buttonText2">编辑信息</p>
-                    </n-button>
-
-                  </n-space>
-                </div>
+                <Card></Card>
               </n-grid-item>
 
               <n-grid-item>
-                <div class="user" style="background:#FEF8EC">
-                  <n-space
-                      vertical>
-                    <p class="name"  style="margin:20px 10px 10px 30px">项目名称</p>
-                    <p class="state" style="margin:0px 10px 10px 30px">项目描述</p>
-                    <div style="height:15px"></div>
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        @click=""
-                    >
-                      <p class="buttonText2">进入项目</p>
-                    </n-button>
-
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        style="margin:5px 10px 10px 10px"
-                        @click="routerToPersonalInfo"
-                    >
-                      <p class="buttonText2">编辑信息</p>
-                    </n-button>
-
-                  </n-space>
-                </div>
+                <Card></Card>
               </n-grid-item>
 
               <n-grid-item>
-                <div class="user" style="background:#EDF5ED">
-                  <n-space
-                      vertical>
-                    <p class="name"  style="margin:20px 10px 10px 30px">项目名称</p>
-                    <p class="state" style="margin:0px 10px 10px 30px">项目描述</p>
-                    <div style="height:15px"></div>
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        @click=""
-                    >
-                      <p class="buttonText2">进入项目</p>
-                    </n-button>
-
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        style="margin:5px 10px 10px 10px"
-                        @click="routerToPersonalInfo"
-                    >
-                      <p class="buttonText2">编辑信息</p>
-                    </n-button>
-
-                  </n-space>
-                </div>
+                <Card></Card>
               </n-grid-item>
 
               <n-grid-item>
-                <div class="user" style="background:#FCEEE9">
-                  <n-space
-                      vertical>
-                    <p class="name"  style="margin:20px 10px 10px 30px">项目名称</p>
-                    <p class="state" style="margin:0px 10px 10px 30px">项目介绍</p>
-                    <div style="height:15px"></div>
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        @click=""
-                    >
-                      <p class="buttonText2">进入项目</p>
-                    </n-button>
-
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        style="margin:5px 10px 10px 10px"
-                        @click="routerToPersonalInfo"
-                    >
-                      <p class="buttonText2">编辑信息</p>
-                    </n-button>
-
-                  </n-space>
-                </div>
+                <Card></Card>
               </n-grid-item>
 
               <n-grid-item>
-                <div class="user" style="background:#FEF8EC">
-                  <n-space
-                      vertical>
-                    <p class="name"  style="margin:20px 10px 10px 30px">项目名称</p>
-                    <p class="state" style="margin:0px 10px 10px 30px">项目描述</p>
-                    <div style="height:15px"></div>
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        @click=""
-                    >
-                      <p class="buttonText2">进入项目</p>
-                    </n-button>
+                <Card></Card>
+              </n-grid-item>
 
-                    <n-button
-                        round
-                        size="large"
-                        color="#DADADA"
-                        ghost
-                        style="margin:5px 10px 10px 10px"
-                        @click="routerToPersonalInfo"
-                    >
-                      <p class="buttonText2">编辑信息</p>
-                    </n-button>
-
-                  </n-space>
-                </div>
+              <n-grid-item>
+                <Card></Card>
               </n-grid-item>
             </n-grid>
-
 
             <template #header-extra>
               <n-image preview-disabled src="svg\project_svg\sort.svg" />
@@ -272,20 +105,153 @@
       </n-gi>
       
     </n-grid>
+
+    <n-grid x-gap="5" :cols="30">
+      
+      <n-gi span="1">
+      </n-gi>
+
+      <n-gi span="28">
+          <n-layout  class="bg"  bordered="false" content-style="padding: 30px 30px 30px 30px;">
+        <n-collapse >
+          <template #arrow>
+            <n-icon>
+              <n-image preview-disabled src="svg\project_svg\folder.svg" />
+            </n-icon>
+          </template>
+          <n-collapse-item title="&emsp;我创建的"  >
+            <n-divider></n-divider>
+
+            <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
+
+              <n-grid-item>
+                <Card></Card>
+              </n-grid-item>
+
+              <n-grid-item>
+                <Card></Card>
+              </n-grid-item>
+
+              <n-grid-item>
+                <Card></Card>
+              </n-grid-item>
+
+              <n-grid-item>
+                <Card></Card>
+              </n-grid-item>
+
+              <n-grid-item>
+                <Card></Card>
+              </n-grid-item>
+
+              <n-grid-item>
+                <Card></Card>
+              </n-grid-item>
+
+            </n-grid>
+
+            <template #header-extra>
+              <n-image preview-disabled src="svg\project_svg\sort.svg" />
+            </template>
+          </n-collapse-item>
+        </n-collapse>
+      </n-layout>
+      </n-gi>
+      <n-gi span="1">
+      </n-gi>
+      
+    </n-grid>
+
+    <n-grid x-gap="5" :cols="30">
+      
+      <n-gi span="1">
+      </n-gi>
+
+      <n-gi span="28">
+          <n-layout  class="bg"  bordered="false" content-style="padding: 30px 30px 30px 30px;">
+        <n-collapse >
+          <template #arrow>
+            <n-icon>
+              <n-image preview-disabled src="svg\project_svg\folder.svg" />
+            </n-icon>
+          </template>
+          <n-collapse-item title="&emsp;我参与的"  >
+            <n-divider></n-divider>
+
+            <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
+
+              <n-grid-item>
+                <Card></Card>
+              </n-grid-item>
+
+              <n-grid-item>
+                <Card></Card>
+              </n-grid-item>
+
+              <n-grid-item>
+                <Card></Card>
+              </n-grid-item>
+
+              <n-grid-item>
+                <Card></Card>
+              </n-grid-item>
+
+              <n-grid-item>
+                <Card></Card>
+              </n-grid-item>
+
+              <n-grid-item>
+                <Card></Card>
+              </n-grid-item>
+            </n-grid> 
+
+            <template #header-extra>
+              <n-image preview-disabled src="svg\project_svg\sort.svg" />
+            </template>
+          </n-collapse-item>
+        </n-collapse>
+      </n-layout>
+      </n-gi>
+      <n-gi span="1">
+      </n-gi>
+      
+    </n-grid>
+
   </n-space>
 
-</template>
-<script setup lang="ts">
-import { useRouter } from 'vue-router'
-import {ref} from 'vue'
-const tagInput=ref("")
+  <el-dialog v-model="dialogCreateVisible" title="新建项目信息">
+                <el-form :model="form">
+                <el-form-item label="项目名称" :label-width="formLabelWidth">
+                    <el-input v-model="form.name" autocomplete="off" placeholder="请输入项目名称"/>
+                </el-form-item>
+                <el-form-item label="项目描述" :label-width="formLabelWidth">
+                    <el-input v-model="form.region" placeholder="请输入项目描述"/>
+                </el-form-item>
+                </el-form>
+                <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="dialogCreateVisible = false">取消</el-button>
+                    <el-button type="primary" @click="dialogCreateVisible = false"
+                    >确定</el-button
+                    >
+                </span>
+                </template>
+            </el-dialog>
 
-const router = useRouter();
-const routerToPersonalInfo=()=>{
-    router.push({
-     path: "/PersonalInfo",
-  });
-}
+</template>
+
+
+<script setup lang = "ts">
+import Card from "../../components/project.vue";
+import { reactive, ref } from 'vue'
+
+const dialogCreateVisible = ref(false)
+const formLabelWidth = '140px'
+
+const form = reactive({
+  name: '',
+  region: '',
+})
 </script>
 
   <style scoped>

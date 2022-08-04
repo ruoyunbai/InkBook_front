@@ -22,14 +22,19 @@
                <div class="user">
                     <n-space 
                     vertical>
+                        <transition enter-active-class="animate__animated animate__fadeIn">
                          <n-image width=56
                          preview-disabled
                          height="56"
                          style="margin:32px 0px 0px 0px"
+                          @click="()=>{router.push('/personalInfo')}"
                           src="svg\\主页svg\\Avatar.svg" />
+                          
+                          </transition>
                          <p class="name"  style="margin:10px 0px 0px 0px">Name</p>
                          <p class="state">state</p>
                          <div style="height:15px"></div>
+                         
                     </n-space>
                </div>
                <n-menu :collapsed="collapsed" 
@@ -54,8 +59,9 @@
           </n-layout-sider>
           <n-layout content-style="padding: 10px;
                backgroundColor:rgb(245, 181, 68, 0.1)">
+              <transition enter-active-class="animate__animated animate__fadeIn">
                <router-view></router-view>
-
+                </transition>
           </n-layout>
 
           <!-- :naitive-sceoll="false"> -->
@@ -70,10 +76,21 @@ import Content from './Content/index.vue'
 import axios from 'axios';
 import { useUserStore } from '../../store/User'
 import { onMounted, reactive } from '@vue/runtime-core';
-import { defineComponent, h, Component,ref } from 'vue'
+import { defineComponent, h, Component,ref,onBeforeMount,onBeforeUnmount } from 'vue'
 import { NIcon, NImage, useMessage } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
+import { useRouter } from 'vue-router'
+onBeforeMount(()=>{
+    let l=localStorage.getItem("Login")
+    if(l!="true"){
+    router.push('/logIn')
+  }
+})
+onBeforeUnmount(()=>{
+    User.Login=true
+})
+const router=useRouter()
 const cubeSrc=ref("svg\\主页svg\\icon-1.2s-47px.gif")
 const collapsed = ref(false)
 const defaultExpandedKeys = [2]
@@ -278,11 +295,11 @@ const handleUpdateValue = (key: string, item: MenuOption) => {
      // menuLists[Number(key)]
      // menuOptions[JSON.stringify(key)]=
      // menuLists[JSON.stringify(key)][JSON.stringify(key)]
-     message.info('[onUpdate:value]: ' + JSON.stringify(key))
-     message.info('[onUpdate:value]: ' + JSON.stringify(item))
+    //  message.info('[onUpdate:value]: ' + JSON.stringify(key))
+    //  message.info('[onUpdate:value]: ' + JSON.stringify(item))
 }
 const handleUpdateExpandedKeys = (keys: string[]) => {
-     message.info('[onUpdate:expandedKeys]: ' + JSON.stringify(keys))
+    //  message.info('[onUpdate:expandedKeys]: ' + JSON.stringify(keys))
 }
 // axios.post('/935712/api/v1/user/info',{
 //     user_id:3

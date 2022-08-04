@@ -79,7 +79,7 @@ import {
   useMessage,
   FormRules
 } from 'naive-ui'
-import { ref, onMounted, computed, onUnmounted,onBeforeMount } from 'vue'
+import { ref, onMounted, computed, onUnmounted,onBeforeMount,onBeforeUnmount } from 'vue'
 
 import { useRouter } from 'vue-router'
 import axios from 'axios';
@@ -188,34 +188,37 @@ const handleValidateButtonClick = (e: MouseEvent) => {
         console.log(response.data);
 
         if (response.data?.success) {
+          User.Login=true
           User.token=response.data.token
-          axios({
-            url: axios.defaults.baseURL + "/info",
-            method: "post",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization":User.token
-            },
-            data: {
+          localStorage.setItem("Login","true")
+          router.push('/')
+          // axios({
+          //   url: axios.defaults.baseURL + "/info",
+          //   method: "post",
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //     "Authorization":User.token
+          //   },
+          //   data: {
                 
-            },
-            transformRequest: [
-              function (data, headers) {
-                let data1 = JSON.stringify(data);
-                console.log(data1);
-                return data1;
-              },
-            ],
-          }).then(function (response) {
-            // 处理成功情况
-            console.log(response.data);
+          //   },
+          //   transformRequest: [
+          //     function (data, headers) {
+          //       let data1 = JSON.stringify(data);
+          //       console.log(data1);
+          //       return data1;
+          //     },
+          //   ],
+          // }).then(function (response) {
+          //   // 处理成功情况
+          //   console.log(response.data);
 
-            if (response.data?.success) {
+          //   if (response.data?.success) {
 
-            }
+          //   }
 
-          }
-          )
+          // }
+          // )
         }
 
 

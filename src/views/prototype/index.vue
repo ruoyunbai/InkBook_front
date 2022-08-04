@@ -9,7 +9,6 @@
       <n-gi>
       </n-gi>
       <n-gi>
-
       </n-gi>
       <n-gi>
 
@@ -49,7 +48,10 @@ import { ref, reactive, onMounted, computed, watch } from 'vue'
 import { EmailEditor } from 'vue-email-editor';
 import type { UploadInst, UploadFileInfo } from 'naive-ui'
 import { id } from 'date-fns/locale';
+import axios from 'axios';
 
+import {useUserStore} from '../../store/User'
+const User=useUserStore()
 const height = ref(500)
 const width = ref(500)
 
@@ -97,8 +99,39 @@ const projectId = ref(0) // replace with your project id
 //       })
 
 
+onMounted(()=>{
+  getPPage()
+})
+const getPPage=()=>{
+   axios({
+        url: axios.defaults.baseURL + "/ppage/get_ppage_by_id",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization":User.token
+        },
+        data: {
+          ppage_id:1,
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("response",response)
+        console.log(response.data);
+        let content=response?.data.ppage.ppage_data
+        console.log(content)
+        console.log("JSON",eval('('+content+')'))
+        console.log("JSON",JSON.parse(content))
+      }
+      )
 
-
+}
 // called when the editor is created
 const editorLoaded = () => {
   console.log('editorLoaded');

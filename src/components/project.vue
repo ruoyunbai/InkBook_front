@@ -1,0 +1,114 @@
+<template>
+    <div class="user" style="background:#EDF5ED">
+        <n-space vertical>
+            <p class="name"  style="margin:20px 10px 10px 30px">{{form.name}}</p>
+            <p class="state" style="margin:0px 10px 10px 30px">{{form.region}}</p>
+            <div style="height:15px"></div>
+            <n-button
+                round
+                size="large"
+                color="#DADADA"
+                ghost
+                @click="routerToPersonalInfo"
+            >
+                <router-link to="/projectDetail" style="text-decoration: none">
+                    <p class="buttonText2">进入项目</p>    
+                </router-link>
+            </n-button>
+
+            <n-button
+                round
+                size="large"
+                color="#DADADA"
+                ghost
+                style="margin:5px 10px 10px 10px"
+                @click="dialogEditVisible = true"
+            >
+                <p class="buttonText2">编辑信息</p>
+            </n-button>
+
+            <el-dialog v-model="dialogEditVisible" title="修改项目信息">
+                <el-form :model="form">
+                <el-form-item label="项目名称" :label-width="formLabelWidth">
+                    <el-input v-model="form.name" autocomplete="off" placeholder="请输入项目名称"/>
+                </el-form-item>
+                <el-form-item label="项目描述" :label-width="formLabelWidth">
+                    <el-input v-model="form.region" placeholder="请输入项目描述"/>
+                </el-form-item>
+                </el-form>
+                <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="dialogEditVisible = false">取消</el-button>
+                    <el-button type="primary" @click="dialogEditVisible = false"
+                    >确定</el-button
+                    >
+                </span>
+                </template>
+            </el-dialog>
+        
+        </n-space>
+    </div>
+</template>
+
+<script lang="ts" setup>
+import { reactive, ref } from 'vue'
+
+
+const dialogEditVisible = ref(false)
+const formLabelWidth = '140px'
+
+const form = reactive({
+  name: '未命名项目',
+  region: '暂无项目描述',
+})
+</script>
+
+<style>
+     .user {
+    /* opacity: 0.10000000149011612; */
+    border-radius: 16px;
+    /*background: rgb(245, 181, 68, 0.1);*/
+    text-align: center;
+  }
+  .buttonText2 {
+    color: #2772F0;
+    font-family: nunito-sans, sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: normal;
+    letter-spacing: 2px;
+    text-align: left;
+  }
+    .state{
+    opacity: 0.4000000059604645;
+    color: #091B3D;
+    font-family: Sk-Modernist;
+    font-weight: regular;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0px;
+    text-align: left;
+
+  }
+  .name{
+    color: #091B3D;
+    font-family: Sk-Modernist;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 26px;
+    letter-spacing: 0px;
+    text-align: left;
+  }
+    .el-button--text {
+    margin-right: 15px;
+    }
+    .el-select {
+    width: 300px;
+    }
+    .el-input {
+    width: 300px;
+    }
+    .dialog-footer button:first-child {
+    margin-right: 10px;
+    }
+</style>

@@ -24,6 +24,9 @@ const routes:Array<RouteRecordRaw>=[
                     title:"首页",
                     transition:"animate__bounceIn"
                 },
+                // children:[
+                    
+                // ]
             },
             {
                 name:'group',
@@ -44,7 +47,7 @@ const routes:Array<RouteRecordRaw>=[
                 },
             },
             {
-                name:'prototype',
+                name:'dnd',
                 path:"dnd",
                 component:()=>import('../views/prototype/vue3dnd.vue'),
                 meta:{
@@ -85,6 +88,15 @@ const routes:Array<RouteRecordRaw>=[
                 component:()=>import('../views/trash/index.vue'),
                 meta:{
                     title:"首页",
+                    transition:"animate__bounceIn"
+                },
+            },
+            {
+                name:'projectDetail',
+                path:"/projectDetail",
+                component:()=>import('../views/projectDetail/projectDetail.vue'),
+                meta:{
+                    title:"项目详情",
                     transition:"animate__bounceIn"
                 },
             },

@@ -54,7 +54,7 @@ const piniaPlugin=(options:Options)=>{
     const {store}=context
     const data=getStorage(`${options?.key ??__piniaKey__}-${store.$id}`)
     console.log("Pinia data:")
-    // console.log(data)
+    console.log(data)
     store.$subscribe(()=>{
     console.log("changeUserState")
     setStorage(`${options?.key ??__piniaKey__}-${store.$id}`,toRaw(store.$state))

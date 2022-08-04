@@ -7,6 +7,7 @@ export const useProtoStore = defineStore("Proto",{
     // id:"user",
     state:()=>{
         return {
+            project:[],
             Login:false,
             token:"",
             Id:0,
