@@ -97,7 +97,7 @@
                     <n-gi span="8">
                       <router-link
                         to="/prototype"
-                        style="text-decoration: none"
+                        style="text-decoration: none; color: black"
                       >
                         <div display="inline">{{ protoList[idx] }}</div>
                       </router-link>
@@ -199,7 +199,7 @@
                       />
                     </n-gi>
                     <n-gi span="8">
-                      <router-link to="/document" style="text-decoration: none">
+                      <router-link to="/document" style="text-decoration: none; color: black">
                         <div display="inline">{{ fileList[idx] }}</div>
                       </router-link>
                     </n-gi>

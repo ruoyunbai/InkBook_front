@@ -71,8 +71,8 @@ const dialogEditVisible = ref(false)
 const formLabelWidth = '140px'
 
 const form = reactive({
-  name: '未命名项目',
-  region: '暂无项目描述',
+  name: '项目1',
+  region: '项目描述',
 })
 </script>
 
