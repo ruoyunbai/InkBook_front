@@ -1,307 +1,379 @@
-<!--<template>
-<div>hahah</div>
-</template>
-<script >
-</script>-->
-
 <template>
-    <n-space vertical size="large" >
-        <n-layout style="margin: 20px">
-        <n-layout-header class="projectTitle">
-            <n-grid x-gap="12" :cols="4" >
-                <n-gi style="display: flex;">
-                    <n-image width=32 src="svg\\主页svg\\Icons\\Setting - 5.svg" />
-                    <span style="margin-left: 15px; padding-top: -10px;">项目名称</span>
-                </n-gi>
-                <n-gi>
-                </n-gi>
-                <n-gi style="margin-top: -1px">
-                    <span>
-                        <n-input
-                        v-model:value="tagInput"
-                        ref="inputInstRef" 
-                        round 
-                        clearable 
-                        placeholder="搜索文件">
-                            <template #prefix>
-                                <n-image width=24 src="svg\\主页svg\\projectDetail\\⭐️ Icons L.svg" />
-                            </template>
-                        </n-input>
-                    </span>
-                </n-gi>
-                <n-gi style="margin-top: -8px">
-                    <n-button color=#2772F0 class="button" @click="show_delete">管理文件</n-button>
-                </n-gi>
-            </n-grid>
-            
-        </n-layout-header>
-        <n-layout-content content-style="padding: 24px;" style="background-color: rgb(245, 181, 68, 0.1)">
-            <div class="fileTitle">项目介绍</div>
-            <div class="intro">
-                <n-space vertical>
-                    <n-input
-                        v-model:value="value"
-                        type="textarea"
-                        placeholder="项目内容简介"
-                        rows="5"
-                        style="font-family: Inria Sans; font-size: 16px;"
-                    />
-                </n-space>
+  <n-space vertical size="large">
+    <n-layout style="margin: 20px">
+      <n-layout-header class="projectTitle">
+        <n-grid x-gap="12" :cols="9">
+          <n-gi span="4" style="display: flex">
+            <n-image width="32" src="svg\\主页svg\\Icons\\Setting - 5.svg" />
+            <span style="margin-left: 15px; padding-top: -10px">{{
+              form.name
+            }}</span>
+          </n-gi>
+          <n-gi> </n-gi>
+          <n-gi span="2" style="margin-top: -1px">
+            <span>
+              <n-input
+                v-model:value="tagInput"
+                ref="inputInstRef"
+                round
+                clearable
+                placeholder="搜索文件"
+              >
+                <template #prefix>
+                  <n-image
+                    width="24"
+                    src="svg\\主页svg\\projectDetail\\⭐️ Icons L.svg"
+                  />
+                </template>
+              </n-input>
+            </span>
+          </n-gi>
+          <n-gi style="margin-top: -8px">
+            <n-button
+              align="center"
+              color="#2772F0"
+              class="button"
+              @click="searchFile"
+              >搜索文件</n-button
+            >
+          </n-gi>
+          <n-gi style="margin-top: -8px">
+            <n-button
+              color="#2772F0"
+              class="button"
+              margin-left="15px"
+              @click="projectEditVisible = true"
+              >编辑项目</n-button
+            >
+          </n-gi>
+        </n-grid>
+      </n-layout-header>
+      <n-layout-content
+        content-style="padding: 24px;"
+        style="background-color: rgb(245, 181, 68, 0.1)"
+      >
+        <div class="fileTitle">项目介绍</div>
+        <div class="intro">
+          {{ form.description }}
+        </div>
+      </n-layout-content>
+      <n-layout-content
+        content-style="padding: 24px;"
+        style="background-color: rgb(245, 181, 68, 0.1)"
+      >
+        <n-grid x-gap="50" :cols="3" class="fileTitle">
+          <n-gi>
+            <div>设计原型</div>
+          </n-gi>
+          <n-gi>
+            <div>UML图</div>
+          </n-gi>
+          <n-gi>
+            <div>文档</div>
+          </n-gi>
+        </n-grid>
+        <n-grid x-gap="50" :cols="3" style="margin-top: 10px">
+          <n-gi>
+            <div class="section">
+              <el-scrollbar max-height="97%">
+                <el-row has-sider
+                  v-for="(item, idx) in countProto"
+                  :key="idx"
+                  class="scrollbar-demo-item">
+                    <el-cow span="22">
+                      <ProtoItem>
+                      </ProtoItem>
+                    </el-cow>
+                    <el-cow span="2">
+                      <el-icon @click="delProto(idx)" style="margin-top: 12px; margin-left: -29px">
+                        <Delete />
+                      </el-icon>
+                    </el-cow>
+                </el-row>
+              </el-scrollbar>
+
+              <div class="btnspace">
+                <n-button color="#4B9F47" class="button" @click="addProto"
+                  >新建原型</n-button
+                >
+              </div>
             </div>
-        </n-layout-content>
-        <n-layout-content content-style="padding: 24px;" style="background-color: rgb(245, 181, 68, 0.1)">
-            <n-grid x-gap="50" :cols="3" class="fileTitle">
-                <n-gi>
-                    <div>
-                        设计原型
-                    </div>
-                </n-gi>
-                <n-gi>
-                    <div>
-                        UML图
-                    </div>
-                </n-gi>
-                <n-gi>
-                    <div>
-                        文档
-                    </div>
-                </n-gi>
-            </n-grid>
-            <n-grid x-gap="50" :cols="3" style="margin-top: 10px">
-                <n-gi>
-                    <div class="section">
-                        <div class="item">
-                            <div>
-                                <n-grid x-gap="0" :cols="10" style="padding-top: 5px;">
-                                    <n-gi span="1">
-                                        <n-image width=26.5 height=23.5 src="svg\\主页svg\\projectDetail\\ItemIcon.svg" />
-                                    </n-gi>
-                                    <n-gi span="8">
-                                        <div display="inline">设计原型名称</div>
-                                    </n-gi>
-                                    <n-gi span="1" align="right">
-                                        <n-button 
-                                            v-show="showDelete"
-                                            quaternary circle ghost
-                                            type="error"
-                                            size="tiny"
-                                            color="white">
-                                            <n-icon size="24" color="red">
-                                                <CancelOutlined />
-                                            </n-icon>
-                                        </n-button>
-                                    </n-gi>
-                                </n-grid>
-                            </div>
-                        </div>
-                        <div class="btnspace">
-                            <n-button color=#4B9F47 class="button">新建原型</n-button>
-                        </div>
-                    </div>
-                    
-                </n-gi>
+          </n-gi>
 
-                <n-gi>
-                    <div class="section" style="background-color: rgb(246, 134, 106, 0.2)">
-                        <div class="item">
-                            <div>
-                                <n-grid x-gap="0" :cols="10" style="padding-top: 5px;">
-                                    <n-gi span="1">
-                                        <n-image width=26.5 height=23.5 src="svg\\主页svg\\projectDetail\\ItemIcon.svg" />
-                                    </n-gi>
-                                    <n-gi span="8">
-                                        <div display="inline">图文件名称</div>
-                                    </n-gi>
-                                    <n-gi span="1" align="right">
-                                        <n-button 
-                                            v-show="show_delete"
-                                            quaternary circle ghost
-                                            type="error"
-                                            size="tiny"
-                                            color="white">
-                                            <n-icon size="24" color="red">
-                                                <CancelOutlined />
-                                            </n-icon>
-                                        </n-button>
-                                    </n-gi>
-                                </n-grid>
-                            </div>
-                            
-                            
-                        </div>
-                        <div class="btnspace">
-                            <n-button color=#F6866A class="button">新建图文件</n-button>
-                        </div>
-                    </div>
-                </n-gi>
+          <n-gi>
+            <div
+              class="section"
+              style="background-color: rgb(246, 134, 106, 0.2)"
+            >
+              <el-scrollbar max-height="97%">
+                <el-row has-sider
+                  v-for="(item, idx) in countUML"
+                  :key="idx"
+                  class="scrollbar-demo-item">
+                    <el-cow span="22">
+                      <UmlItem>
+                      </UmlItem>
+                    </el-cow>
+                    <el-cow span="2">
+                      <el-icon @click="delUML(idx)" style="margin-top: 12px; margin-left: -29px">
+                        <Delete />
+                      </el-icon>
+                    </el-cow>
+                </el-row>
+              </el-scrollbar>
 
-                <n-gi>
-                    <div class="section" style="background-color: rgb(255, 190, 92, 0.2)">
-                        <div class="item">
-                            <div>
-                                <n-grid x-gap="0" :cols="10" style="padding-top: 5px;">
-                                    <n-gi span="1">
-                                        <n-image width=26.5 height=23.5 src="svg\\主页svg\\projectDetail\\ItemIcon.svg" />
-                                    </n-gi>
-                                    <n-gi span="8">
-                                        <div display="inline">文档名称</div>
-                                    </n-gi>
-                                    <n-gi span="1" align="right">
-                                        <n-button 
-                                            v-show="show_delete"
-                                            quaternary circle ghost
-                                            type="error"
-                                            size="tiny"
-                                            color="white">
-                                            <n-icon size="24" color="red">
-                                                <CancelOutlined />
-                                            </n-icon>
-                                        </n-button>
-                                    </n-gi>
-                                </n-grid>
-                            </div>
-                        </div>
-                        <div class="btnspace">
-                            <n-button color=#F5B544 class="button">新建文档</n-button>
-                        </div>
-                    </div>
-                    
-                </n-gi>
+              <div class="btnspace">
+                <n-button color="#F6866A" class="button" @click="addUML"
+                  >新建图文件</n-button
+                >
+              </div>
+            </div>
+          </n-gi>
 
-            </n-grid>
-        </n-layout-content>
-        <!--<n-layout-footer>角标</n-layout-footer>-->
-        </n-layout>
-    </n-space>
+          <n-gi>
+            <div
+              class="section"
+              style="background-color: rgb(255, 190, 92, 0.2)"
+            >
+              <el-scrollbar max-height="97%">
+                <el-row has-sider
+                  v-for="(item, idx) in countFile"
+                  :key="idx"
+                  class="scrollbar-demo-item">
+                    <el-cow span="22">
+                      <FileItem>
+                      </FileItem>
+                    </el-cow>
+                    <el-cow span="2">
+                      <el-icon @click="delFile(idx)" style="margin-top: 12px; margin-left: -29px">
+                        <Delete />
+                      </el-icon>
+                    </el-cow>
+                </el-row>
+              </el-scrollbar>
 
+              <div class="btnspace">
+                <n-button color="#F5B544" class="button" @click="addFile"
+                  >新建文档</n-button
+                >
+              </div>
+            </div>
+          </n-gi>
+        </n-grid>
+      </n-layout-content>
+      <!--<n-layout-footer>角标</n-layout-footer>-->
+    </n-layout>
+  </n-space>
+
+  <!--项目信息修改框-->
+  <el-dialog v-model="projectEditVisible" title="修改项目信息">
+    <el-form :model="form">
+      <el-form-item label="项目名称" :label-width="formLabelWidth">
+        <el-input
+          v-model="form.name"
+          autocomplete="off"
+          placeholder="请输入项目名称"
+        />
+      </el-form-item>
+      <el-form-item label="项目描述" :label-width="formLabelWidth">
+        <el-input v-model="form.description" placeholder="请输入项目描述" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="projectEditVisible = false">取消</el-button>
+        <el-button type="primary" @click="projectEditVisible = false"
+          >确认</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
-<script>
-//import { defineComponent } from 'vue'
-import { defineComponent, ref } from 'vue'
-import { CancelOutlined } from '@vicons/material'
-import { Delete } from '@element-plus/icons-vue'
-export default defineComponent({
-  data: {
-    showDelete: false,
-    buttonMessage:"管理文件",
-  },
-  components: {
-    CancelOutlined
-  },
-  setup () {
-    return {
-      value: ref(null),
-      CancelOutlined
-    }
-  },
-  methods: {
-    show_delete(){
-        this.showDelete = !this.showDelete;
-    }
-  },
-    //动态删除批量绑定数据
-    /*batchDel(index) {
-        if (this.batchForm.length <= 1) {
-            this.batchForm[index].value = "";
-            this.batchForm[index].index = 0;
-            this.batchFormNum = 0;
-        } else {
-        //先删除当前下标的数据
-            this.batchForm.splice(index, 1);
-            let num = [];
-        //循环找出所有下标,不找出最大值，不根据顺序删除会报错
-            this.batchForm.forEach((item) => {
-            num.push(item.index);
-            });
-            //查出数组中最大值，赋值给batchFormNum 
-            this.batchFormNum = Math.max(...num);
-        }
-    }
-  },*/
-})
+<script setup lang="ts">
+import FileItem from "./fileName.vue";
+import UmlItem from "./UMLName.vue";
+import ProtoItem from "./protoName.vue";
+import { reactive, Ref, ref, toRefs } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import {
+  Check,
+  Delete,
+  Edit,
+  Message,
+  Search,
+  Star,
+} from "@element-plus/icons-vue";
+import axios from "axios"; //axios请求地址
+import { useMessage } from "naive-ui";
 
+const dialogEditVisible = ref(false);
+const projectEditVisible = ref(false);
+const formLabelWidth = "140px";
+
+const form = reactive({
+  name: "项目名称",
+  description: "项目描述",
+});
+const searchFile = () => {
+  ElMessage({
+    message: "searching",
+    type: "warning",
+  });
+};
+
+//const protoList=ref([])
+const countProto = ref(0);
+const countUML = ref(1);
+const countFile = ref(1);
+
+let protoList: Array<String> = [];
+let cntP: number = 0;
+
+const addProto = () => {
+  let str: String = "新建文件"+cntP.toString();
+  protoList.push(str);
+  cntP++;
+  countProto.value++;
+};
+const addUML = () => {
+  countUML.value++;
+};
+const addFile = () => {
+  countFile.value++;
+};
+
+const msg=useMessage;
+const delProto = (idx: number) => {
+  ElMessageBox.confirm(
+        //'确定删除这个文件？',
+        idx.toString(),
+        'Confirm',
+        {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        }
+    )
+      .then(() => {
+        protoList.splice(idx,1);
+        countProto.value--;
+        ElMessage({
+            type: 'success',
+            message: protoList[idx].toString(),
+        })
+        //handleSure(idx);
+      })
+      .catch(() => {
+        // catch error
+      });
+};
+const handleSure=(val)=> {
+  const index = protoList.findIndex((item) => item.id === val.id);
+  data.studentInfo.splice(index, 1);
+};
+
+const handleDeleteOne = (id) => {
+  //接口调用
+  axios
+    .post("/user/order/del", {
+      data: {
+        document_id: [id],
+      },
+    })
+    .then(() => {
+      ElMessage.success("删除成功");
+      //getShowList();
+    });
+};
 </script>
 
 <style scoped>
-.projectTitle{
-    display: flex;
-    /*justify-content: center;*/
-    align-items: center;
+.projectTitle {
+  display: flex;
+  /*justify-content: center;*/
+  align-items: center;
 
-    background-color: rgb(245, 181, 68, 0.1);
-    font-family: Inria Sans;
-    font-weight: bold;
-    font-size: 28px;
+  background-color: rgb(245, 181, 68, 0.1);
+  font-family: Inria Sans;
+  font-weight: bold;
+  font-size: 28px;
 }
 .button {
-    border-radius: 10px;
-    text-align: center;
-    background-color: (39, 114, 240);
-    
-    font-family: Inria Sans;
-    font-weight: bold;
-    color: white;
+  border-radius: 10px;
+  text-align: center;
+  background-color: (39, 114, 240);
+
+  font-family: Inria Sans;
+  font-weight: bold;
+  color: white;
 }
 
 .intro {
-    border-radius: 16px;
-    background-color: white;
-    /*width: 1130px;*/
-    height: 175px;
-    margin-top: 10px;
-    padding: 25px;
+  border-radius: 16px;
+  background-color: white;
+  /*width: 1130px;*/
+  height: 175px;
+  margin-top: 10px;
+  padding: 25px;
 }
 
 .fileTitle {
-    margin-left: 30px;
-    margin-bottom: 0px;
-    line-height: 32px;
-    text-align: left;
-    font-family: Inria Sans;
-    font-weight: bold;
-    font-size: 20px;
+  margin-left: 22px;
+  margin-bottom: 0px;
+  line-height: 32px;
+  text-align: left;
+  font-family: Inria Sans;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .section {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;/**/
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column; /**/
 
-    border-radius: 16px;
-    background-color: rgb(75, 159, 71, 0.2);
-    text-align: center;
-    padding-bottom: 10px;
-    padding-top: 20px;
-    padding-left: 30px;
-    padding-right: 30px;
-    align-items: center;
+  border-radius: 16px;
+  background-color: rgb(75, 159, 71, 0.2);
+  padding-bottom: 10px;
+  padding-top: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+  align-items: center;
 
-    /*width: 330.7px;*/
-    height: 450px;
+  /*width: 330.7px;*/
+  height: 450px;
 
-    font-family: Inria Sans;
-    font-weight: bold;
-    font-size: 16px;
-}
-.btnspace {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    align-items: center;
+  font-family: Inria Sans;
+  font-weight: bold;
+  font-size: 16px;
 }
 
 .item {
-    display: flex;
-    align-items: center;
-    background-color: rgb(255, 255, 255, 0.3);
-    border-radius: 10px;
+  display: flex;
+  align-items: center;
+  background-color: rgb(255, 255, 255, 0.3);
+  border-radius: 10px;
 
-    font-family: Inria Sans;
-    font-size: 16px;
-    text-align: left;
+  font-family: Inria Sans;
+  font-size: 16px;
+  text-align: left;
 
-    height: 45px;
-    width: 100%;
+  height: 45px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.btnspace {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+}
+
+.deleteButton {
+  width: 16px;
+  height: 16px;
+  background: url("svg\\主页svg\\projectDetail\\trash.svg") no-repeat;
+  border-style: hidden;
 }
 </style >
