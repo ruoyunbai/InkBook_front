@@ -275,9 +275,9 @@
 
 
 <script setup lang="ts">
-import FileItem from "./fileName.vue";
-import UmlItem from "./UMLName.vue";
-import ProtoItem from "./protoName.vue";
+// import FileItem from "./fileName.vue";
+// import UmlItem from "./UMLName.vue";
+// import ProtoItem from "./protoName.vue";
 import { onMounted, reactive, Ref, ref, toRefs } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import {
@@ -306,10 +306,10 @@ const project = reactive({
   name: ""
 })
 const searchFile = () => {
-  ElMessage({
-    message: "searching",
-    type: "warning",
-  });
+  // ElMessage({
+  //   message: "searching",
+  //   type: "warning"
+  // })
 
   /*console.log(goods_data.selected_data.introduce)
   let search_res: FileReadOptions[] = []  // 接受查询文件结果
@@ -335,7 +335,7 @@ const searchFile = () => {
 }
 
 onMounted(() => {
-  getProjectDetail();
+  // getProjectDetail();
 });
 let info: any = reactive([])
 const getProjectDetail = (clear: boolean = true) => {
@@ -361,6 +361,7 @@ const getProjectDetail = (clear: boolean = true) => {
         // User.Name=modelRef.value.name,
         // User.Id=response.data.data.user_id,
       } else {
+
       }
       console.log(response.data);
     };
