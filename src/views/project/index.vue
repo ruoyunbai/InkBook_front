@@ -221,57 +221,14 @@ const form = reactive({
   region: '',
 })
 
-//创建项目
+
 
 onMounted(() => {
   getProject();
 });
-
-
-const project_create = () =>{
-  axios({
-    url: axios.defaults.baseURL + "/proj/create_proj",
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization":User.token
-    },
-    data: {
-      // post_id: props.onePost.post_id,
-      // user_id: User.Id,
-      // content: text.value,
-      // content:vditor.value!.getValue(),
-      group_id: projects[index].group_id,//怎么获得团队id？
-      proj_info: form.region,
-      proj_name: form.name
-    },
-    transformRequest: [
-      function (data, headers) {
-        let data1 = JSON.stringify(data);
-        console.log(data1);
-        return data1;
-      },
-    ],
-  }).then(function (response) {
-    // 处理成功情况
-      console.log(response.data);
-
-      if (response.data?.success) {
-        message.success("创建成功");
-        getProject();
-        dialogCreateVisible.value = false;
-
-        // setTimeout(() => {
-        //   footRef.value.style.width = post.value?.offsetWidth + "px";
-        // }, 200);
-      } else {
-        message.error(response.data.message);
-      }
-      console.log(response.data);
-  });
-}
  
 let count: number = 0;
+let one_group_id : number;
 const projects: any[] = reactive([]);
 const getProject = (clear: boolean = true) => {
   //   section.value=parseInt(localStorage.getItem("section")+"")
@@ -308,8 +265,8 @@ const getProject = (clear: boolean = true) => {
               status: response.data.data[i].projs.status,
               user_id: response.data.data[i].projs. user_id,
             });
-
             projects.push(temp);
+            one_group_id = projects[0].group_id;
           }
         console.log(projects);
         // User.Name=modelRef.value.name,
@@ -319,150 +276,52 @@ const getProject = (clear: boolean = true) => {
       console.log(response.data);
     });
 }
-// const getProject = () => {
-//   //   section.value=parseInt(localStorage.getItem("section")+"")
-//   axios
-//     .post("/proj/get_proj_all", {
-//     })
-//     .then(function (response) {
-//       // 处理成功情况
-//       if (response.data?.success) {
-//         count = response.data?.count;
-//         console.log(response.data.data);
-//         let i = 0;
-//         // if (clear) while (projects.length != 0) projects.pop();
-//         if (response.data.data != null)
-//           for (i = 0; i < response.data.data.length; i++) {
-//             let temp = reactive({
-//               group_id:response.data.data[i].projs.group_id,
-//               proj_id: response.data.data[i].projs.proj_id,
-//               proj_info: response.data.data[i].projs.proj_info,
-//               proj_name: response.data.data[i].projs.proj_name,
-//               status: response.data.data[i].projs.status,
-//               user_id: response.data.data[i].projs. user_id,
-//             });
-//             //要获得group_id吗？
-//             // axios({
-//             //   url: axios.defaults.baseURL + "/user/info",
-//             //   method: "post",
-//             //   // headers: {
-//             //   //   "Content-Type": "application/json",
-//             //   // },
-//             //   data: {
-//             //     user_id: response.data.data[i].comment.user_id,
-//             //   },
-//             //   // transformRequest: [
-//             //   //   function (data, headers) {
-//             //   //     let data1 = JSON.stringify(data);
-//             //   //     console.log(data1);
-//             //   //     return data1;
-//             //   //   },
-//             //   // ],
-//             // }).then(function (response) {
-//             //   console.log(response.data);
-//             //   if (response.data.status) {
-//             //     if (response.data.data.avatar_url != "")
-//             //       temp.src = response.data.data.avatar_url;
-//             //   }
-//             // });
-//             projects.push(temp);
-//           }
-//         console.log(projects);
-//         // User.Name=modelRef.value.name,
-//         // User.Id=response.data.data.user_id,
-//       } else {
-//       }
-//       console.log(response.data);
-//     });
-// };
+//创建项目
+const project_create = () =>{
+  axios({
+    url: axios.defaults.baseURL + "/proj/create_proj",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization":User.token
+    },
+    data: {
+      // post_id: props.onePost.post_id,
+      // user_id: User.Id,
+      // content: text.value,
+      // content:vditor.value!.getValue(),
+      group_id: one_group_id,//怎么获得团队id？
+      proj_info: form.region,
+      proj_name: form.name
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
+      console.log(response.data);
+
+      if (response.data?.success) {
+        message.success("创建成功");
+        getProject();
+        dialogCreateVisible.value = false;
+
+        // setTimeout(() => {
+        //   footRef.value.style.width = post.value?.offsetWidth + "px";
+        // }, 200);
+      } else {
+        message.error(response.data.message);
+      }
+      console.log(response.data);
+  });
+}
 
 
 </script>
-
-
-<!--<script lang="ts">
-import {computed, defineComponent, onMounted, reactive, toRefs, watch} from 'vue';
-import { getGoodsList } from '../../request/api';
-import {ProjsData} from "../../type/goods";
-
-export default defineComponent({
-  setup () {
-    const projs_data = reactive(new ProjsData())
-
-    // 获取全部商品数据, 因为多个地方使用,所以封装为方法
-    const p_getGoodsList = () => {
-      getGoodsList().then(res => {
-        console.log(res)
-        projs_data.goods_list = res.data
-      })
-    }
-
-    onMounted(() => {
-      p_getGoodsList()  // 获取全部商品数据
-    })
-
-    // 点击查询商品按钮时触发
-    // const onSearchGoods = () => {
-    //   // console.log(goods_data.selected_data.title)
-    //   // console.log(goods_data.selected_data.introduce)
-    //   let search_res: IGoods[] = []  // 接受查询商品的结果
-    //   if(goods_data.selected_data.title || goods_data.selected_data.introduce){
-    //     if(goods_data.selected_data.title){
-    //       search_res = goods_data.goods_list.filter((value) => {
-    //         return value.title.indexOf(goods_data.selected_data.title) !== -1
-    //       })
-    //     }
-    //     else {
-    //       if(goods_data.selected_data.introduce){
-    //         search_res = goods_data.goods_list.filter((value) => {
-    //           return value.introduce.indexOf(goods_data.selected_data.introduce) !== -1
-    //         })
-    //       }
-    //     }
-    //   }
-    //   else {
-    //     search_res = goods_data.goods_list
-    //   }
-    //   goods_data.goods_list = search_res
-    //   goods_data.selected_data.data_count = goods_data.goods_list.length
-    // }
-
-    // 计算属性, 切割出实际上需要展示的数据
-    // const showedDataList = reactive({
-    //   compDataList: computed(() => {
-    //     return goods_data.goods_list.slice(
-    //         (goods_data.selected_data.current_page - 1) * goods_data.selected_data.single_page_size,
-    //         goods_data.selected_data.current_page * goods_data.selected_data.single_page_size,
-    //     )
-    //   })
-    // })
-
-    // // 当前页改变时触发
-    // const currentChange = (page: number) => {
-    //   goods_data.selected_data.current_page = page
-    // }
-
-    // // 当单页数量改变时触发
-    // const sizeChange = (page_size: number) => {
-    //   goods_data.selected_data.single_page_size = page_size
-    // }
-
-    // //watch 监听
-    // watch([() => goods_data.selected_data.title, () => goods_data.selected_data.introduce], () => {
-    //   if(goods_data.selected_data.title === "" && goods_data.selected_data.introduce === ""){
-    //     p_getGoodsList()
-    //   }
-    // })
-    return {
-      ...toRefs(projs_data),
-      // onSearchGoods,
-      // currentChange,
-      // sizeChange,
-      // showedDataList
-    }
-  }
-})
-</script> -->
 
 
 <style scoped>
