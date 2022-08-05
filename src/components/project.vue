@@ -21,10 +21,21 @@
                 size="large"
                 color="#DADADA"
                 ghost
-                style="margin:5px 10px 10px 10px"
+                style="margin:5px 10px 5px 10px"
                 @click="dialogEditVisible = true"
             >
                 <p class="buttonText2">编辑信息</p>
+            </n-button>
+
+            <n-button
+                round
+                size="large"
+                color="#DADADA"
+                ghost
+                style="margin:0px 10px 10px 10px"
+                @click=""
+            >
+                <p class="buttonText2">删除项目</p>
             </n-button>
 
             <el-dialog v-model="dialogEditVisible" title="修改项目信息">

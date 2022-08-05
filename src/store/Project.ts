@@ -3,19 +3,15 @@ import { defineStore } from 'pinia'
 import { Names } from './store-namespace'
 
  
-export const useProtoStore = defineStore("Proto",{
-    // id:"user",
+export const useProjectStore = defineStore("Project",{
     state:()=>{
         return {
-            name:"",
-            group_id:0,
-            project:[],
-            Login:false,
-            token:"",
-            Id:0,
-            avatar:"http://43.138.77.133:81/media/avatars/default.jpg",
-            level:1,
-            isadmin:false
+            "group_id": 0,
+            "proj_id": 0,
+            "proj_info": "string",
+            "proj_name": "string",
+            "status": 0,
+            "user_id": 0
         }
     },
     // getters:{
