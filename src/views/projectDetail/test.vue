@@ -1,3 +1,189 @@
+<!--<template>
+<div class="todo-container">
+  <div class="todo-wrap">
+    <div class="todo-header">
+    <input type="text" v-model="msg" @keyup.enter="func" />
+    </div>
+    <p v-if="arr.length == 0">暂无项目</p>
+    <ul class="todo-main" v-else>
+      <li v-for="(e, idx) in arr" :key="idx">
+        <label
+          ><span>{{ e }}</span></label
+        >
+        <button @click="del(idx)" class="btn btn-danger">删除</button>
+      </li>
+    </ul>
+  </div>
+</div>
+</template>
+
+<script lang="ts">
+import { computed, defineComponent, Ref, ref } from "vue";
+export default defineComponent({
+  setup() {
+    const msg = ref("");
+    const arr: Ref = ref([]);
+    const func = () => {
+      if (msg.value !== "") {
+        arr.value.unshift(msg.value.trim());
+        msg.value = "";
+      }
+    };
+    const del = (idx: number) => {
+      arr.value.splice(idx, 1);
+    }
+    return {
+      msg,
+      arr,
+      func,
+      del
+    };
+  },
+});
+</script>
+
+<style>
+/*base*/
+body {
+  background: #fff;
+}
+
+.btn {
+  display: inline-block;
+  padding: 4px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #da4f49;
+  border: 1px solid #bd362f;
+}
+
+.btn-danger:hover {
+  color: #fff;
+  background-color: #bd362f;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+/*app*/
+.todo-container {
+  width: 600px;
+  margin: 0 auto;
+}
+.todo-container .todo-wrap {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/*header*/
+.todo-header input {
+  width: 560px;
+  height: 28px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 7px;
+}
+
+.todo-header input:focus {
+  outline: none;
+  border-color: rgba(82, 168, 236, 0.8);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+    0 0 8px rgba(82, 168, 236, 0.6);
+}
+
+/*main*/
+.todo-main {
+  margin-left: 0px;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  padding: 0px;
+}
+
+.todo-empty {
+  height: 40px;
+  line-height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  padding-left: 5px;
+  margin-top: 10px;
+}
+/*item*/
+li {
+  list-style: none;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 5px;
+  border-bottom: 1px solid #ddd;
+}
+
+li label {
+  float: left;
+  cursor: pointer;
+}
+
+li label li input {
+  vertical-align: middle;
+  margin-right: 6px;
+  position: relative;
+  top: -1px;
+}
+
+li button {
+  float: right;
+  display: none;
+  margin-top: 3px;
+}
+
+li:before {
+  content: initial;
+}
+
+li:last-child {
+  border-bottom: none;
+}
+
+/*footer*/
+.todo-footer {
+  height: 40px;
+  line-height: 40px;
+  padding-left: 6px;
+  margin-top: 5px;
+}
+
+.todo-footer label {
+  display: inline-block;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.todo-footer label input {
+  position: relative;
+  top: -1px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.todo-footer button {
+  float: right;
+  margin-top: 5px;
+}
+</style>
+-->
+
 <template>
   <n-space vertical size="large">
     <n-layout style="margin: 20px">
@@ -78,11 +264,9 @@
               <el-scrollbar max-height="97%">
                 <div
                   v-for="(item, idx) in countProto"
-                  :key="idx"
-                  class="scrollbar-demo-item"
-                >
-                  <n-grid
-                    class="item"
+                  :key="idx" 
+                  class="scrollbar-demo-item">
+                  <n-grid class="item"
                     x-gap="0"
                     :cols="11"
                     style="padding-top: 5px; vertical-align: middle"
@@ -95,23 +279,17 @@
                       />
                     </n-gi>
                     <n-gi span="8">
-                      <router-link
-                        to="/prototype"
-                        style="text-decoration: none"
-                      >
-                        <div display="inline">{{ protoList[idx] }}</div>
-                      </router-link>
+                      <div display="inline">{{protoList[idx]}}</div>
                     </n-gi>
                     <n-gi span="1">
-                      <el-icon @click="dialogEditVisible = true"
-                        ><!--@click="dialogEditVisible = true"-->
+                      <el-icon @click="editProto"><!--@click="dialogEditVisible = true"-->
                         <Edit />
                       </el-icon>
                     </n-gi>
                     <n-gi span="1">
                       <el-icon @click="delProto(idx)">
-                        <Delete /> </el-icon
-                      ><!---->
+                        <Delete />
+                      </el-icon><!---->
                     </n-gi>
                   </n-grid>
                 </div>
@@ -133,11 +311,9 @@
               <el-scrollbar max-height="97%">
                 <div
                   v-for="(item, idx) in countUML"
-                  :key="idx"
-                  class="scrollbar-demo-item"
-                >
-                  <n-grid
-                    class="item"
+                  :key="idx" 
+                  class="scrollbar-demo-item">
+                  <n-grid class="item"
                     x-gap="0"
                     :cols="11"
                     style="padding-top: 5px; vertical-align: middle"
@@ -150,7 +326,7 @@
                       />
                     </n-gi>
                     <n-gi span="8">
-                      <div display="inline">{{ umlList[idx] }}</div>
+                      <div display="inline">{{umlList[idx]}}</div>
                     </n-gi>
                     <n-gi span="1">
                       <el-icon @click="dialogEditVisible = true">
@@ -159,8 +335,8 @@
                     </n-gi>
                     <n-gi span="1">
                       <el-icon @click="delUML(idx)">
-                        <Delete /> </el-icon
-                      ><!---->
+                        <Delete />
+                      </el-icon><!---->
                     </n-gi>
                   </n-grid>
                 </div>
@@ -182,11 +358,9 @@
               <el-scrollbar max-height="97%">
                 <div
                   v-for="(item, idx) in countFile"
-                  :key="idx"
-                  class="scrollbar-demo-item"
-                >
-                  <n-grid
-                    class="item"
+                  :key="idx" 
+                  class="scrollbar-demo-item">
+                  <n-grid class="item"
                     x-gap="0"
                     :cols="11"
                     style="padding-top: 5px; vertical-align: middle"
@@ -199,9 +373,7 @@
                       />
                     </n-gi>
                     <n-gi span="8">
-                      <router-link to="/document" style="text-decoration: none">
-                        <div display="inline">{{ fileList[idx] }}</div>
-                      </router-link>
+                      <div display="inline">{{fileList[idx]}}</div>
                     </n-gi>
                     <n-gi span="1">
                       <el-icon @click="dialogEditVisible = true">
@@ -210,8 +382,8 @@
                     </n-gi>
                     <n-gi span="1">
                       <el-icon @click="delFile(idx)">
-                        <Delete /> </el-icon
-                      ><!---->
+                        <Delete />
+                      </el-icon><!---->
                     </n-gi>
                   </n-grid>
                 </div>
@@ -231,7 +403,7 @@
   </n-space>
 
   <!--文件名修改框-->
-  <el-dialog v-model="dialogEditVisible" title="重命名文件" draggable>
+  <el-dialog @click="dialogEditVisible" title="重命名文件"  draggable>
     <el-form :model="form">
       <el-form-item label="新的文件名称" :label-width="formLabelWidth">
         <el-input v-model="project.name" autocomplete="off" />
@@ -240,7 +412,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogEditVisible = false">取消</el-button>
-        <el-button type="primary" @click="editProto(project.name)"
+        <el-button type="primary" @click="dialogEditVisible = false"
           >确认</el-button
         >
       </span>
@@ -272,13 +444,11 @@
   </el-dialog>
 </template>
 
-
-
 <script setup lang="ts">
 import FileItem from "./fileName.vue";
 import UmlItem from "./UMLName.vue";
 import ProtoItem from "./protoName.vue";
-import { onMounted, reactive, Ref, ref, toRefs } from "vue";
+import { reactive, Ref, ref, toRefs } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import {
   Check,
@@ -290,9 +460,7 @@ import {
 } from "@element-plus/icons-vue";
 import axios from "axios"; //axios请求地址
 import { useProjectStore } from "../../store/Project";
-import { useDetailStore } from "../../store/ProjectDetail";
 import { useMessage } from "naive-ui";
-import { FileReadOptions } from "fs/promises";
 
 const dialogEditVisible = ref(false);
 const projectEditVisible = ref(false);
@@ -310,62 +478,7 @@ const searchFile = () => {
     message: "searching",
     type: "warning",
   });
-
-  /*console.log(goods_data.selected_data.introduce)
-  let search_res: FileReadOptions[] = []  // 接受查询文件结果
-    if(goods_data.selected_data.title || goods_data.selected_data.introduce){
-      if(goods_data.selected_data.title){
-        search_res = goods_data.goods_list.filter((value) => {
-          return value.title.indexOf(goods_data.selected_data.title) !== -1
-        })
-      }
-      else {
-        if(goods_data.selected_data.introduce){
-          search_res = goods_data.goods_list.filter((value) => {
-            return value.introduce.indexOf(goods_data.selected_data.introduce) !== -1
-          })
-        }
-      }
-    }
-    else {
-      search_res = goods_data.goods_list
-    }
-    goods_data.goods_list = search_res
-    goods_data.selected_data.data_count = goods_data.goods_list.length*/
-}
-
-onMounted(() => {
-  getProjectDetail();
-});
-let info: any = reactive([])
-const getProjectDetail = (clear: boolean = true) => {
-  axios
-    .post("/file/get_proj_by_id", {
-    })
-    .then(function (response) {
-      // 处理成功情况
-      if (response.data?.success) {
-        console.log(response.data.data);
-        if (response.data.data != null){
-          let temp = reactive({
-            group_id:response.data.group_id,
-            proj_id: response.data.proj_id,
-            proj_info: response.data.proj_info,
-            proj_name: response.data.proj_name,
-            status: response.data.status,
-            user_id: response.data.user_id,
-          });
-          info = temp;
-          
-        console.log(info);
-        // User.Name=modelRef.value.name,
-        // User.Id=response.data.data.user_id,
-      } else {
-      }
-      console.log(response.data);
-    };
-});
-
+};
 
 //const protoList=ref([])
 const countProto = ref(0);
@@ -384,7 +497,6 @@ const addProto = () => {
   protoList.push(str);
   cntP++;
   countProto.value++;
-  handleProtoAdd();
 };
 const addUML = () => {
   let str: String = "新建UML图"+cntU.toString();
@@ -399,74 +511,19 @@ const addFile = () => {
   countFile.value++;
 };
 
-const handleProtoAdd=()=> {
-  axios
-  .post("/file/create_prototype", {
-    "proj_id": 0,
-    "prototype_name": "string"
-  })
-  .then(function (response) {
-    // 处理成功情况
-    console.log(response.data);
-
-    if (response.data?.success) {
-      message.success("创建成功");
-      getProjectDetail();
-    } else {
-      message.error(response.data.message);
-    }
-    console.log(response.data);
-  });
-}
-
 const msg = ref("");
-const editProto = (name: String) => {
-  dialogEditVisible.value = false;
+const editProto = (idx: number) => {
+  dialogEditVisible = true;
   ElMessage({
             type: 'success',
-            message: project.name,
+            message: '测试editProto ',
         })
-  if (name !== "") {
-    ElMessage({
-            type: 'success',
-            message: name,
-        })
-    let idx = protoList.findIndex((x) => x === name);
-    ElMessage({
-            type: 'success',
-            message: idx.toString(),
-        })
+  if (project.name !== "") {
     protoList[idx]=project.name;
     project.name = "";
   }
+  dialogEditVisible.value = !dialogEditVisible.value;
 }
-
-
-const message = useMessage();
-const protoCreate = () => {
-  axios
-    .post("/file/create_document", {
-      proj_id: 0,//怎么获得项目id？
-      proto_name: form.name
-    })
-    .then(function (response) {
-      // 处理成功情况
-      console.log(response.data);
-
-      if (response.data?.success) {
-        message.success("创建成功");
-        getProjectDetail();
-        dialogEditVisible.value = false;
-
-        // setTimeout(() => {
-        //   footRef.value.style.width = post.value?.offsetWidth + "px";
-        // }, 200);
-      } else {
-        message.error(response.data.message);
-      }
-      console.log(response.data);
-    });
-};
 
 const delProto = (idx: number) => {
   ElMessageBox.confirm(
@@ -480,13 +537,12 @@ const delProto = (idx: number) => {
         }
     )
       .then(() => {
-        handleProtoDelete(idx);
         let str: String =protoList[idx];
         protoList.splice(idx,1);
         countProto.value--;
         ElMessage({
             type: 'success',
-            message: '删除成功 '+str,
+            message: '成功删除文件 '+str,
         })
       })
       .catch(() => {
@@ -505,7 +561,6 @@ const delUML = (idx: number) => {
         }
     )
       .then(() => {
-        handleUMLDelete(idx);
         let str: String =umlList[idx];
         umlList.splice(idx,1);
         countUML.value--;
@@ -530,7 +585,6 @@ const delFile = (idx: number) => {
         }
     )
       .then(() => {
-        handleFileDelete(idx);
         let str: String =fileList[idx];
         fileList.splice(idx,1);
         countFile.value--;
@@ -544,46 +598,19 @@ const delFile = (idx: number) => {
       });
 };
 
-const handleProtoDelete = (id) => {
+const handleDeleteOne = (id) => {
   //接口调用
   axios
-    .post("/file/move_prototype_to_bin", {
+    .post("/user/order/del", {
       data: {
-        prototype_name: [id],
+        document_id: [id],
       },
     })
     .then(() => {
-      //ElMessage.success("删除成功");
+      ElMessage.success("删除成功");
       //getShowList();
     });
 };
-const handleUMLDelete = (id) => {
-  //接口调用
-  axios
-    .post("/file/move_uml_to_bin", {
-      data: {
-        uml_name: [id],
-      },
-    })
-    .then(() => {
-      //ElMessage.success("删除成功");
-      //getShowList();
-    });
-};
-const handleFileDelete = (id) => {
-  //接口调用
-  axios
-    .post("/file/move_document_to_bin", {
-      data: {
-        document_name: [id],
-      },
-    })
-    .then(() => {
-      //ElMessage.success("删除成功");
-      //getShowList();
-    });
-};
-
 </script>
 
 <style scoped>
@@ -609,14 +636,11 @@ const handleFileDelete = (id) => {
 
 .intro {
   border-radius: 16px;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: white;
   /*width: 1130px;*/
   height: 175px;
   margin-top: 10px;
   padding: 25px;
-
-  font-family: Inria Sans;
-  font-weight: bold;
 }
 
 .fileTitle {
