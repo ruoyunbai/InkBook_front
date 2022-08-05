@@ -25,7 +25,7 @@ const { isDragging } = toRefs(collect)
     v-else
     :ref="drag"
     class="box"
-    :style="{ left: `${left}px`, top: `${top}px` ,zIndex: `${z}` }"
+    :style="{ left: `${left}px`, top: `${top}px`  }"
     role="Box"
     data-testid="box"
   >

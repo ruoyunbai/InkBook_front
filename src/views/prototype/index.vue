@@ -1,23 +1,72 @@
 <template>
+ <n-modal
+    v-model:show="showModal"
+    class="custom-card"
+    preset="card"
+    :style="bodyStyle"
+    title=" 请输入页面名字"
+    size="huge"
+    :bordered="false"
+  >
+    <template #header-extra>
+     取消
+    </template>
+    <n-input
+    v-model:value="createName"
+    ></n-input>
+    <template #footer>
+      <n-button
+      @click="createPage"
+      >确定</n-button>
+    </template>
+  </n-modal>
   <n-card :bordered="false">
     <n-grid :cols="20">
       <n-gi span="3">
         <n-space vertical>
-          <n-select v-model:value="value" :options="options" class="choose" />
+          <n-select v-model:value="value" 
+          :options="options" 
+           remote
+           :loading="protoLoading"
+          placeholder="请选择原型"
+      @update:value="getPPages"
+          class="choose" />
         </n-space>
       </n-gi>
-      <n-gi>
+      <!-- <n-gi></n-gi> -->
+      <n-gi span="3">
+        <n-space vertical>
+          <n-select
+          :loading="pageNotChosed"
+           remote
+          :placeholder=pageHolder
+          :disabled="ProtoNotChosed"
+           v-model:value="pageId" 
+           :options="optionsPage" 
+            @update:value="getPage"
+           class="choose" />
+        </n-space>
       </n-gi>
-      <n-gi>
-      </n-gi>
-      <n-gi>
-
-      </n-gi>
-      <n-gi span="5">
-        <n-space>
-          <n-button type="warning" strong secondary v-on:click="saveDesign">保存设计</n-button>
+ <n-gi span="2">
+  <n-space>
+          <n-button 
+          type="warning" 
+          strong secondary 
+          :disabled="ProtoNotChosed "
+          v-on:click="saveDesign"
+          @click="()=>{showModal=true}"
+          >新建页面</n-button>
           <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
-
+        </n-space>
+ </n-gi>
+      <n-gi span="2">
+        <n-space>
+          <n-button 
+          type="warning" 
+          strong secondary 
+          :disabled="nopageChosed"
+          v-on:click="saveDesign">保存设计</n-button>
+          <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
         </n-space>
       </n-gi>
       <n-gi span="2">
@@ -44,17 +93,33 @@
 
 <script setup lang="ts">
 import html2canvas from 'html2canvas';
-import { ref, reactive, onMounted, computed, watch } from 'vue'
+import { ref, reactive, onMounted, computed, watch,onBeforeMount } from 'vue'
 import { EmailEditor } from 'vue-email-editor';
 import type { UploadInst, UploadFileInfo } from 'naive-ui'
 import { id } from 'date-fns/locale';
 import axios from 'axios';
-
+import { SelectOption } from 'naive-ui'
 import {useUserStore} from '../../store/User'
+const createName=ref("")
 const User=useUserStore()
 const height = ref(500)
 const width = ref(500)
-
+const ProtoNotChosed=ref(true)
+const protoLoading=ref(true)
+const nopageChosed=ref(true)
+const pageNotChosed=ref(false)
+const pageHolder=ref("选择原型后可选择页面")
+const showModal=ref(false)
+const bodyStyle={
+        width: '600px'
+      }
+      // const  segmented={
+      //   content: 'soft',
+      //   footer: 'soft'
+      // }
+onBeforeMount(()=>{
+  getProtos()
+})
 const changeHeight = () => {
   if (height.value != null) {
     minHeight.value = height.value + "px"
@@ -72,18 +137,51 @@ const changeWidth = () => {
     preheaderText: "Hello World"
   });
 }
-// import * as Automerge from 'automerge'
-const options = reactive([
-  {
-    label: "Everybody's Got Something to Hide Except Me and My Monkey",
-    value: 'song0',
 
-  },
-  {
-    label: 'InkBook',
-    value: 'song1'
-  }])
+// import * as Automerge from 'automerge'
+const options = ref<SelectOption[]>([])
+const optionsPage = ref<SelectOption[]>([])
+
+  const getProtos=()=>{
+    axios({
+        url: axios.defaults.baseURL + "/file/get_proj_prototypes",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization":User.token
+        },
+        data: {
+          proj_id: 1
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("response",response)
+        console.log(response.data);
+
+        if (response.data?.success) {
+            for(let i=0;i<response.data?.count;i++){
+             
+             
+               options.value.push({
+                label:response.data?.prototypes[i]?.prototype_name,
+                value:response.data?.prototypes[i]?.prototype_id
+                })
+             
+            }
+            protoLoading.value=false
+
+          }
+        })
+  }
 const value = ref(null)
+const pageId = ref(null)
 const emailEditor = ref()
 const minHeight = ref('500px')
 watch(minHeight, (newVal, oldVal) => {
@@ -100,10 +198,15 @@ const projectId = ref(0) // replace with your project id
 
 
 onMounted(()=>{
-  getPPage()
+  // getPPage()
 })
-const getPPage=()=>{
-   axios({
+let ppageName=""
+let ppageData=""
+const createPage=()=>{
+  console.log("created!")
+}
+const getPage=()=>{
+  axios({
         url: axios.defaults.baseURL + "/ppage/get_ppage_by_id",
         method: "post",
         headers: {
@@ -111,23 +214,75 @@ const getPPage=()=>{
           "Authorization":User.token
         },
         data: {
-          ppage_id:1,
+          ppage_id: pageId.value
         },
         transformRequest: [
           function (data, headers) {
             let data1 = JSON.stringify(data);
-            console.log(data1);
+            // console.log(data1);
             return data1;
           },
         ],
       }).then(function (response) {
         // 处理成功情况
         console.log("response",response)
-        console.log(response.data);
-        let content=response?.data.ppage.ppage_data
-        console.log(content)
-        console.log("JSON",eval('('+content+')'))
-        console.log("JSON",JSON.parse(content))
+        // console.log(response.data);
+        
+          if(response.data?.success){
+               ppageName=response.data?.ppage.ppage_name,
+               ppageData=response.data?.ppage.ppage_data
+               emailEditor.value.editor.
+               loadDesign(JSON.parse(ppageData));
+               nopageChosed.value=false
+          }
+
+        // console.log(content)
+        // console.log("JSON",eval('('+content+')'))
+        // console.log("JSON",JSON.parse(content))
+      }
+      )
+}
+const getPPages=()=>{
+  pageNotChosed.value=true
+   axios({
+        url: axios.defaults.baseURL + "/ppage/get_ppages",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization":User.token
+        },
+        data: {
+          prototype_id: value.value
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            // console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        // console.log("response",response)
+        // console.log(response.data);
+        
+          if(response.data?.success){
+              ProtoNotChosed.value=false
+               for(let i=0;i<response.data?.count;i++){
+                console.log(response)
+                const t={
+                  label:response.data?.ppages[i].ppage_id,
+                  value:response.data?.ppages[i].ppage_id
+                  }
+                 optionsPage.value.push(t)
+               }
+               pageNotChosed.value=false
+               ProtoNotChosed.value=false
+                pageHolder.value="请选择页面"
+          }
+        // console.log(content)
+        // console.log("JSON",eval('('+content+')'))
+        // console.log("JSON",JSON.parse(content))
       }
       )
 
@@ -187,28 +342,101 @@ const editorReady = () => {
     preheaderText: "Hello World"
   });
 }
+const upJson=(str: String)=>{
 
-const saveDesign = () => {
-  emailEditor.value.editor.saveDesign((design: any) => {
-    console.log('saveDesign', design);
+axios({
+        url: axios.defaults.baseURL + "/ppage/update_ppage",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization":User.token
+        },
+        data: {
+          ppage_id:pageId.value,
+          ppage_name:ppageName,
+          ppage_data:str
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+          
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("response",response)
+        console.log(response.data);
+
+        if (response.data?.success) {
+          
+
+          }
+        })
   
+}
+const createJson=(str: String)=>{
+
+axios({
+        url: axios.defaults.baseURL + "/ppage/update_ppage",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization":User.token
+        },
+        data: {
+          ppage_id:pageId.value,
+          ppage_name:ppageName,
+          ppage_data:str
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+          
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("response",response)
+        console.log(response.data);
+
+        if (response.data?.success) {
+          
+
+          }
+        })
+  
+}
+const createDesign=()=>{
+  emailEditor.value.editor.saveDesign((design: any) => {
+    // console.log('saveDesign', design);
+    upJson(JSON.stringify(design))
     // console.log(JSON.stringify(design))
     // a=design
   });
-  let dom = document.body // 先滚动到最顶部
-  console.log(dom)
-  document.documentElement.style.position = 'fixed';
-    if(dom != null){
-       html2canvas(document.body,{}).then(canvas => { 
-        dom.appendChild(canvas)   
-     let dataURL = canvas.toDataURL("image/png");
-        console.log(canvas)
+}
+const saveDesign = () => {
+  emailEditor.value.editor.saveDesign((design: any) => {
+    // console.log('saveDesign', design);
+    upJson(JSON.stringify(design))
+    // console.log(JSON.stringify(design))
+    // a=design
+  });
+  // let dom = document.body // 先滚动到最顶部
+  // console.log(dom)
+  // document.documentElement.style.position = 'fixed';
+  //   if(dom != null){
+  //      html2canvas(document.body,{}).then(canvas => { 
+  //       dom.appendChild(canvas)   
+  //    let dataURL = canvas.toDataURL("image/png");
+  //       console.log(canvas)
 
-         document.documentElement.style.position = '';
-    //  this.uploadImg = dataURL
-    //  this.loading = true
-       });
-    }
+  //        document.documentElement.style.position = '';
+  //   //  this.uploadImg = dataURL
+  //   //  this.loading = true
+  //      });
+  //   }
 
   //    emailEditor.value.editor.setBodyValues({
   //   backgroundColor: "#e7e7e7",
