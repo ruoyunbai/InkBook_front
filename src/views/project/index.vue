@@ -76,7 +76,7 @@
               <Card v-for="(project,index) in projects"
               :key="project.project_id"
               :one-project="project"
-              @delProject="delProject"></Card>
+             ></Card>
             <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
               <n-grid-item>
                 <Card></Card>
@@ -225,11 +225,13 @@ const form = reactive({
 
 onMounted(() => {
   getProject();
+  console.log("1");
 });
  
 let count: number = 0;
 let one_group_id : number;
 const projects: any[] = reactive([]);
+//获取项目
 const getProject = (clear: boolean = true) => {
    axios({
     url: axios.defaults.baseURL + "/group/get_groups",
@@ -255,8 +257,8 @@ const getProject = (clear: boolean = true) => {
       }
   })
   //   section.value=parseInt(localStorage.getItem("section")+"")
-    axios({
-    url: axios.defaults.baseURL + "/proj/get_proj_all",
+  axios({
+    url: axios.defaults.baseURL + "/group/get_groups",
     method: "post",
     headers: {
       "Content-Type": "application/json",
@@ -275,21 +277,53 @@ const getProject = (clear: boolean = true) => {
       // 处理成功情况
       if (response.data?.success) {
         count = response.data?.count;
-        console.log(response.data.data);
+        console.log(response.data);
         let i = 0;
         if (clear) while (projects.length != 0) projects.pop();
-        if (response.data.data != null)
-          for (i = 0; i < response.data.data.length; i++) {
+        if (response.data!= null)
+          one_group_id = response.data.groups[0].groupID;
+          console.log("one_group_id"+ one_group_id);
+        // User.Name=modelRef.value.name,
+        // User.Id=response.data.data.user_id,
+      } else {
+      }
+      console.log(response.data);
+  });
+    axios({
+    url: axios.defaults.baseURL + "/proj/get_proj_all",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization":User.token
+    },
+    data: {
+      group_id : one_group_id
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+      // 处理成功情况
+      if (response.data?.success) {
+        count = response.data?.count;
+        console.log(response.data);
+        let i = 0;
+        if (clear) while (projects.length != 0) projects.pop();
+        if (response.data!= null)
+          for (i = 0; i < count; i++) {
             let temp = reactive({
-              group_id:response.data.data[i].projs.group_id,
-              proj_id: response.data.data[i].projs.proj_id,
-              proj_info: response.data.data[i].projs.proj_info,
-              proj_name: response.data.data[i].projs.proj_name,
-              status: response.data.data[i].projs.status,
-              user_id: response.data.data[i].projs. user_id,
+              group_id:response.data.projs[i].group_id,
+              proj_id: response.data.projs[i].proj_id,
+              proj_info: response.data.projs[i].proj_info,
+              proj_name: response.data.projs[i].proj_name,
+              status: response.data.projs[i].status,
+              user_id: response.data.projs[i].user_id,
             });
             projects.push(temp);
-            
           }
         console.log(projects);
         // User.Name=modelRef.value.name,
@@ -327,17 +361,17 @@ const project_create = () =>{
   }).then(function (response) {
     // 处理成功情况
       console.log(response.data);
-
       if (response.data?.success) {
         message.success("创建成功");
         getProject();
+        console.log("2");
         dialogCreateVisible.value = false;
 
         // setTimeout(() => {
         //   footRef.value.style.width = post.value?.offsetWidth + "px";
         // }, 200);
       } else {
-        message.error(response.data.message);
+        message.error(response.data?.message);
       }
       console.log(response.data);
   });
