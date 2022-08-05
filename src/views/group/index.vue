@@ -73,10 +73,10 @@ import { ElMessageBox } from "element-plus";
 import Dialog from "./dialog.vue";
 import Detail from "./detail.vue";
 import { useRouter } from 'vue-router'
-import {useUserStore} from '../../store/User'
+import { useUserStore } from '../../store/User'
 import axios from 'axios'
 const router = useRouter();
-const User=useUserStore()
+const User = useUserStore()
 onMounted(() => {
   //localStorage.setItem("token","");
   // let token = localStorage.getItem("token");
@@ -168,7 +168,7 @@ const method = reactive({
             "Content-Type": "application/json",
             "Authorization": User.token
           },
-          data:params,
+          data: params,
           transformRequest: [
             function (data, headers) {
               let data1 = JSON.stringify(data);
@@ -266,7 +266,58 @@ const method = reactive({
     data.studentInfo.splice(index, 1, val);
   },
   getstudent() {
-    let that = this;
+
+    axios({
+      url: axios.defaults.baseURL + "/group/get_groups",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": User.token
+      },
+      data: {},
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log("response", response)
+      console.log(response.data);
+      data.group_id=response.data.groups[0].GroupID
+      // console.log("group",response.data.groups[0])
+      // console.log("data",data.group_id)
+      if (response.data?.success) {
+            axios({
+              url: axios.defaults.baseURL + "/group/get_group_members",
+              method: "post",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": User.token
+              },
+              data: {
+                group_id: data.group_id
+              },
+              transformRequest: [
+                function (data, headers) {
+                  let data1 = JSON.stringify(data);
+                  return data1;
+                },
+              ],
+            }).then(function (response) {
+              // 处理成功情况
+              console.log("response", response)
+              console.log(response.data);
+
+              if (response.data?.success) {
+                  data.studentInfo=response.data?.members
+
+              }
+            })
+
+      }
+    })
     /*  let params = {
       group_id: 1,
 
