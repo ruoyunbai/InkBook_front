@@ -73,10 +73,10 @@
               </el-table> -->
 
               <!--加载项目-->
-              <Card> v-for="project in projects"
+              <Card v-for="(project,index) in projects"
               :key="project.project_id"
               :one-project="project"
-              @delProject="delProject"</Card>
+              @delProject="delProject"></Card>
             <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
               <n-grid-item>
                 <Card></Card>
@@ -227,6 +227,7 @@ onMounted(() => {
   getProject();
 });
 
+
 const project_create = () =>{
   axios({
     url: axios.defaults.baseURL + "/proj/create_proj",
@@ -236,6 +237,13 @@ const project_create = () =>{
       "Authorization":User.token
     },
     data: {
+      // post_id: props.onePost.post_id,
+      // user_id: User.Id,
+      // content: text.value,
+      // content:vditor.value!.getValue(),
+      group_id: projects[index].group_id,//怎么获得团队id？
+      proj_info: form.region,
+      proj_name: form.name
     },
     transformRequest: [
       function (data, headers) {
@@ -263,45 +271,27 @@ const project_create = () =>{
   });
 }
  
-
-//无token
-// const project_create = () => {
-//   axios
-//     .post("/proj/create_proj", {
-//       // post_id: props.onePost.post_id,
-//       // user_id: User.Id,
-//       // content: text.value,
-//       // content:vditor.value!.getValue(),
-//       group_id: 0,//怎么获得团队id？
-//       proj_info: form.region,
-//       proj_name: form.name
-//     })
-//     .then(function (response) {
-//       // 处理成功情况
-//       console.log(response.data);
-
-//       if (response.data?.success) {
-//         message.success("创建成功");
-//         getProject();
-//         dialogCreateVisible.value = false;
-
-//         // setTimeout(() => {
-//         //   footRef.value.style.width = post.value?.offsetWidth + "px";
-//         // }, 200);
-//       } else {
-//         message.error(response.data.message);
-//       }
-//       console.log(response.data);
-//     });
-// };
 let count: number = 0;
 const projects: any[] = reactive([]);
 const getProject = (clear: boolean = true) => {
   //   section.value=parseInt(localStorage.getItem("section")+"")
-  axios
-    .post("/proj/get_proj_all", {
-    })
-    .then(function (response) {
+    axios({
+    url: axios.defaults.baseURL + "/proj/get_proj_all",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization":User.token
+    },
+    data: {
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
       // 处理成功情况
       if (response.data?.success) {
         count = response.data?.count;
@@ -318,30 +308,7 @@ const getProject = (clear: boolean = true) => {
               status: response.data.data[i].projs.status,
               user_id: response.data.data[i].projs. user_id,
             });
-            //要获得group_id吗？
-            // axios({
-            //   url: axios.defaults.baseURL + "/user/info",
-            //   method: "post",
-            //   // headers: {
-            //   //   "Content-Type": "application/json",
-            //   // },
-            //   data: {
-            //     user_id: response.data.data[i].comment.user_id,
-            //   },
-            //   // transformRequest: [
-            //   //   function (data, headers) {
-            //   //     let data1 = JSON.stringify(data);
-            //   //     console.log(data1);
-            //   //     return data1;
-            //   //   },
-            //   // ],
-            // }).then(function (response) {
-            //   console.log(response.data);
-            //   if (response.data.status) {
-            //     if (response.data.data.avatar_url != "")
-            //       temp.src = response.data.data.avatar_url;
-            //   }
-            // });
+
             projects.push(temp);
           }
         console.log(projects);
@@ -351,7 +318,63 @@ const getProject = (clear: boolean = true) => {
       }
       console.log(response.data);
     });
-};
+}
+// const getProject = () => {
+//   //   section.value=parseInt(localStorage.getItem("section")+"")
+//   axios
+//     .post("/proj/get_proj_all", {
+//     })
+//     .then(function (response) {
+//       // 处理成功情况
+//       if (response.data?.success) {
+//         count = response.data?.count;
+//         console.log(response.data.data);
+//         let i = 0;
+//         // if (clear) while (projects.length != 0) projects.pop();
+//         if (response.data.data != null)
+//           for (i = 0; i < response.data.data.length; i++) {
+//             let temp = reactive({
+//               group_id:response.data.data[i].projs.group_id,
+//               proj_id: response.data.data[i].projs.proj_id,
+//               proj_info: response.data.data[i].projs.proj_info,
+//               proj_name: response.data.data[i].projs.proj_name,
+//               status: response.data.data[i].projs.status,
+//               user_id: response.data.data[i].projs. user_id,
+//             });
+//             //要获得group_id吗？
+//             // axios({
+//             //   url: axios.defaults.baseURL + "/user/info",
+//             //   method: "post",
+//             //   // headers: {
+//             //   //   "Content-Type": "application/json",
+//             //   // },
+//             //   data: {
+//             //     user_id: response.data.data[i].comment.user_id,
+//             //   },
+//             //   // transformRequest: [
+//             //   //   function (data, headers) {
+//             //   //     let data1 = JSON.stringify(data);
+//             //   //     console.log(data1);
+//             //   //     return data1;
+//             //   //   },
+//             //   // ],
+//             // }).then(function (response) {
+//             //   console.log(response.data);
+//             //   if (response.data.status) {
+//             //     if (response.data.data.avatar_url != "")
+//             //       temp.src = response.data.data.avatar_url;
+//             //   }
+//             // });
+//             projects.push(temp);
+//           }
+//         console.log(projects);
+//         // User.Name=modelRef.value.name,
+//         // User.Id=response.data.data.user_id,
+//       } else {
+//       }
+//       console.log(response.data);
+//     });
+// };
 
 
 </script>
