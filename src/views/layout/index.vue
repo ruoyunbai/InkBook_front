@@ -62,6 +62,11 @@
               <transition enter-active-class="animate__animated animate__fadeIn">
                <router-view></router-view>
                 </transition>
+                <!-- <router-view v-slot="{ Component }">
+  <transition>
+    <component :is="Component" />
+  </transition>
+</router-view> -->
           </n-layout>
 
           <!-- :naitive-sceoll="false"> -->
@@ -104,9 +109,9 @@ const menuOptions: MenuOption[]= reactive([
                 {
                     to: {
                         path: '/group',
-                        params: {
-                            lang: 'zh-CN'
-                        }
+                        // params: {
+                        //     lang: 'zh-CN'
+                        // }
                     }
                 },
                 '管理团队'
@@ -136,9 +141,9 @@ const menuOptions: MenuOption[]= reactive([
                                 {
                                     to: {
                                         path: '/project',
-                                        params: {
-                                            lang: 'zh-CN'
-                                        }
+                                        // params: {
+                                        //     lang: 'zh-CN'
+                                        // }
                                     }
                                 },
                                 '管理项目'
@@ -159,9 +164,9 @@ const menuOptions: MenuOption[]= reactive([
                                 {
                                     to: {
                                         path: '/prototype',
-                                        params: {
-                                            lang: 'zh-CN'
-                                        }
+                                        // params: {
+                                        //     lang: 'zh-CN'
+                                        // }
                                     }
                                 },
                                 '设计原型'
@@ -182,9 +187,9 @@ const menuOptions: MenuOption[]= reactive([
                                 {
                                     to: {
                                         path: '/graph',
-                                        params: {
-                                            lang: 'zh-CN'
-                                        }
+                                        // params: {
+                                        //     lang: 'zh-CN'
+                                        // }
                                     }
                                 },
                                 '绘制图'
@@ -205,9 +210,9 @@ const menuOptions: MenuOption[]= reactive([
                             {
                                 to: {
                                     path: '/document',
-                                    params: {
-                                        lang: 'zh-CN'
-                                    }
+                                    // params: {
+                                    //     lang: 'zh-CN'
+                                    // }
                                 }
                             },
                             "多人文档",
@@ -228,9 +233,9 @@ const menuOptions: MenuOption[]= reactive([
         {
             to: {
                 path: '/trash',
-                params: {
-                    lang: 'zh-CN'
-                }
+                // params: {
+                //     lang: 'zh-CN'
+                // }
             }
         },
         "回收站",
