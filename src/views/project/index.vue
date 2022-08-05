@@ -250,8 +250,8 @@ const getProject = (clear: boolean = true) => {
   }).then(function (response) {
       // 处理成功情况
       if (response.data?.success) {
-    
-        console.log(response.data);
+    one_group_id=response.data.groups[0].GroupID
+        console.log("groupsID",response.data.groups[0].GroupID);
       }
   })
   //   section.value=parseInt(localStorage.getItem("section")+"")
@@ -289,7 +289,7 @@ const getProject = (clear: boolean = true) => {
               user_id: response.data.data[i].projs. user_id,
             });
             projects.push(temp);
-            one_group_id = projects[0].group_id;
+            
           }
         console.log(projects);
         // User.Name=modelRef.value.name,
