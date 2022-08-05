@@ -607,6 +607,7 @@ const message = useMessage();
 const UserExit = () => {
   message.success("退出成功");
   User.Login = false;
+  localStorage.setItem("login", "false");
   localStorage.setItem("Login", "false");
   localStorage.setItem("user_ID", "null");
   router.push("/");

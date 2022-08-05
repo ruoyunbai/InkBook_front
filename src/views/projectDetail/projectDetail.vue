@@ -76,20 +76,37 @@
           <n-gi>
             <div class="section">
               <el-scrollbar max-height="97%">
-                <el-row has-sider
+                <div
                   v-for="(item, idx) in countProto"
-                  :key="idx"
+                  :key="idx" 
                   class="scrollbar-demo-item">
-                    <el-cow span="22">
-                      <ProtoItem>
-                      </ProtoItem>
-                    </el-cow>
-                    <el-cow span="2">
-                      <el-icon @click="delProto(idx)" style="margin-top: 12px; margin-left: -29px">
-                        <Delete />
+                  <n-grid class="item"
+                    x-gap="0"
+                    :cols="11"
+                    style="padding-top: 5px; vertical-align: middle"
+                  >
+                    <n-gi span="1">
+                      <n-image
+                        width="26.5"
+                        height="23.5"
+                        src="svg\\主页svg\\projectDetail\\ItemIcon.svg"
+                      />
+                    </n-gi>
+                    <n-gi span="8">
+                      <div display="inline">{{protoList[idx]}}</div>
+                    </n-gi>
+                    <n-gi span="1">
+                      <el-icon @click="editProto"><!--@click="dialogEditVisible = true"-->
+                        <Edit />
                       </el-icon>
-                    </el-cow>
-                </el-row>
+                    </n-gi>
+                    <n-gi span="1">
+                      <el-icon @click="delProto(idx)">
+                        <Delete />
+                      </el-icon><!---->
+                    </n-gi>
+                  </n-grid>
+                </div>
               </el-scrollbar>
 
               <div class="btnspace">
@@ -106,20 +123,37 @@
               style="background-color: rgb(246, 134, 106, 0.2)"
             >
               <el-scrollbar max-height="97%">
-                <el-row has-sider
+                <div
                   v-for="(item, idx) in countUML"
-                  :key="idx"
+                  :key="idx" 
                   class="scrollbar-demo-item">
-                    <el-cow span="22">
-                      <UmlItem>
-                      </UmlItem>
-                    </el-cow>
-                    <el-cow span="2">
-                      <el-icon @click="delUML(idx)" style="margin-top: 12px; margin-left: -29px">
-                        <Delete />
+                  <n-grid class="item"
+                    x-gap="0"
+                    :cols="11"
+                    style="padding-top: 5px; vertical-align: middle"
+                  >
+                    <n-gi span="1">
+                      <n-image
+                        width="26.5"
+                        height="23.5"
+                        src="svg\\主页svg\\projectDetail\\ItemIcon.svg"
+                      />
+                    </n-gi>
+                    <n-gi span="8">
+                      <div display="inline">{{umlList[idx]}}</div>
+                    </n-gi>
+                    <n-gi span="1">
+                      <el-icon @click="dialogEditVisible = true">
+                        <Edit />
                       </el-icon>
-                    </el-cow>
-                </el-row>
+                    </n-gi>
+                    <n-gi span="1">
+                      <el-icon @click="delUML(idx)">
+                        <Delete />
+                      </el-icon><!---->
+                    </n-gi>
+                  </n-grid>
+                </div>
               </el-scrollbar>
 
               <div class="btnspace">
@@ -136,20 +170,37 @@
               style="background-color: rgb(255, 190, 92, 0.2)"
             >
               <el-scrollbar max-height="97%">
-                <el-row has-sider
+                <div
                   v-for="(item, idx) in countFile"
-                  :key="idx"
+                  :key="idx" 
                   class="scrollbar-demo-item">
-                    <el-cow span="22">
-                      <FileItem>
-                      </FileItem>
-                    </el-cow>
-                    <el-cow span="2">
-                      <el-icon @click="delFile(idx)" style="margin-top: 12px; margin-left: -29px">
-                        <Delete />
+                  <n-grid class="item"
+                    x-gap="0"
+                    :cols="11"
+                    style="padding-top: 5px; vertical-align: middle"
+                  >
+                    <n-gi span="1">
+                      <n-image
+                        width="26.5"
+                        height="23.5"
+                        src="svg\\主页svg\\projectDetail\\ItemIcon.svg"
+                      />
+                    </n-gi>
+                    <n-gi span="8">
+                      <div display="inline">{{fileList[idx]}}</div>
+                    </n-gi>
+                    <n-gi span="1">
+                      <el-icon @click="dialogEditVisible = true">
+                        <Edit />
                       </el-icon>
-                    </el-cow>
-                </el-row>
+                    </n-gi>
+                    <n-gi span="1">
+                      <el-icon @click="delFile(idx)">
+                        <Delete />
+                      </el-icon><!---->
+                    </n-gi>
+                  </n-grid>
+                </div>
               </el-scrollbar>
 
               <div class="btnspace">
@@ -164,6 +215,23 @@
       <!--<n-layout-footer>角标</n-layout-footer>-->
     </n-layout>
   </n-space>
+
+  <!--文件名修改框-->
+  <el-dialog @click="dialogEditVisible" title="重命名文件"  draggable>
+    <el-form :model="form">
+      <el-form-item label="新的文件名称" :label-width="formLabelWidth">
+        <el-input v-model="project.name" autocomplete="off" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogEditVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogEditVisible = false"
+          >确认</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
 
   <!--项目信息修改框-->
   <el-dialog v-model="projectEditVisible" title="修改项目信息">
@@ -205,6 +273,7 @@ import {
   Star,
 } from "@element-plus/icons-vue";
 import axios from "axios"; //axios请求地址
+import { useProjectStore } from "../../store/Project";
 import { useMessage } from "naive-ui";
 
 const dialogEditVisible = ref(false);
@@ -215,6 +284,9 @@ const form = reactive({
   name: "项目名称",
   description: "项目描述",
 });
+const project = reactive({
+  name: ""
+})
 const searchFile = () => {
   ElMessage({
     message: "searching",
@@ -224,30 +296,52 @@ const searchFile = () => {
 
 //const protoList=ref([])
 const countProto = ref(0);
-const countUML = ref(1);
-const countFile = ref(1);
+const countUML = ref(0);
+const countFile = ref(0);
 
-let protoList: Array<String> = [];
-let cntP: number = 0;
+let protoList: Array<String> = ["新建设计原型"];
+let umlList: Array<String> = ["新建UML图"];
+let fileList: Array<String> = ["新建文档"];
+let cntP: number = 1;
+let cntU: number = 1;
+let cntF: number = 1;
 
 const addProto = () => {
-  let str: String = "新建文件"+cntP.toString();
+  let str: String = "新建设计原型"+cntP.toString();
   protoList.push(str);
   cntP++;
   countProto.value++;
 };
 const addUML = () => {
+  let str: String = "新建UML图"+cntU.toString();
+  umlList.push(str);
+  cntU++;
   countUML.value++;
 };
 const addFile = () => {
+  let str: String = "新建文档"+cntF.toString();
+  fileList.push(str);
+  cntF++;
   countFile.value++;
 };
 
-const msg=useMessage;
+const msg = ref("");
+const editProto = (idx: number) => {
+  dialogEditVisible = true;
+  ElMessage({
+            type: 'success',
+            message: '测试editProto ',
+        })
+  if (project.name !== "") {
+    protoList[idx]=project.name;
+    project.name = "";
+  }
+}
+
 const delProto = (idx: number) => {
   ElMessageBox.confirm(
-        //'确定删除这个文件？',
-        idx.toString(),
+        '确定删除这个文件？',
+        //idx.toString(),
         'Confirm',
         {
         confirmButtonText: '确定',
@@ -256,21 +350,65 @@ const delProto = (idx: number) => {
         }
     )
       .then(() => {
+        let str: String =protoList[idx];
         protoList.splice(idx,1);
         countProto.value--;
         ElMessage({
             type: 'success',
-            message: protoList[idx].toString(),
+            message: '成功删除文件 '+str,
         })
-        //handleSure(idx);
       })
       .catch(() => {
         // catch error
       });
 };
-const handleSure=(val)=> {
-  const index = protoList.findIndex((item) => item.id === val.id);
-  data.studentInfo.splice(index, 1);
+const delUML = (idx: number) => {
+  ElMessageBox.confirm(
+        '确定删除这个文件？',
+        //idx.toString(),
+        'Confirm',
+        {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        }
+    )
+      .then(() => {
+        let str: String =umlList[idx];
+        umlList.splice(idx,1);
+        countUML.value--;
+        ElMessage({
+            type: 'success',
+            message: '成功删除文件 '+str,
+        })
+      })
+      .catch(() => {
+        // catch error
+      });
+};
+const delFile = (idx: number) => {
+  ElMessageBox.confirm(
+        '确定删除这个文件？',
+        //idx.toString(),
+        'Confirm',
+        {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        }
+    )
+      .then(() => {
+        let str: String =fileList[idx];
+        fileList.splice(idx,1);
+        countFile.value--;
+        ElMessage({
+            type: 'success',
+            message: '成功删除文件 '+str,
+        })
+      })
+      .catch(() => {
+        // catch error
+      });
 };
 
 const handleDeleteOne = (id) => {
