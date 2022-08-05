@@ -199,7 +199,7 @@ li:last-child {
           <n-gi span="2" style="margin-top: -1px">
             <span>
               <n-input
-                v-model:value="tagInput"
+            
                 ref="inputInstRef"
                 round
                 clearable
@@ -513,7 +513,7 @@ const addFile = () => {
 
 const msg = ref("");
 const editProto = (idx: number) => {
-  dialogEditVisible = true;
+  dialogEditVisible.value = true;
   ElMessage({
             type: 'success',
             message: '测试editProto ',
@@ -598,7 +598,7 @@ const delFile = (idx: number) => {
       });
 };
 
-const handleDeleteOne = (id) => {
+const handleDeleteOne = (id: any) => {
   //接口调用
   axios
     .post("/user/order/del", {

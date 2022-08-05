@@ -13,7 +13,7 @@
           <n-gi span="2" style="margin-top: -1px">
             <span>
               <n-input
-                v-model:value="tagInput"
+              
                 ref="inputInstRef"
                 round
                 clearable
@@ -289,10 +289,10 @@ import {
   Star,
 } from "@element-plus/icons-vue";
 import axios from "axios"; //axios请求地址
-import { useProjectStore } from "../../store/Project";
-import { useDetailStore } from "../../store/ProjectDetail";
+// import { useProjectStore } from "../../store/Project";
+// import { useDetailStore } from "../../store/ProjectDetail";
 import { useMessage } from "naive-ui";
-import { FileReadOptions } from "fs/promises";
+// import { FileReadOptions } from "fs/promises";
 
 const dialogEditVisible = ref(false);
 const projectEditVisible = ref(false);
@@ -411,7 +411,7 @@ const handleProtoAdd=()=> {
 
     if (response.data?.success) {
       message.success("创建成功");
-      getProjectDetail();
+      // getProjectDetail();
     } else {
       message.error(response.data.message);
     }
@@ -427,10 +427,10 @@ const editProto = (name: String) => {
             message: project.name,
         })
   if (name !== "") {
-    ElMessage({
-            type: 'success',
-            message: name,
-        })
+    // ElMessage({
+    //         type: 'success',
+    //         message: name,
+    //     })
     let idx = protoList.findIndex((x) => x === name);
     ElMessage({
             type: 'success',
@@ -455,7 +455,7 @@ const protoCreate = () => {
 
       if (response.data?.success) {
         message.success("创建成功");
-        getProjectDetail();
+        // getProjectDetail();
         dialogEditVisible.value = false;
 
         // setTimeout(() => {
@@ -544,7 +544,7 @@ const delFile = (idx: number) => {
       });
 };
 
-const handleProtoDelete = (id) => {
+const handleProtoDelete = (id: number) => {
   //接口调用
   axios
     .post("/file/move_prototype_to_bin", {
@@ -557,7 +557,7 @@ const handleProtoDelete = (id) => {
       //getShowList();
     });
 };
-const handleUMLDelete = (id) => {
+const handleUMLDelete = (id: number) => {
   //接口调用
   axios
     .post("/file/move_uml_to_bin", {
@@ -570,7 +570,7 @@ const handleUMLDelete = (id) => {
       //getShowList();
     });
 };
-const handleFileDelete = (id) => {
+const handleFileDelete = (id: number) => {
   //接口调用
   axios
     .post("/file/move_document_to_bin", {
