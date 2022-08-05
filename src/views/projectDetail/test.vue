@@ -511,7 +511,7 @@ const addFile = () => {
 };
 
 const editProto = (idx: number) => {
-  dialogEditVisible = !dialogEditVisible;
+  dialogEditVisible.value = !dialogEditVisible.value;
 
 
 }
