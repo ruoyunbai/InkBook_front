@@ -1,7 +1,6 @@
 <template>
   <div id="group_message">
-    <div id="group_name">团队名称</div>
-    <div id="group_intro">团队简介</div>
+    <div id="group_name">我的团队</div>
     <el-form :model="dengmiQueryForm" ref="dengmiQueryForm" label-width="80px" class="demo-ruleForm" size="mini">
       <el-row>
         <el-col span="8">
@@ -26,7 +25,7 @@
 
   <div id="group_panel">
     <el-table :data="admin" style="width: 90%" :header-cell-style="{ 'text-align': 'center', height: '80px' }"
-      :row-style="{ height: '55px' }" :cell-style="{ 'text-align': 'center' }">
+              :row-style="{ height: '55px' }" :cell-style="{ 'text-align': 'center' }">
       <el-table-column prop="Username" label="昵称" />
       <el-table-column prop="RealName" label="姓名" />
       <el-table-column prop="Email" label="邮箱" />
@@ -73,19 +72,19 @@ import { ElMessageBox } from "element-plus";
 import Dialog from "./dialog.vue";
 import Detail from "./detail.vue";
 import { useRouter } from 'vue-router'
-import {useUserStore} from '../../store/User'
+import { useUserStore } from '../../store/User'
 import axios from 'axios'
 const router = useRouter();
-const User=useUserStore()
+const User = useUserStore()
 onMounted(() => {
-  //localStorage.setItem("token","");
+  // localStorage.setItem("token","");
   // let token = localStorage.getItem("token");
   // if (token) {
   //   // 判断当前的token是否存在
   //    console.log("ceshi", token);
   // } else {
   //   router.push('/logIn')
-
+  //
   // }
   method.getstudent();
 })
@@ -156,47 +155,47 @@ const method = reactive({
       cancelButtonText: "取消",
       type: "warning",
     })
-      .then(() => {
-        let params = {
-          group_id: data.group_id,
-          user_id: val.UserID,
-        };
-        axios({
-          url: axios.defaults.baseURL + "/group/remove_member",
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": User.token
-          },
-          data:params,
-          transformRequest: [
-            function (data, headers) {
-              let data1 = JSON.stringify(data);
-              return data1;
+        .then(() => {
+          let params = {
+            group_id: data.group_id,
+            user_id: val.UserID,
+          };
+          axios({
+            url: axios.defaults.baseURL + "/group/remove_member",
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": User.token
             },
-          ],
-        }).then(function (response) {
-          // 处理成功情况
-          console.log("response", response)
-          console.log(response.data);
+            data: params,
+            transformRequest: [
+              function (data, headers) {
+                let data1 = JSON.stringify(data);
+                return data1;
+              },
+            ],
+          }).then(function (response) {
+            // 处理成功情况
+            console.log("response", response)
+            console.log(response.data);
 
-          if (response.data?.success) {
+            if (response.data?.success) {
 
 
-          }
+            }
+          })
+          // that.$request.post("/group/remove_member", params).then((res) => {
+          //   if (res.data.code == 0) {
+          //     console.log("删除信息是", res.data);
+          //   } else {
+          //     console.log("登录信息是2", res);
+          //   }
+          // });
+          method.handleSure(val);
         })
-        // that.$request.post("/group/remove_member", params).then((res) => {
-        //   if (res.data.code == 0) {
-        //     console.log("删除信息是", res.data);
-        //   } else {
-        //     console.log("登录信息是2", res);
-        //   }
-        // });
-        method.handleSure(val);
-      })
-      .catch(() => {
-        // catch error
-      });
+        .catch(() => {
+          // catch error
+        });
   },
   handleSure(val) {
     /* this.dialogVisible = false;
@@ -207,6 +206,32 @@ const method = reactive({
       group_id: data.group_id,
       user_id: val.UserID,
     };
+
+    axios({
+      url: axios.defaults.baseURL + "/group/remove_member",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": User.token
+      },
+      data: params,
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log("response", response)
+      console.log(response.data);
+
+      if (response.data?.success) {
+
+
+      }
+    })
+
 
     // that.$request.post("/group/remove_member", params).then((res) => {
     //   if (res.data.code == 0) {
@@ -227,6 +252,31 @@ const method = reactive({
       status: 2,
       user_id: val.UserID,
     };
+
+    axios({
+      url: axios.defaults.baseURL + "/group/set_member_status",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": User.token
+      },
+      data: params,
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log("response", response)
+      console.log(response.data);
+
+      if (response.data?.success) {
+
+
+      }
+    })
 
     // that.$request.post("/group/set_member_status", params).then((res) => {
     //   if (res.data.code == 0) {
@@ -249,6 +299,31 @@ const method = reactive({
       username: data.formData["Username"],
     };
 
+    axios({
+      url: axios.defaults.baseURL + "/group/add_member",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": User.token
+      },
+      data: params,
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log("response", response)
+      console.log(response.data);
+
+      if (response.data?.success) {
+
+
+      }
+    })
+
     // that.$request.post("/group/add_member", params).then((res) => {
     //   if (res.data.code == 0) {
     //     console.log("add信息是", res.data);
@@ -261,12 +336,63 @@ const method = reactive({
   // 编辑行
   editRow(val) {
     let index = data.studentInfo.findIndex(
-      (item, index) => item.id === val.id
+        (item, index) => item.id === val.id
     );
     data.studentInfo.splice(index, 1, val);
   },
   getstudent() {
-    let that = this;
+
+    axios({
+      url: axios.defaults.baseURL + "/group/get_groups",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": User.token
+      },
+      data: {},
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log("response", response)
+      console.log(response.data);
+      data.group_id=response.data.groups[0].GroupID
+      // console.log("group",response.data.groups[0])
+      // console.log("data",data.group_id)
+      if (response.data?.success) {
+        axios({
+          url: axios.defaults.baseURL + "/group/get_group_members",
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+          },
+          data: {
+            group_id: data.group_id
+          },
+          transformRequest: [
+            function (data, headers) {
+              let data1 = JSON.stringify(data);
+              return data1;
+            },
+          ],
+        }).then(function (response) {
+          // 处理成功情况
+          console.log("response", response)
+          console.log(response.data);
+
+          if (response.data?.success) {
+            data.studentInfo=response.data?.members
+
+          }
+        })
+
+      }
+    })
     /*  let params = {
       group_id: 1,
 
