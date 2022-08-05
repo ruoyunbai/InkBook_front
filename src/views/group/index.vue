@@ -34,10 +34,13 @@
       <el-table-column prop="RealName" label="姓名" />
       <el-table-column prop="Email" label="邮箱" />
       <el-table-column label="Status" label="职务">
-        <span v-if="row.Status == 1">普通会员</span>
-        <span v-if="row.Status == 2">管理员</span>
-        <span v-if="row.Status == 3">创建者</span>
+        <template #default="{ row }">
+          <span v-if="row.Status == 1">普通会员</span>
+          <span v-if="row.Status == 2">管理员</span>
+          <span v-if="row.Status == 3">创建者</span>
+        </template>
       </el-table-column>
+
       <el-table-column fixed="right" label="操作">
         <template #default="{ row }">
           <!-- <el-button type="text" size="small" @click="handleDetail(row)"
