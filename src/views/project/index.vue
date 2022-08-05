@@ -231,6 +231,29 @@ let count: number = 0;
 let one_group_id : number;
 const projects: any[] = reactive([]);
 const getProject = (clear: boolean = true) => {
+   axios({
+    url: axios.defaults.baseURL + "/group/get_groups",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization":User.token
+    },
+    data: {
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+      // 处理成功情况
+      if (response.data?.success) {
+    
+        console.log(response.data);
+      }
+  })
   //   section.value=parseInt(localStorage.getItem("section")+"")
     axios({
     url: axios.defaults.baseURL + "/proj/get_proj_all",
