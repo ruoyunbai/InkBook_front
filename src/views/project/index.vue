@@ -252,21 +252,22 @@ const getProject = (clear: boolean = true) => {
       // 处理成功情况
       if (response.data?.success) {
         count = response.data?.count;
-        console.log(response.data.data);
+        console.log(response.data);
         let i = 0;
         if (clear) while (projects.length != 0) projects.pop();
-        if (response.data.data != null)
-          for (i = 0; i < response.data.data.length; i++) {
+        if (response.data!= null)
+          for (i = 0; i < response.data.length; i++) {
             let temp = reactive({
-              group_id:response.data.data[i].projs.group_id,
-              proj_id: response.data.data[i].projs.proj_id,
-              proj_info: response.data.data[i].projs.proj_info,
-              proj_name: response.data.data[i].projs.proj_name,
-              status: response.data.data[i].projs.status,
-              user_id: response.data.data[i].projs. user_id,
+              group_id:response.data.projs[i].group_id,
+              proj_id: response.data.projs[i].proj_id,
+              proj_info: response.data.projs[i].proj_info,
+              proj_name: response.data.projs[i].proj_name,
+              status: response.data.projs[i].status,
+              user_id: response.data.projs[i].user_id,
             });
             projects.push(temp);
-            one_group_id = projects[0].group_id;
+            if(i==0)
+              one_group_id = response.data.projs[0].group_id;
           }
         console.log(projects);
         // User.Name=modelRef.value.name,
@@ -314,7 +315,7 @@ const project_create = () =>{
         //   footRef.value.style.width = post.value?.offsetWidth + "px";
         // }, 200);
       } else {
-        message.error(response.data.message);
+        message.error(response.data?.message);
       }
       console.log(response.data);
   });
