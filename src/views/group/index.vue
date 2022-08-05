@@ -24,7 +24,7 @@
   <div id="title">全部成员</div>
 
   <div id="group_panel">
-    <el-table :data="admin" style="width: 90%" :header-cell-style="{ 'text-align': 'center', height: '80px' }"
+    <el-table :data="data.admin" style="width: 90%" :header-cell-style="{ 'text-align': 'center', height: '80px' }"
               :row-style="{ height: '55px' }" :cell-style="{ 'text-align': 'center' }">
       <el-table-column prop="Username" label="昵称" />
       <el-table-column prop="RealName" label="姓名" />
