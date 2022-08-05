@@ -93,7 +93,7 @@ onBeforeMount(()=>{
   }
 })
 onBeforeUnmount(()=>{
-    User.Login=true
+    // User.Login=true
 })
 const router=useRouter()
 const cubeSrc=ref("svg\\主页svg\\icon-1.2s-47px.gif")
