@@ -327,7 +327,7 @@ const addFile = () => {
 
 const msg = ref("");
 const editProto = (idx: number) => {
-  dialogEditVisible = true;
+  dialogEditVisible.value = true;
   ElMessage({
             type: 'success',
             message: '测试editProto ',

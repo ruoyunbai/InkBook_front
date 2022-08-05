@@ -73,9 +73,10 @@ import { ElMessageBox } from "element-plus";
 import Dialog from "./dialog.vue";
 import Detail from "./detail.vue";
 import { useRouter } from 'vue-router'
+import {useUserStore} from '../../store/User'
 import axios from 'axios'
 const router = useRouter();
-
+const User=useUserStore()
 onMounted(() => {
   //localStorage.setItem("token","");
   // let token = localStorage.getItem("token");

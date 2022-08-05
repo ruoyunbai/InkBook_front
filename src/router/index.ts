@@ -57,7 +57,7 @@ const routes:Array<RouteRecordRaw>=[
             },
             {
                 name:'test',
-                path:"test",
+                path:"test1",
                 component:()=>import('../test.vue'),
                 meta:{
                     title:"首页",
@@ -100,15 +100,15 @@ const routes:Array<RouteRecordRaw>=[
                     transition:"animate__bounceIn"
                 },
             },
-            {
-                name:'test',
-                path:"/test",
-                component:()=>import('../views/projectDetail/test.vue'),
-                meta:{
-                    title:"项目测试",
-                    transition:"animate__bounceIn"
-                },
-            },
+            // {
+            //     name:'test',
+            //     path:"/test",
+            //     component:()=>import('../views/projectDetail/test.vue'),
+            //     meta:{
+            //         title:"项目测试",
+            //         transition:"animate__bounceIn"
+            //     },
+            // },
         ]
     },
     {
