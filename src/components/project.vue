@@ -64,7 +64,9 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 
-
+const routerToPersonalInfo=()=>{
+    console.log("route")
+}
 const dialogEditVisible = ref(false)
 const formLabelWidth = '140px'
 

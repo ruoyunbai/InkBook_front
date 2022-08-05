@@ -1,4 +1,4 @@
-import {IRole, IRoleWithAuth} from "@/type/role";
+import {IRole, IRoleWithAuth} from "./role";
 
 // 用户接口
 export interface IUser {

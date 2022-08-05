@@ -13,7 +13,7 @@
           <n-gi span="2" style="margin-top: -1px">
             <span>
               <n-input
-                v-model:value="tagInput"
+              
                 ref="inputInstRef"
                 round
                 clearable
@@ -411,7 +411,7 @@ const delFile = (idx: number) => {
       });
 };
 
-const handleDeleteOne = (id) => {
+const handleDeleteOne = (id: any) => {
   //接口调用
   axios
     .post("/user/order/del", {
