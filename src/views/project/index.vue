@@ -227,20 +227,25 @@ onMounted(() => {
   getProject();
 });
 
-
-const project_create = () => {
-  axios
-    .post("/proj/create_proj", {
-      // post_id: props.onePost.post_id,
-      // user_id: User.Id,
-      // content: text.value,
-      // content:vditor.value!.getValue(),
-      group_id: 0,//怎么获得团队id？
-      proj_info: form.region,
-      proj_name: form.name
-    })
-    .then(function (response) {
-      // 处理成功情况
+const project_create = () =>{
+  axios({
+    url: axios.defaults.baseURL + "/proj/create_proj",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization":User.token
+    },
+    data: {
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
       console.log(response.data);
 
       if (response.data?.success) {
@@ -255,8 +260,40 @@ const project_create = () => {
         message.error(response.data.message);
       }
       console.log(response.data);
-    });
-};
+  });
+}
+ 
+
+//无token
+// const project_create = () => {
+//   axios
+//     .post("/proj/create_proj", {
+//       // post_id: props.onePost.post_id,
+//       // user_id: User.Id,
+//       // content: text.value,
+//       // content:vditor.value!.getValue(),
+//       group_id: 0,//怎么获得团队id？
+//       proj_info: form.region,
+//       proj_name: form.name
+//     })
+//     .then(function (response) {
+//       // 处理成功情况
+//       console.log(response.data);
+
+//       if (response.data?.success) {
+//         message.success("创建成功");
+//         getProject();
+//         dialogCreateVisible.value = false;
+
+//         // setTimeout(() => {
+//         //   footRef.value.style.width = post.value?.offsetWidth + "px";
+//         // }, 200);
+//       } else {
+//         message.error(response.data.message);
+//       }
+//       console.log(response.data);
+//     });
+// };
 let count: number = 0;
 const projects: any[] = reactive([]);
 const getProject = (clear: boolean = true) => {
