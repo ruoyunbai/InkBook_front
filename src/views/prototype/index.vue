@@ -152,7 +152,7 @@ const getProtos = () => {
   })
 }
 const value = ref(null)
-const pageId = ref(null)
+const pageId:any = ref(null)
 const emailEditor = ref()
 const minHeight = ref('800px')
 watch(minHeight, (newVal, oldVal) => {
