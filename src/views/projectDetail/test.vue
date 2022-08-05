@@ -282,7 +282,7 @@ li:last-child {
                       <div display="inline">{{protoList[idx]}}</div>
                     </n-gi>
                     <n-gi span="1">
-                      <el-icon @click="dialogEditVisible = true">
+                      <el-icon @click="editProto"><!--@click="dialogEditVisible = true"-->
                         <Edit />
                       </el-icon>
                     </n-gi>
@@ -403,7 +403,7 @@ li:last-child {
   </n-space>
 
   <!--文件名修改框-->
-  <el-dialog v-model="dialogEditVisible" title="重命名文件"  draggable>
+  <el-dialog @click="dialogEditVisible" title="重命名文件"  draggable>
     <el-form :model="form">
       <el-form-item label="新的文件名称" :label-width="formLabelWidth">
         <el-input v-model="project.name" autocomplete="off" />
@@ -459,6 +459,7 @@ import {
   Star,
 } from "@element-plus/icons-vue";
 import axios from "axios"; //axios请求地址
+import { useProjectStore } from "../../store/Project";
 import { useMessage } from "naive-ui";
 
 const dialogEditVisible = ref(false);
@@ -510,10 +511,17 @@ const addFile = () => {
   countFile.value++;
 };
 
+const msg = ref("");
 const editProto = (idx: number) => {
-  dialogEditVisible = !dialogEditVisible;
-
-
+  dialogEditVisible = true;
+  ElMessage({
+            type: 'success',
+            message: '测试editProto ',
+        })
+  if (project.name !== "") {
+    protoList[idx]=project.name;
+    project.name = "";
+  }
 }
 
 const delProto = (idx: number) => {
