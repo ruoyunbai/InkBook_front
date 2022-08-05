@@ -52,7 +52,9 @@
   <br>
 
   <div>
-    <EmailEditor displayMode='web' style="height:300px" :min-height="minHeight" :project-id="projectId" :locale="locale"
+    <EmailEditor 
+    locale='zh-CN'
+    displayMode='web' style="height:300px" :min-height="minHeight" :project-id="projectId" :locale="locale"
       ref="emailEditor" v-on:load="editorLoaded()" display-mod="web" v-on:ready="editorReady()" />
   </div>
 
@@ -284,6 +286,9 @@ const editorLoaded = () => {
   emailEditor.value.editor.loadBlank({
     backgroundColor: 'rgb(245, 181, 68, 0.1)'
   })
+  //  emailEditor.value.editor.init({
+      
+  //   });
   emailEditor.value.editor.addEventListener('image:uploaded', function (data: any) {
     console.log("传过来了")
   })

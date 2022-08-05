@@ -275,9 +275,9 @@
 
 
 <script setup lang="ts">
-// import FileItem from "./fileName.vue";
-// import UmlItem from "./UMLName.vue";
-// import ProtoItem from "./protoName.vue";
+/*import FileItem from "./fileName.vue";
+import UmlItem from "./UMLName.vue";
+import ProtoItem from "./protoName.vue";*/
 import { onMounted, reactive, Ref, ref, toRefs } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import {
@@ -299,8 +299,8 @@ const projectEditVisible = ref(false);
 const formLabelWidth = "140px";
 
 const form = reactive({
-  name: "项目名称",
-  description: "项目描述",
+  name: "项目1",
+  description: "blabla",
 });
 const project = reactive({
   name: ""
@@ -338,7 +338,7 @@ onMounted(() => {
   // getProjectDetail();
 });
 let info: any = reactive([])
-const getProjectDetail = (clear: boolean = true) => {
+/*const getProjectDetail = (clear: boolean = true) => {
   axios
     .post("/file/get_proj_by_id", {
     })
@@ -365,7 +365,7 @@ const getProjectDetail = (clear: boolean = true) => {
       }
       console.log(response.data);
     };
-});
+});*/
 
 
 //const protoList=ref([])
@@ -385,7 +385,6 @@ const addProto = () => {
   protoList.push(str);
   cntP++;
   countProto.value++;
-  handleProtoAdd();
 };
 const addUML = () => {
   let str: String = "新建UML图"+cntU.toString();
