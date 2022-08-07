@@ -1,4 +1,36 @@
 <template>
+    <n-card :bordered="false">
+        <n-button @click="show"></n-button>
+        <n-grid :cols="20">
+            <n-gi span="3">
+                <n-space vertical>
+                    
+                    <n-select v-model:value="docValue" :options="options" remote :loading="protoLoading" placeholder="请选文档"
+                        @update:value="enterDoc" class="choose" />
+                </n-space>
+            </n-gi>
+            <!-- <n-gi></n-gi> -->
+            <n-gi span="3">
+              
+            </n-gi>
+            <n-gi span="2">
+                <n-space>
+                    <n-button type="warning" strong secondary :disabled="ProtoNotChosed" v-on:click="saveDesign"
+                        @click="() => { showModal = true }">新建页面</n-button>
+                    <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
+                </n-space>
+            </n-gi>
+            <n-gi span="2">
+                <n-space>
+                    <n-button type="warning" strong secondary :disabled="nopageChosed" v-on:click="saveDesign">保存设计
+                    </n-button>
+                    <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
+                </n-space>
+            </n-gi>
+
+
+        </n-grid>
+    </n-card>
     <div v-if="editor">
 
         <n-button @click="editor?.chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
@@ -91,18 +123,188 @@ import Collaboration from '@tiptap/extension-collaboration'
 import * as Y from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
+import { ref, onBeforeMount, onBeforeUnmount, reactive } from 'vue'
+import axios from "axios"
+import { useUserStore } from '../../store/User'
+import { SelectOption } from 'naive-ui'
+import { HocuspocusProvider } from '@hocuspocus/provider'
+const User = useUserStore()
+const options = ref<SelectOption[]>([])
+const docChosed = ref(false)
+const docId = ref(-1)
+const docValue=ref(null)
+const doc = reactive({
+    id:-1,
+    name: ""
+}
+)
+onBeforeMount(() => {
+//     axios.post('http://43.138.77.133:81/media/documents/2592b0d7a779ac7c4590c74d707b76a7.md'
+//     ,{},{responseType:'blob'}).then((res)=>{
+//         console.log(res)
+//     const blob = new Blob([res.data]);//处理文档流
+//     console.log(blob)
+//     const fileName = '资产列表.xlsx';
+//     const elink = document.createElement('a');
+//     elink.download = fileName;
+//     elink.style.display = 'none';
+//     elink.href = URL.createObjectURL(blob);
+//     document.body.appendChild(elink);
+//     elink.click();
+//     URL.revokeObjectURL(elink.href); // 释放URL 对象
+//     document.body.removeChild(elink);
+// })
+    getDocs()
+})
+onBeforeUnmount(() => {
+    console.log("quit!")
+    if (doc.id == -1) return
 
+    axios({
+        url: axios.defaults.baseURL + "/file/quit_document",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            document_id: doc.id
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("response", response)
+        console.log(response.data);
+
+        if (response.data?.success) {
+
+        }
+    })
+    axios({
+        url: axios.defaults.baseURL + "/file/upload_document",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            context: JSON.stringify(editor.value?.getJSON()),
+            document_name: doc.name,
+            proj_id: 1,
+            document_id: doc.id
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("response", response)
+        console.log(response.data);
+
+        if (response.data?.success) {
+
+        }
+    })
+})
+
+
+const getDocs = () => {
+    axios({
+        url: axios.defaults.baseURL + "/file/get_proj_documents",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            proj_id: 1
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("response", response)
+        console.log(response.data);
+
+        if (response.data?.success) {
+            for (let i = 0; i < response.data?.count; i++) {
+                options.value.push({
+                    label: response.data?.documents[i]?.document_name,
+                    value: response.data?.documents[i]?.document_id
+                })
+
+            }
+            //   protoLoading.value = false
+
+        }
+    })
+}
+const enterDoc = () => {
+    doc.id=docValue.value
+    axios({
+        url: axios.defaults.baseURL + "/file/enter_document",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            document_id:doc.id
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("response", response)
+        console.log(response.data);
+
+        if (response.data?.success) {
+            doc.name=response.data?.document.document_name
+            editor.value?.chain()
+            .clearContent()
+            .setContent(JSON.parse).run()
+            //   protoLoading.value = false
+
+        }
+    })
+
+}
 const show = () => {
     console.log(editor.value?.getJSON())
     console.log(JSON.stringify(editor.value?.getJSON()))
     console.log(editor.value?.getText())
     console.log(editor.value?.getHTML())
+    
+   
 
 }
 const ydoc = new Y.Doc()
 // Registered with a WebRTC provider
 const provider = new WebrtcProvider('example-document1', ydoc)
-let a = `{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"十大算法是大多数"}]}]}`
+// const providerw = new HocuspocusProvider({
+//   url: 'ws://121.40.165.18:8800',
+//   name: '',
+// })
 const editor = useEditor({
     extensions: [
         StarterKit.configure({
@@ -111,16 +313,17 @@ const editor = useEditor({
         }),
         Collaboration.configure({
             document: ydoc,
+            // document:providerw.docunment
         }),
         CollaborationCursor.configure({
             provider: provider,
             user: {
-                name: 'Cyndi Lauper',
+                name: User.Name,
                 color: '#f783ac',
             },
         }),
     ],
-    content: null
+    content: ""
 })
 
 
@@ -226,5 +429,32 @@ console.log("ydoc", ydoc.get('array', Y.Array))
     padding: 0.1rem 0.3rem;
     border-radius: 3px 3px 3px 0;
     white-space: nowrap;
+}
+</style>
+
+<style lang="less" scoped>
+.choose {
+  border-width: 0px;
+
+  :deep(.n-base-selection__border) {
+    border-width: 0px;
+      
+  }
+
+  :deep(.n-base-selection--selected) {
+    border-width: 0px;
+  }
+
+  
+
+  :deep(.n-base-selection-input__content) {
+    font-family: 'Inria Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 34px;
+    /* identical to box height, or 142% */
+    color: rgba(9, 27, 61, 0.5);
+  }
 }
 </style>

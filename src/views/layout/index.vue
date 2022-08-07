@@ -1,79 +1,71 @@
 <template>
-     <n-layout has-sider>
-          <n-layout-sider content-style="padding: 24px;
-      backgroundColor:rgb(255,255,255)" 
-      :width="240" bordered
-       :collapsed-width="0"
-        show-trigger="bar"
-               @collapse="collapsed = true"
-                @expand="collapsed = false">
-                <div style="height: 30px;"></div>
-               <n-space justify="center">
-                    <n-image 
-                    height="30"
-                    preview-disabled
-                    @mouseenter="reloadenter()"
-                    :src=cubeSrc></n-image>
-                    <p class="title">
-                         InkBook
-                    </p>
-               </n-space>
-               <div style="height: 30px;"></div>
-               <div class="user">
-                    <n-space 
-                    vertical>
-                        <transition enter-active-class="animate__animated animate__fadeIn">
-                         <n-image width=56
-                         preview-disabled
-                         height="56"
-                         style="margin:32px 0px 0px 0px"
-                          @click="()=>{router.push('/personalInfo')}"
-                          src="svg\\主页svg\\Avatar.svg" />
-                          
-                          </transition>
-                         <p class="name"  style="margin:10px 0px 0px 0px">Name</p>
-                         <p class="state">state</p>
-                         <div style="height:15px"></div>
-                         
-                    </n-space>
-               </div>
-               <n-menu :collapsed="collapsed" 
-               :collapsed-width="64"
-               :collapsed-icon-size="40" 
-               :options="menuOptions"
-                    @update:value="handleUpdateValue" 
-                    :default-expanded-keys="defaultExpandedKeys"
-                    @update:expanded-keys="handleUpdateExpandedKeys" />
+    <n-layout has-sider native-scrollbar="false">
+        <n-layout-sider content-style="padding: 24px;
+      backgroundColor:rgb(255,255,255)" :width="240" bordered :collapsed-width="0" show-trigger="bar"
+            @collapse="collapsed = true" @expand="collapsed = false">
+                  <div class="grouptitle">我的团队</div>
+             <n-select
+             class="choose"
+             :loading="loading"
+              v-model:value="groupValue" 
+              @update:value="handleUpdateGroup"
+              :options="groupOptions" />   
+            <div style="height: 30px;"></div>
+            <n-space justify="center">
+                <n-image height="30" preview-disabled @mouseenter="reloadenter()" :src=cubeSrc></n-image>
+                <p class="title">
+                    InkBook
+                </p>
+            </n-space>
           
-          <div style="height:100px"></div>
-          <n-space justify="center"
-          >
-          <n-image
-     height="65"
-          preview-disabled
-          src="svg\主页svg\icon-1.5s-45px.gif"></n-image>
-          <!-- <n-image
+            <div style="height: 30px;"></div>
+            <div class="user">
+                <n-space vertical>
+                    <transition enter-active-class="animate__animated animate__fadeIn">
+                        <n-image width=56 preview-disabled height="56" style="margin:32px 0px 0px 0px"
+                            @click="() => { router.push('/personalInfo') }" src="svg\\主页svg\\Avatar.svg" />
+
+                    </transition>
+                    <p class="name" style="margin:10px 0px 0px 0px">{{User.Name}}</p>
+                    <p class="state">state</p>
+                    <div style="height:15px"></div>
+
+                </n-space>
+            </div>
+          
+            <n-menu :collapsed="collapsed" :collapsed-width="64" :collapsed-icon-size="40" :options="menuOptions"
+                :value="chosePage" @update:value="handleUpdateValue" :default-expanded-keys="defaultExpandedKeys"
+                @update:expanded-keys="handleUpdateExpandedKeys" />
+
+            <div style="height:100px"></div>
+            <n-space justify="center">
+                <n-image height="65" preview-disabled src="svg\主页svg\icon-1.5s-45px.gif"></n-image>
+                <!-- <n-image
           preview-disabled
           src="svg\主页svg\Upgrade.svg"></n-image> -->
-          </n-space>
-          </n-layout-sider>
-          <n-layout content-style="padding: 10px;
-               backgroundColor:rgb(245, 181, 68, 0.1)">
-              <transition enter-active-class="animate__animated animate__fadeIn">
-               <router-view></router-view>
-                </transition>
-                <!-- <router-view v-slot="{ Component }">
+            </n-space>
+        </n-layout-sider>
+        <n-layout content-style="padding: 10px;
+               backgroundColor:rgb(245, 181, 68, 0.1);
+               height:1000px"
+               :native-scrollbar="false"
+               >
+            <transition enter-active-class="animate__animated animate__fadeIn">
+                <router-view></router-view>
+            </transition>
+            <!-- <router-view v-slot="{ Component }">
   <transition>
     <component :is="Component" />
   </transition>
 </router-view> -->
-          </n-layout>
+        </n-layout>
 
-          <!-- :naitive-sceoll="false"> -->
+        <!-- :naitive-sceoll="false"> -->
 
-     </n-layout>
+    </n-layout>
 </template>
 <script setup lang="ts">
+import {useGroupStore} from '../../store/Group'
 import { menuList, menuLists } from "./menuList"
 import Header from './Header/index.vue'
 // import Menu from './Menu/index.vue'
@@ -81,28 +73,31 @@ import Content from './Content/index.vue'
 import axios from 'axios';
 import { useUserStore } from '../../store/User'
 import { onMounted, reactive } from '@vue/runtime-core';
-import { defineComponent, h, Component,ref,onBeforeMount,onBeforeUnmount } from 'vue'
+import { defineComponent, h, Component, ref, onBeforeMount, onBeforeUnmount } from 'vue'
 import { NIcon, NImage, useMessage } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
 import { useRouter } from 'vue-router'
-onBeforeMount(()=>{
-    let l=localStorage.getItem("Login")
-    if(l!="true"){
-    router.push('/logIn')
-  }
+import { SelectProps } from 'element-plus/es/components/select-v2/src/defaults';
+onBeforeMount(() => {
+    let l = localStorage.getItem("Login")
+    if (l != "true") {
+        router.push('/logIn')
+    }
 })
-onBeforeUnmount(()=>{
+onBeforeUnmount(() => {
     // User.Login=true
 })
-const router=useRouter()
-const cubeSrc=ref("svg\\主页svg\\icon-1.2s-47px.gif")
+const Group=useGroupStore()
+const loading=ref(true)
+const router = useRouter()
+const cubeSrc = ref("svg\\主页svg\\icon-1.2s-47px.gif")
 const collapsed = ref(false)
 const defaultExpandedKeys = [2]
 const message = useMessage()
 const User = useUserStore()
-const menuOptions: MenuOption[]= reactive([
-      {
+const menuOptions: MenuOption[] = reactive([
+    {
         label: () =>
             h(
                 RouterLink,
@@ -120,186 +115,248 @@ const menuOptions: MenuOption[]= reactive([
         icon: () => h(
             NImage,
             {
-               previewDisabled:true,  src: 'svg\\主页svg\\Group-1.svg'
+                previewDisabled: true, src: 'svg\\主页svg\\Group-1.svg'
             }
         )
     },
-{
-    label: '执行项目',
+    {
+        label: '执行项目',
         key: 2,
-            icon: () => h(
-                NImage,
-                {
-                    previewDisabled:true,  src: 'svg\\主页svg\\Group-2.svg'
-                }
-            ),
-                children: [
-                    {
-                        label: () =>
-                            h(
-                                RouterLink,
-                                {
-                                    to: {
-                                        path: '/project',
-                                        // params: {
-                                        //     lang: 'zh-CN'
-                                        // }
-                                    }
-                                },
-                                '管理项目'
-                            ),
-                        key: 3,
-                        icon: () => h(
-                            NImage,
-                            {
-                                previewDisabled:true,  src: 'svg\\主页svg\\Group-3.svg'
-                            }
-                        )
-
-                    },
-                    {
-                        label: () =>
-                            h(
-                                RouterLink,
-                                {
-                                    to: {
-                                        path: '/prototype',
-                                        // params: {
-                                        //     lang: 'zh-CN'
-                                        // }
-                                    }
-                                },
-                                '设计原型'
-                            ),
-                        key: 4,
-                        icon: () => h(
-                            NImage,
-                            {
-                                 previewDisabled:true,  src: 'svg\\主页svg\\Group-4.svg'
-                            }
-                        )
-
-                    },
-                    {
-                        label: () =>
-                            h(
-                                RouterLink,
-                                {
-                                    to: {
-                                        path: '/graph',
-                                        // params: {
-                                        //     lang: 'zh-CN'
-                                        // }
-                                    }
-                                },
-                                '绘制图'
-                            ),
-                        key: 5,
-                        icon: () => h(
-                            NImage,
-                            {
-                                previewDisabled:true,  src: 'svg\\主页svg\\Group-5.svg'
-                            }
-                        )
-
-                    },
-
-                    {
-                        label: () => h(
-                            RouterLink,
-                            {
-                                to: {
-                                    path: '/document',
-                                    // params: {
-                                    //     lang: 'zh-CN'
-                                    // }
-                                }
-                            },
-                            "多人文档",
-                        ),
-                        key: 6,
-                        icon: () => h(
-                            NImage,
-                            {
-                                previewDisabled:true,  src: 'svg\\主页svg\\Group-6.svg'
-                            }
-                        )
-                    }
-                ]
-},
-{
-    label: () => h(
-        RouterLink,
-        {
-            to: {
-                path: '/trash',
-                // params: {
-                //     lang: 'zh-CN'
-                // }
+        icon: () => h(
+            NImage,
+            {
+                previewDisabled: true, src: 'svg\\主页svg\\Group-2.svg'
             }
-        },
-        "回收站",
-    ),
-        key: 7,
-            icon: () => h(
-                NImage,
-                {
-                    previewDisabled:true,  src: 'svg\\主页svg\\Group-7.svg'
+        ),
+        children: [
+            {
+                label: () =>
+                    h(
+                        RouterLink,
+                        {
+                            to: {
+                                path: '/project',
+                                // params: {
+                                //     lang: 'zh-CN'
+                                // }
+                            }
+                        },
+                        '管理项目'
+                    ),
+                key: 3,
+                icon: () => h(
+                    NImage,
+                    {
+                        previewDisabled: true, src: 'svg\\主页svg\\Group-3.svg'
+                    }
+                )
+
+            },
+            {
+                label: () =>
+                    h(
+                        RouterLink,
+                        {
+                            to: {
+                                path: '/prototype',
+                                // params: {
+                                //     lang: 'zh-CN'
+                                // }
+                            }
+                        },
+                        '设计原型'
+                    ),
+                key: 4,
+                icon: () => h(
+                    NImage,
+                    {
+                        previewDisabled: true, src: 'svg\\主页svg\\Group-4.svg'
+                    }
+                )
+
+            },
+            {
+                label: () =>
+                    h(
+                        RouterLink,
+                        {
+                            to: {
+                                path: '/graph',
+                                // params: {
+                                //     lang: 'zh-CN'
+                                // }
+                            }
+                        },
+                        '绘制图'
+                    ),
+                key: 5,
+                icon: () => h(
+                    NImage,
+                    {
+                        previewDisabled: true, src: 'svg\\主页svg\\Group-5.svg'
+                    }
+                )
+
+            },
+
+            {
+                label: () => h(
+                    RouterLink,
+                    {
+                        to: {
+                            path: '/document',
+                            // params: {
+                            //     lang: 'zh-CN'
+                            // }
+                        }
+                    },
+                    "多人文档",
+                ),
+                key: "6",
+                icon: () => h(
+                    NImage,
+                    {
+                        previewDisabled: true, src: 'svg\\主页svg\\Group-6.svg'
+                    }
+                )
+            }
+        ]
+    },
+    {
+        label: () => h(
+            RouterLink,
+            {
+                to: {
+                    path: '/trash',
+                    // params: {
+                    //     lang: 'zh-CN'
+                    // }
                 }
-            )
-}
+            },
+            "回收站",
+        ),
+        key: 7,
+        icon: () => h(
+            NImage,
+            {
+                previewDisabled: true, src: 'svg\\主页svg\\Group-7.svg'
+            }
+        )
+    }
 ])
 let last = -1
-let cnt0=0
-const reloadenter=()=>{
-     if(cnt0==0){ cubeSrc.value="svg\\主页svg\\icon-1.3s-47px2.gif"
-     cnt0=1}else{
-           cubeSrc.value="svg\\主页svg\\icon-1.3s-47px1.gif"
-     cnt0=0
-     }
-    
+let cnt0 = 0
+const group=ref(null)
+const groupValue=ref("")
+const groupOptions:MenuOption[]=reactive([])
+const  handleUpdateGroup =(value: string, option: SelectOption)=> {
+        Group.id=Number(value)
+        groupValue.value=option.label
+        console.log("value",option)
+       
 }
-const reloadout=()=>{
-     cubeSrc.value="svg\\主页svg\\icon-1.3s-47px1.gif"
+onBeforeMount(()=>{
+     axios({
+        url: axios.defaults.baseURL + "/group/get_groups",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("response", response)
+        console.log(response.data);
+
+        if (response.data?.success) {
+            let d=response.data?.groups
+            for(let i=0;i<response.data?.count;i++){
+                groupOptions.push({
+                    label:d[i].GroupName,
+                    key:d[i].GroupID
+                })
+                loading.value=false
+                groupValue.value=d[0].GroupName
+            
+                Group.id=d[0].GroupID
+            }
+        }
+    })
+})
+const reloadenter = () => {
+    if (cnt0 == 0) {
+        cubeSrc.value = "svg\\主页svg\\icon-1.3s-47px2.gif"
+        cnt0 = 1
+    } else {
+        cubeSrc.value = "svg\\主页svg\\icon-1.3s-47px1.gif"
+        cnt0 = 0
+    }
+
+}
+const reloadout = () => {
+    cubeSrc.value = "svg\\主页svg\\icon-1.3s-47px1.gif"
 }
 // const menuOptions: MenuOption[] = reactive(menuList)
+const chosePage = ref("")
+onMounted(() => {
+   
+        let p = localStorage.getItem("page")
+        if (p != null && p != undefined) {
+            chosePage.value = p
+            handleUpdateValue(p,menuList[0])
+        }
+    
+
+})
 const handleUpdateValue = (key: string, item: MenuOption) => {
+    console.log("key", key, "value", Number(chosePage.value))
+    chosePage.value = key
+    localStorage.setItem("page", key)
+    menuOptions[0] =
+        menuLists[7][0]
+    menuOptions[1] =
+        menuLists[7][1]
+    menuOptions[2] =
+        menuLists[5][2]
+    let n = Number(key)
+    switch (n) {
+        case 1: menuOptions[0] =
+            menuLists[1][0]
+            break;
+        case 2: menuOptions[1] =
+            menuLists[2][1]
+            break;
+        case 3: menuOptions[1] =
+            menuLists[3][1]
+            break;
+        case 4: menuOptions[1] =
+            menuLists[4][1]
+            break;
+        case 5: menuOptions[1] =
+            menuLists[5][1]
+            break;
+        case 6: menuOptions[1] =
+            menuLists[6][1]
+            break;
+        case 7: menuOptions[2] =
+            menuLists[7][2]
+            break;
 
-     menuOptions[0] =
-          menuLists[7][0]
-     menuOptions[1] =
-          menuLists[7][1]
-     menuOptions[2] =
-          menuLists[5][2]
-     let n = Number(key)
-     switch (n) {
-          case 1: menuOptions[0] =
-               menuLists[1][0]
-               break;
-          case 2: menuOptions[1] =
-               menuLists[2][1]
-               break;
-          case 3: menuOptions[1] =
-               menuLists[3][1]
-               break;
-          case 4: menuOptions[1] =
-               menuLists[4][1]
-               break;
-          case 5: menuOptions[1] =
-               menuLists[5][1]
-               break;
-          case 6: menuOptions[1] =
-               menuLists[6][1]
-               break;
-          case 7: menuOptions[2] =
-               menuLists[7][2]
-               break;
-
-     }
-     //      menuOptions[Number(key)-1]=
-     // menuLists[Number(key)]
-     // menuOptions[JSON.stringify(key)]=
-     // menuLists[JSON.stringify(key)][JSON.stringify(key)]
+    }
+    //      menuOptions[Number(key)-1]=
+    // menuLists[Number(key)]
+    // menuOptions[JSON.stringify(key)]=
+    // menuLists[JSON.stringify(key)][JSON.stringify(key)]
     //  message.info('[onUpdate:value]: ' + JSON.stringify(key))
     //  message.info('[onUpdate:value]: ' + JSON.stringify(item))
 }
@@ -325,46 +382,60 @@ onMounted(()=>{
 })*/
 </script>
 
-<style scoped>
-.state{
-     opacity: 0.4000000059604645;
-color: #091B3D;
-font-family: Sk-Modernist;
-font-weight: regular;
-font-size: 12px;
-line-height: 16px;
-letter-spacing: 0px;
-text-align: center;
+<style scoped >
+.state {
+    opacity: 0.4000000059604645;
+    color: #091B3D;
+    font-family: Sk-Modernist;
+    font-weight: regular;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0px;
+    text-align: center;
 
 }
-.name{
-     color: #091B3D;
-font-family: Sk-Modernist;
-font-weight: bold;
-font-size: 16px;
-line-height: 26px;
-letter-spacing: 0px;
-text-align: center;
+
+.name {
+    color: #091B3D;
+    font-family: Sk-Modernist;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 26px;
+    letter-spacing: 0px;
+    text-align: center;
 
 }
+.grouptitle {
+    color: #000000;
+    font-family: Inria Sans;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 34px;
+    letter-spacing: 0px;
+    position: relative;
+    left: 5px;
+    /* text-align: center; */
+    margin: 0px 0px 0 0;
+}
+
 .title {
-     color: #000000;
-     font-family: Inria Sans;
-     font-weight: bold;
-     font-size: 24px;
-     line-height: 34px;
-     letter-spacing: 0px;
-     position:relative;
-     left:-5px;
-     /* text-align: center; */
-     margin: 0px 0px 0 0 ;
+    color: #000000;
+    font-family: Inria Sans;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 34px;
+    letter-spacing: 0px;
+    position: relative;
+    left: -5px;
+    /* text-align: center; */
+    margin: 0px 0px 0 0;
 }
 
 .user {
-     /* opacity: 0.10000000149011612; */
-     border-radius: 16px;
-     background: rgb(245, 181, 68, 0.1);
-     text-align: center;
+    /* opacity: 0.10000000149011612; */
+    border-radius: 16px;
+    background: rgb(245, 181, 68, 0.1);
+    text-align: center;
 }
 
 /* .n-layout{
@@ -387,4 +458,30 @@ background-color .3s var(--n-bezier),
 /* height:100%; */
 
 /* } */
+</style>
+<style lang="less" scoped>
+.choose {
+  border-width: 0px;
+
+  :deep(.n-base-selection__border) {
+    border-width: 0px;
+      
+  }
+
+  :deep(.n-base-selection--selected) {
+    border-width: 0px;
+  }
+
+  
+
+  :deep(.n-base-selection-input__content) {
+    font-family: 'Inria Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 34px;
+    /* identical to box height, or 142% */
+    color: rgba(9, 27, 61, 0.5);
+  }
+}
 </style>

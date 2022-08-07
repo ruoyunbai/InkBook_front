@@ -3,17 +3,11 @@ import { defineStore } from 'pinia'
 import { Names } from './store-namespace'
 
  
-export const useUserStore = defineStore( Names.User,{
-    // id:"user",
+export const useGroupStore = defineStore( Names.Group,{
     state:()=>{
-        return {  
-            Name:"",
-            Login:false,
-            token:"",
-            Id:0,
-            avatar:"http://43.138.77.133:81/media/avatars/default.jpg",
-            level:1,
-            isadmin:false
+        return {
+            id:-1,
+            name:""
         }
     },
     // getters:{

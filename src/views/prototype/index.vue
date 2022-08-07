@@ -75,7 +75,7 @@ const message=useMessage()
 
 const createName = ref("")
 const User = useUserStore()
-const height = ref(500)
+const height = ref(800)
 const width = ref(500)
 const ProtoNotChosed = ref(true)
 const protoLoading = ref(true)
@@ -92,6 +92,7 @@ const bodyStyle = {
 // }
 onBeforeMount(() => {
   getProtos()
+  minHeight.value=height.value+"px"
 })
 const changeHeight = () => {
   if (height.value != null) {
