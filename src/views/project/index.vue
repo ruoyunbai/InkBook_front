@@ -7,11 +7,22 @@
       </n-gi>
       <!-- v-model:value="" -->
       <n-gi span="5">
-        <n-input ref="inputInstRef" placeholder="搜索项目" clearable round size="large" style="margin-left: 19px">
+         <n-input-group>
+         <n-button
+         @click="search"
+          type="warning">
+        搜索
+      </n-button>
+        <n-input
+        v-model:value="input"
+         ref="inputInstRef" 
+        placeholder="项目名称" 
+        clearable round  style="margin-left: 19px">
           <template #prefix>
-            <n-image src="svg\project_svg\search.svg"></n-image>
+            <n-image preview-disabled src="svg\project_svg\search.svg"></n-image>
           </template>
         </n-input>
+        </n-input-group>
       </n-gi>
       <n-gi span="1">
       </n-gi>
@@ -19,7 +30,7 @@
         <el-button round color="#2772F0" size="large" @click="dialogCreateVisible = true">
           <template #icon>
             <n-icon>
-              <n-image src="svg\project_svg\plus.svg" />
+              <n-image preview-disabled src="svg\project_svg\plus.svg" />
             </n-icon>
           </template>
           <div class="commonText">
@@ -37,8 +48,61 @@
         我的项目
       </div>
     </div>
+    <transition-group
+            name="posts"
+            tag="p"
+            enter-active-class="animate__animated animate__backInLeft"
+            appear-active-class="animate__animated animate__backInLeft"
+      >
+    <n-grid :key="1" v-show="searched" x-gap="5" :cols="30">
 
-    <n-grid x-gap="5" :cols="30">
+      <n-gi span="1">
+      </n-gi>
+
+      <n-gi span="28">
+        <n-layout class="bg" bordered="false" content-style="padding: 30px 30px 30px 30px;">
+          <n-collapse
+          :default-expanded-names="['2']">
+            <template #arrow>
+              <n-icon>
+                <n-image preview-disabled 
+                 src="svg\project_svg\folder.svg" />
+              </n-icon>
+            </template>
+            <n-collapse-item 
+            name="2"
+            title="&emsp;搜索结果">
+              <n-divider></n-divider>
+              <!-- <el-table  style="width: 100%">
+                <el-table-column prop="obname" label="项目名称" width="280" />
+                <el-table-column prop="obstate" label="项目描述" width="580" />
+                <el-table-column prop="operation" label="操作" />
+              </el-table> -->
+
+              <!--加载项目-->
+              <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
+                <n-grid-item name="2" v-for="(project, index) in sprojects">
+                               <Card  :key="project.project_id" :one-project="project"></Card>
+                </n-grid-item>
+              </n-grid>
+              <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
+              <n-grid-item>
+                <Card></Card>
+              </n-grid-item>
+            </n-grid> -->
+
+              <template #header-extra>
+                <n-image preview-disabled  src="svg\project_svg\sort.svg" />
+              </template>
+            </n-collapse-item>
+          </n-collapse>
+        </n-layout>
+      </n-gi>
+      <n-gi span="1">
+      </n-gi>
+
+    </n-grid>
+    <n-grid :key="2" v-show="!searched" x-gap="5" :cols="30">
 
       <n-gi span="1">
       </n-gi>
@@ -48,7 +112,8 @@
           <n-collapse>
             <template #arrow>
               <n-icon>
-                <n-image preview-disabled src="svg\project_svg\folder.svg" />
+                <n-image preview-disabled 
+                 src="svg\project_svg\folder.svg" />
               </n-icon>
             </template>
             <n-collapse-item title="&emsp;全部项目">
@@ -60,7 +125,11 @@
               </el-table> -->
 
               <!--加载项目-->
-              <Card v-for="(project, index) in projects" :key="project.project_id" :one-project="project"></Card>
+              <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
+                <n-grid-item v-for="(project, index) in projects">
+                               <Card  :key="project.project_id" :one-project="project"></Card>
+                </n-grid-item>
+              </n-grid>
               <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
               <n-grid-item>
                 <Card></Card>
@@ -68,7 +137,7 @@
             </n-grid> -->
 
               <template #header-extra>
-                <n-image preview-disabled src="svg\project_svg\sort.svg" />
+                <n-image preview-disabled  src="svg\project_svg\sort.svg" />
               </template>
             </n-collapse-item>
           </n-collapse>
@@ -78,8 +147,7 @@
       </n-gi>
 
     </n-grid>
-
-    <n-grid x-gap="5" :cols="30">
+    <n-grid :key="4" v-show="!searched" x-gap="5" :cols="30">
 
       <n-gi span="1">
       </n-gi>
@@ -89,7 +157,7 @@
           <n-collapse>
             <template #arrow>
               <n-icon>
-                <n-image preview-disabled src="svg\project_svg\folder.svg" />
+                <n-image preview-disabled  src="svg\project_svg\folder.svg" />
               </n-icon>
             </template>
             <n-collapse-item title="&emsp;我创建的">
@@ -102,7 +170,7 @@
               </n-grid>
 
               <template #header-extra>
-                <n-image preview-disabled src="svg\project_svg\sort.svg" />
+                <n-image preview-disabled  src="svg\project_svg\sort.svg" />
               </template>
             </n-collapse-item>
           </n-collapse>
@@ -112,8 +180,7 @@
       </n-gi>
 
     </n-grid>
-
-    <n-grid x-gap="5" :cols="30">
+    <n-grid :key="5" v-show="!searched" x-gap="5" :cols="30">
 
       <n-gi span="1">
       </n-gi>
@@ -123,7 +190,7 @@
           <n-collapse>
             <template #arrow>
               <n-icon>
-                <n-image preview-disabled src="svg\project_svg\folder.svg" />
+                <n-image preview-disabled  src="svg\project_svg\folder.svg" />
               </n-icon>
             </template>
             <n-collapse-item title="&emsp;我参与的">
@@ -136,7 +203,7 @@
               </n-grid>
 
               <template #header-extra>
-                <n-image preview-disabled src="svg\project_svg\sort.svg" />
+                <n-image preview-disabled  src="svg\project_svg\sort.svg" />
               </template>
             </n-collapse-item>
           </n-collapse>
@@ -146,7 +213,7 @@
       </n-gi>
 
     </n-grid>
-
+</transition-group>
   </n-space>
 
   <!--编辑信息dialog-->
@@ -176,6 +243,7 @@ import {
   onUpdated,
   toRaw,
   reactive,
+  onBeforeMount,
   ref,
   onMounted,
   StyleValue,
@@ -190,11 +258,11 @@ import { useUserStore } from "../../store/User";
 import { InputInst, useMessage } from "naive-ui";
 import { useProjectStore } from "../../store/Project";
 let text1: Ref<string> = ref("");
-
+const searched=ref(false)
 const Project = useProjectStore();
 const User = useUserStore();
 const message = useMessage();
-
+const input=ref("")
 //对话框
 const dialogCreateVisible = ref(false)
 const formLabelWidth = '140px'
@@ -202,10 +270,52 @@ const form = reactive({
   name: '',
   region: '',
 })
+const search=()=>{
+axios({
+    url: axios.defaults.baseURL + "/proj/get_proj_by_name",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": User.token
+    },
+    data: {
+      proj_name:input.value
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
+    console.log(response)
+    while (sprojects.length != 0) sprojects.pop();     
+    if (response.data?.success) {
+         if (response.data != null)
+            for (let i = 0; i < response.data.count; i++) {
+              let temp = reactive({
+                group_id: response.data.projs[i].group_id,
+                proj_id: response.data.projs[i].proj_id,
+                proj_info: response.data.projs[i].proj_info,
+                proj_name: response.data.projs[i].proj_name,
+                status: response.data.projs[i].status,
+                user_id: response.data.projs[i].user_id,
+              });
+              sprojects.push(temp);
+            }
+            searched.value=true
+    }else{
+      message.error(response.data?.message)
+      searched.value=false
+    }})
 
 
+  
+}
 
-onMounted(() => {
+
+onBeforeMount(() => {
   getProject();
   console.log("1");
 });
@@ -213,31 +323,10 @@ onMounted(() => {
 let count: number = 0;
 let one_group_id: number;
 const projects: any[] = reactive([]);
+const sprojects: any[] = reactive([]);
 //获取项目
 const getProject = (clear: boolean = true) => {
-  axios({
-    url: axios.defaults.baseURL + "/group/get_groups",
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": User.token
-    },
-    data: {
-    },
-    transformRequest: [
-      function (data, headers) {
-        let data1 = JSON.stringify(data);
-        console.log(data1);
-        return data1;
-      },
-    ],
-  }).then(function (response) {
-    // 处理成功情况
-    if (response.data?.success) {
-      one_group_id = response.data.groups[0].GroupID
-      console.log("groupsID", response.data.groups[0].GroupID);
-    }
-  })
+  
   //   section.value=parseInt(localStorage.getItem("section")+"")
   axios({
     url: axios.defaults.baseURL + "/group/get_groups",
@@ -263,7 +352,7 @@ const getProject = (clear: boolean = true) => {
       let i = 0;
       if (clear) while (projects.length != 0) projects.pop();
       if (response.data != null)
-      one_group_id = response.data.groups[0].groupID;
+      one_group_id = response.data.groups[0].group_id;
       console.log("one_group_id" + one_group_id);
       axios({
         url: axios.defaults.baseURL + "/proj/get_proj_all",
@@ -365,6 +454,9 @@ const project_create = () => {
 
 
 <style scoped>
+.posts-move {
+  transition: transform 1s;
+}
 .headTitle {
   margin: auto;
   color: #000000;

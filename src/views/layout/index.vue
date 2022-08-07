@@ -50,9 +50,14 @@
                height:1000px"
                :native-scrollbar="false"
                >
-            <transition enter-active-class="animate__animated animate__fadeIn">
-                <router-view></router-view>
-            </transition>
+               <router-view v-slot="{ Component }">
+  <transition enter-active-class="animate__animated animate__fadeIn">
+    <component :is="Component" />
+  </transition>
+</router-view>
+            <!-- <transition >
+                <router-view enter-active-class="animate__animated animate__fadeIn"></router-view>
+            </transition> -->
             <!-- <router-view v-slot="{ Component }">
   <transition>
     <component :is="Component" />
