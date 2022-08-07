@@ -1,4 +1,5 @@
 <template>
+<div>
   <n-space vertical size="large">
     <div style="height:10px"></div>
     <n-grid x-gap="12" :cols="16">
@@ -233,7 +234,7 @@
       </span>
     </template>
   </el-dialog>
-
+</div>
 </template>
 
 

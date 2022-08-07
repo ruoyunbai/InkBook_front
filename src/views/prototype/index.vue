@@ -1,4 +1,5 @@
 <template>
+<div>
   <n-modal v-model:show="showModal" class="custom-card" preset="card" :style="bodyStyle" title=" 请输入页面名字" size="huge"
     :bordered="false">
     <template #header-extra>
@@ -58,7 +59,7 @@
       ref="emailEditor" v-on:load="editorLoaded()" display-mod="web" v-on:ready="editorReady()" />
   </div>
 
-
+</div>
 </template>
 
 <script setup lang="ts">

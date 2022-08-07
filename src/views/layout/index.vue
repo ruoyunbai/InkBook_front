@@ -3,13 +3,9 @@
         <n-layout-sider content-style="padding: 24px;
       backgroundColor:rgb(255,255,255)" :width="240" bordered :collapsed-width="0" show-trigger="bar"
             @collapse="collapsed = true" @expand="collapsed = false">
-                  <div class="grouptitle">我的团队</div>
-             <n-select
-             class="choose"
-             :loading="loading"
-              v-model:value="groupValue" 
-              @update:value="handleUpdateGroup"
-              :options="groupOptions" />   
+            <div class="grouptitle">我的团队</div>
+            <n-select class="choose" :loading="loading" v-model:value="groupValue" @update:value="handleUpdateGroup"
+                :options="groupOptions" />
             <div style="height: 30px;"></div>
             <n-space justify="center">
                 <n-image height="30" preview-disabled @mouseenter="reloadenter()" :src=cubeSrc></n-image>
@@ -17,7 +13,7 @@
                     InkBook
                 </p>
             </n-space>
-          
+
             <div style="height: 30px;"></div>
             <div class="user">
                 <n-space vertical>
@@ -26,13 +22,13 @@
                             @click="() => { router.push('/personalInfo') }" src="svg\\主页svg\\Avatar.svg" />
 
                     </transition>
-                    <p class="name" style="margin:10px 0px 0px 0px">{{User.Name}}</p>
+                    <p class="name" style="margin:10px 0px 0px 0px">{{ User.Name }}</p>
                     <p class="state">state</p>
                     <div style="height:15px"></div>
 
                 </n-space>
             </div>
-          
+
             <n-menu :collapsed="collapsed" :collapsed-width="64" :collapsed-icon-size="40" :options="menuOptions"
                 :value="chosePage" @update:value="handleUpdateValue" :default-expanded-keys="defaultExpandedKeys"
                 @update:expanded-keys="handleUpdateExpandedKeys" />
@@ -47,22 +43,20 @@
         </n-layout-sider>
         <n-layout content-style="padding: 10px;
                backgroundColor:rgb(245, 181, 68, 0.1);
-               height:1000px"
-               :native-scrollbar="false"
-               >
-               <router-view v-slot="{ Component }">
-  <transition enter-active-class="animate__animated animate__fadeIn">
-    <component :is="Component" />
-  </transition>
-</router-view>
-            <!-- <transition >
+               height:1000px" :native-scrollbar="false">
+            <!-- <router-view v-slot="{ Component }">
+                <transition enter-active-class="animate__animated animate__fadeIn">
+                    <component :is="Component" />
+                </transition>
+            </router-view> -->
+            <!-- <transition>
                 <router-view enter-active-class="animate__animated animate__fadeIn"></router-view>
             </transition> -->
-            <!-- <router-view v-slot="{ Component }">
-  <transition>
-    <component :is="Component" />
-  </transition>
-</router-view> -->
+            <router-view v-slot="{ Component }">
+                <transition enter-active-class="animate__animated animate__bounceInLeft" >
+                    <component :is="Component" />
+                </transition>
+            </router-view>
         </n-layout>
 
         <!-- :naitive-sceoll="false"> -->
@@ -70,7 +64,8 @@
     </n-layout>
 </template>
 <script setup lang="ts">
-import {useGroupStore} from '../../store/Group'
+
+import { useGroupStore } from '../../store/Group'
 import { menuList, menuLists } from "./menuList"
 import Header from './Header/index.vue'
 // import Menu from './Menu/index.vue'
@@ -78,7 +73,7 @@ import Content from './Content/index.vue'
 import axios from 'axios';
 import { useUserStore } from '../../store/User'
 import { onMounted, reactive } from '@vue/runtime-core';
-import { defineComponent, h, Component, ref, onBeforeMount, onBeforeUnmount } from 'vue'
+import { defineComponent, h, ref, onBeforeMount, onBeforeUnmount } from 'vue'
 import { NIcon, NImage, useMessage } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
@@ -93,8 +88,8 @@ onBeforeMount(() => {
 onBeforeUnmount(() => {
     // User.Login=true
 })
-const Group=useGroupStore()
-const loading=ref(true)
+const Group = useGroupStore()
+const loading = ref(true)
 const router = useRouter()
 const cubeSrc = ref("svg\\主页svg\\icon-1.2s-47px.gif")
 const collapsed = ref(false)
@@ -251,17 +246,17 @@ const menuOptions: MenuOption[] = reactive([
 ])
 let last = -1
 let cnt0 = 0
-const group=ref(null)
-const groupValue=ref("")
-const groupOptions:MenuOption[]=reactive([])
-const  handleUpdateGroup =(value: string, option: SelectOption)=> {
-        Group.id=Number(value)
-        groupValue.value=option.label
-        console.log("value",option)
-       
+const group = ref(null)
+const groupValue = ref("")
+const groupOptions: MenuOption[] = reactive([])
+const handleUpdateGroup = (value: string, option: SelectOption) => {
+    Group.id = Number(value)
+    groupValue.value = option.label
+    console.log("value", option)
+
 }
-onBeforeMount(()=>{
-     axios({
+onBeforeMount(() => {
+    axios({
         url: axios.defaults.baseURL + "/group/get_groups",
         method: "post",
         headers: {
@@ -269,7 +264,7 @@ onBeforeMount(()=>{
             "Authorization": User.token
         },
         data: {
-            
+
         },
         transformRequest: [
             function (data, headers) {
@@ -284,16 +279,16 @@ onBeforeMount(()=>{
         console.log(response.data);
 
         if (response.data?.success) {
-            let d=response.data?.groups
-            for(let i=0;i<response.data?.count;i++){
+            let d = response.data?.groups
+            for (let i = 0; i < response.data?.count; i++) {
                 groupOptions.push({
-                    label:d[i].GroupName,
-                    key:d[i].GroupID
+                    label: d[i].GroupName,
+                    key: d[i].GroupID
                 })
-                loading.value=false
-                groupValue.value=d[0].GroupName
-            
-                Group.id=d[0].GroupID
+                loading.value = false
+                groupValue.value = d[0].GroupName
+
+                Group.id = d[0].GroupID
             }
         }
     })
@@ -314,13 +309,13 @@ const reloadout = () => {
 // const menuOptions: MenuOption[] = reactive(menuList)
 const chosePage = ref("")
 onMounted(() => {
-   
-        let p = localStorage.getItem("page")
-        if (p != null && p != undefined) {
-            chosePage.value = p
-            handleUpdateValue(p,menuList[0])
-        }
-    
+
+    let p = localStorage.getItem("page")
+    if (p != null && p != undefined) {
+        chosePage.value = p
+        handleUpdateValue(p, menuList[0])
+    }
+
 
 })
 const handleUpdateValue = (key: string, item: MenuOption) => {
@@ -410,6 +405,7 @@ onMounted(()=>{
     text-align: center;
 
 }
+
 .grouptitle {
     color: #000000;
     font-family: Inria Sans;
@@ -466,27 +462,27 @@ background-color .3s var(--n-bezier),
 </style>
 <style lang="less" scoped>
 .choose {
-  border-width: 0px;
-
-  :deep(.n-base-selection__border) {
     border-width: 0px;
-      
-  }
 
-  :deep(.n-base-selection--selected) {
-    border-width: 0px;
-  }
+    :deep(.n-base-selection__border) {
+        border-width: 0px;
 
-  
+    }
 
-  :deep(.n-base-selection-input__content) {
-    font-family: 'Inria Sans';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 34px;
-    /* identical to box height, or 142% */
-    color: rgba(9, 27, 61, 0.5);
-  }
+    :deep(.n-base-selection--selected) {
+        border-width: 0px;
+    }
+
+
+
+    :deep(.n-base-selection-input__content) {
+        font-family: 'Inria Sans';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 34px;
+        /* identical to box height, or 142% */
+        color: rgba(9, 27, 61, 0.5);
+    }
 }
 </style>

@@ -1,4 +1,5 @@
 <template>
+<div>
     <n-card :bordered="false">
         <n-button @click="show"></n-button>
         <n-grid :cols="20">
@@ -139,6 +140,7 @@
     </n-card>
     </n-gi>
     </n-grid>
+    </div>
 </template>
 
 <script setup lang="ts">
