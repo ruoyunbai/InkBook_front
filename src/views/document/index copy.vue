@@ -5,7 +5,7 @@
             <template #header-extra>
                 取消
             </template>
-            <n-input v-model:value="createName"></n-input>
+            <!-- <n-input v-model:value="createName"></n-input> -->
             <template #footer>
                 <n-button @click="createDoc">确定</n-button>
             </template>

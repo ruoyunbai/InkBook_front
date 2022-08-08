@@ -2,7 +2,8 @@
   <div>
     <template v-for="(item, index) in items">
       <div class="divider" v-if="item.type === 'divider'" :key="`divider${index}`" />
-      <menu-item v-else :key="index" v-bind="item" />
+      <!-- <menu-item /> -->
+      <MenuItem v-else :key="index" :icon="item.icon" :title="item.title" :action="item.action" :isActive="item.isActive" ></MenuItem>
     </template>
   </div>
 </template>
