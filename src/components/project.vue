@@ -33,7 +33,7 @@
                 color="#DADADA"
                 ghost
                 style="margin:0px 10px 10px 10px"
-                @click="deletProj"
+                @click="move_proj_to_bin()"
             >
                 <p class="buttonText2"
                 >删除项目</p>
@@ -109,6 +109,12 @@ const project_update = () => {
     Project.proj_name=form.name;
     Project.proj_id=props.oneProject.proj_id;
     Project.operation="changeInfo";
+    dialogEditVisible.value = false;
+}
+
+const move_proj_to_bin = () =>{
+    Project.proj_id=props.oneProject.proj_id;
+    Project.operation="move_to_bin";
     dialogEditVisible.value = false;
 }
 

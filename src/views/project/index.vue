@@ -276,7 +276,7 @@ const form = reactive({
 //修改项目
 Project.$subscribe((mutation, state)=>{
     if(Project.operation=="")return;
-    else{
+    else if(Project.operation=="changeInfo"){
       axios({
         url: axios.defaults.baseURL + "/proj/update_proj",
         method: "post",
@@ -301,7 +301,30 @@ Project.$subscribe((mutation, state)=>{
         console.log(response)
         getProject();
       })
-
+      Project.operation="";
+    }
+    else if(Project.operation=="move_to_bin"){
+      axios({
+        url: axios.defaults.baseURL + "/proj/move_proj_to_bin",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          proj_id: Project.proj_id,
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log(response)
+        getProject();
+      })
       Project.operation="";
     }
 })
