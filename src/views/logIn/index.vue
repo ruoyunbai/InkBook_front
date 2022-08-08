@@ -190,6 +190,7 @@ const handleValidateButtonClick = (e: MouseEvent) => {
         if (response.data?.success) {
           User.Login=true
           User.token=response.data.token
+          if(modelRef.value.name!=null)
           User.Name= modelRef.value.name
           localStorage.setItem("Login","true")
           router.push('/')

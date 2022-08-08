@@ -222,6 +222,7 @@ const getPage = () => {
     },
     preheaderText: "Hello World"
   });
+
       nopageChosed.value = false
       
       
@@ -256,9 +257,12 @@ const getPPages = (set:boolean=false) => {
     // 处理成功情况
     // console.log("response",response)
     // console.log(response.data);
-
+     while(optionsPage.value.length!=0){
+        optionsPage.value.pop()
+      }
+ ProtoNotChosed.value = false
     if (response.data?.success) {
-      ProtoNotChosed.value = false
+   
       while(optionsPage.value.length!=0){
         optionsPage.value.pop()
       }
@@ -270,13 +274,14 @@ const getPPages = (set:boolean=false) => {
         }
         optionsPage.value.push(t)
       }
-      pageNotChosed.value = false
-      ProtoNotChosed.value = false
-      pageHolder.value = "请选择页面"
+      
       if(set){
         pageId.value=optionsPage.value[optionsPage.value.length-1].value
       }
     }
+    pageNotChosed.value = false
+    ProtoNotChosed.value = false
+    pageHolder.value = "请选择页面"
     // console.log(content)
     // console.log("JSON",eval('('+content+')'))
     // console.log("JSON",JSON.parse(content))

@@ -1,8 +1,11 @@
 <template>
     <div class="user" style="background:#EDF5ED">
         <n-space vertical>
-            <p class="name"  style="margin:20px 10px 10px 30px">{{form.name}}</p>
-            <p class="state" style="margin:0px 10px 10px 30px">{{form.region}}</p>
+            <n-space justify="end">
+                <n-image style="margin:15px 15px 10px 10px" height="25" preview-disabled @click="proj_copy()" src="svg\project_svg\copy.svg"/>
+            </n-space>
+            <p class="name"  style="margin:0px 10px 10px 30px">{{props.oneProject.proj_name}}</p>
+            <p class="state" style="margin:0px 10px 10px 30px">{{props.oneProject.proj_info}}</p>
             <div style="height:15px"></div>
             <n-button
                 round
@@ -11,6 +14,10 @@
                 ghost
                 @click="routerToPersonalInfo"
             >
+                <template #icon>
+                    <n-image preview-disabled src="svg\project_svg\toDetail.svg">
+                    </n-image>
+                  </template>
                 <router-link to="/projectDetail" style="text-decoration: none">
                     <p class="buttonText2">进入项目</p>    
                 </router-link>
@@ -24,6 +31,10 @@
                 style="margin:5px 10px 5px 10px"
                 @click="dialogEditVisible = true"
             >
+                <template #icon>
+                    <n-image preview-disabled src="svg\project_svg\edit.svg">
+                    </n-image>
+                  </template>
                 <p class="buttonText2">编辑信息</p>
             </n-button>
 
@@ -33,8 +44,12 @@
                 color="#DADADA"
                 ghost
                 style="margin:0px 10px 10px 10px"
-                @click="deletProj"
+                @click="move_proj_to_bin()"
             >
+                <template #icon>
+                    <n-image preview-disabled src="svg\project_svg\dele.svg">
+                    </n-image>
+                </template>
                 <p class="buttonText2"
                 >删除项目</p>
             </n-button>
@@ -51,7 +66,7 @@
                 <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="dialogEditVisible = false">取消</el-button>
-                    <el-button type="primary" @click="dialogEditVisible = false"
+                    <el-button type="primary" @click="project_update()"
                     >确定</el-button
                     >
                 </span>
@@ -63,8 +78,26 @@
 </template>
 
 <script lang="ts" setup>
+import {
+  onUpdated,
+  toRaw,
+  reactive,
+  onBeforeMount,
+  ref,
+  onMounted,
+  StyleValue,
+  Ref,
+  getCurrentInstance,
+  h,
+} from "vue";
+import { useDialog, NInput } from "naive-ui";
+// import Vditor from 'vditor'
+import axios from "axios";
+import { useProjectStore } from "../store/Project";
+import { useUserStore } from "../store/User";
+import { InputInst, useMessage } from "naive-ui";
 
-import { onBeforeMount, reactive, ref } from 'vue'
+const Project = useProjectStore();
 
 const routerToPersonalInfo=()=>{
     console.log("route")
@@ -82,7 +115,29 @@ const deletProj=()=>{
 onBeforeMount(()=>{
     form.region=props.oneProject.proj_info
     form.name=props.oneProject.proj_name
+
 })
+
+//修改项目
+const project_update = () => {
+    Project.proj_info=form.region;
+    Project.proj_name=form.name;
+    Project.proj_id=props.oneProject.proj_id;
+    Project.operation="changeInfo";
+    dialogEditVisible.value = false;
+}
+
+const move_proj_to_bin = () =>{
+    Project.proj_id=props.oneProject.proj_id;
+    Project.operation="move_to_bin";
+    dialogEditVisible.value = false;
+}
+
+const proj_copy= () =>{
+    Project.proj_id=props.oneProject.proj_id;
+    Project.operation="proj_copy";
+}
+
 type Props = {
   oneProject?: {
     name?: string;
