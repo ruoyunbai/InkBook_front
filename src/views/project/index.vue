@@ -109,7 +109,50 @@
             </template>
             <n-collapse-item title="&emsp;全部项目">
               <n-divider></n-divider>
-
+              <n-space justify="end" style="margin:0px 10px 10px 20px">
+                <n-button
+                    round
+                    strong
+                    secondary
+                    type="info"
+                    @click="show('new')"
+                  >
+                    <template #icon>
+                      <n-image preview-disabled src="svg\project_svg\clock.svg">
+                      </n-image>
+                    </template>
+                  最新创建
+                  </n-button>
+                  <n-button
+                    round
+                    strong
+                    secondary
+                    type="info"
+                    @click="show('top')"
+                  >
+                    <template #icon>
+                      <n-image
+                        preview-disabled
+                        src="svg\project_svg\hot.svg"
+                      >
+                      </n-image>
+                    </template>
+                    最多编辑
+                  </n-button>
+                  <n-button
+                    round
+                    strong
+                    secondary
+                    type="info"
+                    @click="show('hot')"
+                  >
+                    <template #icon>
+                      <n-image preview-disabled src="svg\project_svg\recent.svg">
+                      </n-image>
+                    </template>
+                    最近编辑
+                  </n-button>
+                </n-space>
               <!--加载项目-->
               <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
                 <n-grid-item v-for="(project, index) in projects">
@@ -117,50 +160,6 @@
                 </n-grid-item>
               </n-grid>
 
-              <template #header-extra>
-                  <n-button
-                  round
-                  strong
-                  secondary
-                  :type="typeNew"
-                  @click="show('new')"
-                >
-                  <template #icon>
-                    <n-image preview-disabled src="svg/板块界面svg/Group-1.svg">
-                    </n-image>
-                  </template>
-                 最新创建
-                </n-button>
-                <n-button
-                  round
-                  strong
-                  secondary
-                  :type="typeTop"
-                  @click="show('top')"
-                >
-                  <template #icon>
-                    <n-image
-                      preview-disabled
-                      src="svg/板块界面svg/arrow-up-right.svg"
-                    >
-                    </n-image>
-                  </template>
-                  最多编辑
-                </n-button>
-                <n-button
-                  round
-                  strong
-                  secondary
-                  :type="typeHot"
-                  @click="show('hot')"
-                >
-                  <template #icon>
-                    <n-image preview-disabled src="svg/板块界面svg/whh_hot.svg">
-                    </n-image>
-                  </template>
-                  最近编辑
-                </n-button>
-              </template>
             </n-collapse-item>
           </n-collapse>
         </n-layout>

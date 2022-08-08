@@ -14,6 +14,10 @@
                 ghost
                 @click="routerToPersonalInfo"
             >
+                <template #icon>
+                    <n-image preview-disabled src="svg\project_svg\toDetail.svg">
+                    </n-image>
+                  </template>
                 <router-link to="/projectDetail" style="text-decoration: none">
                     <p class="buttonText2">进入项目</p>    
                 </router-link>
@@ -27,6 +31,10 @@
                 style="margin:5px 10px 5px 10px"
                 @click="dialogEditVisible = true"
             >
+                <template #icon>
+                    <n-image preview-disabled src="svg\project_svg\edit.svg">
+                    </n-image>
+                  </template>
                 <p class="buttonText2">编辑信息</p>
             </n-button>
 
@@ -38,6 +46,10 @@
                 style="margin:0px 10px 10px 10px"
                 @click="move_proj_to_bin()"
             >
+                <template #icon>
+                    <n-image preview-disabled src="svg\project_svg\dele.svg">
+                    </n-image>
+                </template>
                 <p class="buttonText2"
                 >删除项目</p>
             </n-button>
