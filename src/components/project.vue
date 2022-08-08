@@ -33,9 +33,10 @@
                 color="#DADADA"
                 ghost
                 style="margin:0px 10px 10px 10px"
-                @click=""
+                @click="deletProj"
             >
-                <p class="buttonText2">删除项目</p>
+                <p class="buttonText2"
+                >删除项目</p>
             </n-button>
 
             <el-dialog v-model="dialogEditVisible" title="修改项目信息">
@@ -62,7 +63,8 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+
+import { onBeforeMount, reactive, ref } from 'vue'
 
 const routerToPersonalInfo=()=>{
     console.log("route")
@@ -74,6 +76,55 @@ const form = reactive({
   name: '项目1',
   region: '项目描述',
 })
+const deletProj=()=>{
+
+}
+onBeforeMount(()=>{
+    form.region=props.oneProject.proj_info
+    form.name=props.oneProject.proj_name
+})
+type Props = {
+  oneProject?: {
+    name?: string;
+    time?: number;
+    tags?: string[];
+    title?: string;
+    content?: string;
+    watches?: number;
+    comments?: number;
+    ups?: number;
+    user_id?: number;
+    post_id?: number;
+    clear?: boolean;
+    like_status?: number;
+    time_weeks?: number;
+    time_days?: number;
+    time_hours?: number;
+    time_mins?: number;
+   
+  };
+
+};
+const props: any = withDefaults(defineProps<Props>(), {
+  oneProject: () => {
+    return {
+      name: "123",
+      time: 0,
+      tags: [],
+      title: "",
+      content: "",
+      watches: 0,
+      comments: 0,
+      ups: 0,
+      gShow: false,
+      downs: 0,
+      user_id: 1,
+      post_id: 1,
+      clear: true,
+      like_status: 0,
+    };
+  },
+});
 </script>
 
 <style>
