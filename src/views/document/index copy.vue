@@ -10,6 +10,7 @@
                 <n-button @click="createDoc">确定</n-button>
             </template>
         </n-modal>
+        <n-button @click="show"></n-button>
         <n-card :bordered="false">
             <n-grid :cols="20">
                 <n-gi span="3">
@@ -46,7 +47,7 @@
 
             </n-grid>
         </n-card>
-
+        <menu-bar class="editor__header" :editor="editor" />
         <!-- <div v-if="editor"> -->
 
         <!-- <n-button @click="editor?.chain().focus().toggleBold().run()"
@@ -129,15 +130,47 @@
             </n-button> -->
         <!-- </div> -->
         <br>
-        <!-- <router-link to="/document/content">1111111</router-link> -->
-        <n-layout>
-            <router-view></router-view>
-        </n-layout>
+        <n-grid cols="100">
+            <n-gi></n-gi>
+            <n-gi span="99">
+                <n-card content-style="padding:0px;
+  
+  border-radius: 0.75rem;">
+                    <div class="editor" v-if="editor">
+                        <editor-content class="editor__content" :editor="editor" />
+                        <div class="editor__footer">
+                            <div :class="`editor__status editor__status--${status}`">
+                                <template v-if="status === 'connected'">
+                                    {{ editor?.storage.collaborationCursor.users.length }} user{{
+                                            editor?.storage.collaborationCursor.users.length === 1 ? '' : 's'
+                                    }} online in {{
+        doc.name
+}}
+                                </template>
+                                <template v-else>
+                                    offline
+                                </template>
+                            </div>
+                            <div class="editor__name">
+
+                                {{ User.Name }}
+
+                            </div>
+                        </div>
+                    </div>
+                </n-card>
+            </n-gi>
+        </n-grid>
     </div>
 </template>
 
 <script setup lang="ts">
-
+import StarterKit from '@tiptap/starter-kit'
+import { useEditor, Editor, EditorContent } from '@tiptap/vue-3'
+import Collaboration from '@tiptap/extension-collaboration'
+import * as Y from 'yjs'
+import { WebrtcProvider } from 'y-webrtc'
+import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 import { ref, onBeforeMount, onBeforeUnmount, reactive, onMounted } from 'vue'
 import axios from "axios"
 import { useUserStore } from '../../store/User'
@@ -146,9 +179,8 @@ import { HocuspocusProvider } from '@hocuspocus/provider'
 import { useGroupStore } from '../../store/Group'
 import { messageConfig } from 'element-plus'
 import { useMessage } from 'naive-ui'
-import { useRouter ,useRoute} from 'vue-router'
-const route=useRoute()
-const router = useRouter()
+import { WebsocketProvider } from 'y-websocket'
+import MenuBar from './MenuBar.vue'
 const message = useMessage()
 const Group = useGroupStore()
 const User = useUserStore()
@@ -168,39 +200,29 @@ const doc = reactive({
     name: ""
 }
 )
-
+let ydoc = new Y.Doc()
 // let provider = new WebrtcProvider('example-document1', ydoc)
 const createDoc = () => {
 
 }
-let pushN = 0
-const enterDoc = () => {
-    doc.id = Number(docValue.value)
-    console.log("docid", doc.id)
-    for (let i = 0; i < options.value.length; i++) {
-        if (docValue.value == options.value[i].value) {
-            console.log("LABEL", options.value[i].label)
-            doc.name = String(options.value[i].label)
-        }
-    }
-    // console.log("name11111111111",route.name)
-    if (route.name==="docContent") {
-        router.push({
-            name: "docContent0",
-            params: doc
-        })
-        pushN = 1
-    } else {
-        router.push({
-            name: "docContent",
-            params: doc
-        })
-        pushN = 0
-    }
+// provider.on('status', (event: { status: any }) => {
+//     status.value = event.status
+//     console.log("status", event.status)
+// });
+// provider.on('synced', (synced: any) => {
+//     // NOTE: This is only called when a different browser connects to this client
+//     // Windows of the same browser communicate directly with each other
+//     // Although this behavior might be subject to change.
+//     // It is better not to expect a synced event when using y-webrtc
+//     console.log('synced!', synced)
+// })
+// const providerw = new HocuspocusProvider({
+//   url: 'ws://121.40.165.18:8800',
+//   name: '',
+// })
+let wsProvider = new WebsocketProvider('wss://demos.yjs.dev', "gwx" , ydoc)
 
-
-}
-
+// let wsProvider = new WebsocketProvider('wss://demos.yjs.dev', "gwx-" + Math.random().toString(36).slice(-8), ydoc)
 const saveDesign = () => {
     axios({
         url: axios.defaults.baseURL + "/doc/upload_document",
@@ -210,7 +232,7 @@ const saveDesign = () => {
             "Authorization": User.token
         },
         data: {
-            content: "",
+            content: JSON.stringify(editor?.value?.getJSON()),
             document_name: doc.name,
             proj_id: 1,
             document_id: doc.id
@@ -232,7 +254,27 @@ const saveDesign = () => {
         }
     })
 }
-
+const editor = useEditor({
+    autofocus: true,
+    extensions: [
+        StarterKit.configure({
+            // The Collaboration extension comes with its own history handling
+            history: false,
+        }),
+        Collaboration.configure({
+            document: ydoc,
+            // document:providerw.docunment
+        }),
+        CollaborationCursor.configure({
+            provider: wsProvider,
+            user: {
+                name: User.Name,
+                color: '#f783ac',
+            },
+        }),
+    ],
+    content: ""
+})
 onMounted(() => {
 
 })
@@ -255,9 +297,153 @@ onBeforeMount(() => {
     // })
     getDocs()
 })
+function beforeLeave(event: any) {
+      console.log("leave doc!!!!!!")
+    editor?.value?.destroy()
+    // provider.destroy()
+    wsProvider.destroy()
 
+    console.log("quit!")
+    if (doc.id == -1) return
 
+    axios({
+        url: axios.defaults.baseURL + "/file/quit_document",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            document_id: doc.id
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("response", response)
+        console.log(response.data);
 
+        if (response.data?.success) {
+
+        }
+    })
+    axios({
+        url: axios.defaults.baseURL + "/doc/upload_document",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            content: JSON.stringify(editor?.value?.getJSON()),
+            document_name: doc.name,
+            proj_id: 1,
+            document_id: doc.id
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("response", response)
+        console.log(response.data);
+
+        if (response.data?.success) {
+
+        }
+    })
+}
+window.addEventListener("beforeunload",beforeLeave);
+onBeforeUnmount(() => {
+    window.removeEventListener("beforeunload",beforeLeave)
+    console.log("leave doc!!!!!!")
+    editor?.value?.destroy()
+    // provider.destroy()
+    wsProvider.destroy()
+
+    console.log("quit!")
+    if (doc.id == -1) return
+
+    axios({
+        url: axios.defaults.baseURL + "/file/quit_document",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            document_id: doc.id
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("response", response)
+        console.log(response.data);
+
+        if (response.data?.success) {
+
+        }
+    })
+    axios({
+        url: axios.defaults.baseURL + "/doc/upload_document",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            content: JSON.stringify(editor?.value?.getJSON()),
+            document_name: doc.name,
+            proj_id: 1,
+            document_id: doc.id
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("response", response)
+        console.log(response.data);
+
+        if (response.data?.success) {
+
+        }
+    })
+})
+const status = ref('connecting')
+const getRandomElement = (list: string | any[]) => {
+    return list[Math.floor(Math.random() * list.length)]
+}
+const getRandomColor = () => {
+    return getRandomElement([
+        '#958DF1',
+        '#F98181',
+        '#FBBC88',
+        '#FAF594',
+        '#70CFF8',
+        '#94FADB',
+        '#B9F18D',
+    ])
+}
 const getProjs = () => {
     projLoading.value = true
     let id: Number = Group.id
@@ -338,8 +524,72 @@ const getDocs = () => {
         }
     })
 }
+const enterDoc = () => {
+    doc.id = Number(docValue.value)
+    console.log("docid", doc.id)
+    for (let i = 0; i < options.value.length; i++) {
+        if (docValue.value == options.value[i].value) {
+            console.log("LABEL", options.value[i].label)
+            doc.name = String(options.value[i].label)
+        }
+    }
+    let t=new Y.Doc()
+    wsProvider = new WebsocketProvider('wss://demos.yjs.dev', "gwx1-" + doc.name, t)
+    axios({
+        url: axios.defaults.baseURL + "/doc/enter_document",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            document_id: doc.id
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("response", response)
+        console.log(response.data);
 
+        if (response.data?.success) {
+            doc.name = response.data?.document.document_name
+            if (response.data?.rank == 1) {
+                editor?.value?.chain()
+                    .clearContent()
+                    .focus()
+                    .toggleBold()
+                    .setContent(JSON.parse(response.data?.document.content)).run()
+                //   protoLoading.value = false
+            }
 
+        }
+    })
+    status.value = "connected"
+}
+
+const show = () => {
+    console.log("status", status.value)
+    console.log(editor?.value?.getJSON())
+    console.log(JSON.stringify(editor?.value?.getJSON()))
+    console.log(editor?.value?.getText())
+    console.log(editor?.value?.getHTML())
+    console.log("wsp", wsProvider)
+    // provider.disconnect()
+    // provider.roomName = 'example-document2'
+    // console.log(provider.roomName)
+    // provider.connect()
+    // console.log("room", provider.room)
+    // let t = new Y.Doc()
+
+    // provider = new WebrtcProvider('example-document2', t)
+    // console.log("room", provider.room)
+}
 
 // Registered with a WebRTC 
 let roomName = ""
@@ -350,7 +600,8 @@ const createName = () => {
 
 
 
-
+console.log(ydoc)
+console.log("ydoc", ydoc.get('array', Y.Array))
 </script>
 
 <style lang="scss">

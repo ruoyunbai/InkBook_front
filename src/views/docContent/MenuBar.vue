@@ -9,8 +9,6 @@
 
 <script setup lang="ts">
 import MenuItem from './MenuItem.vue'
-
-
 type Props = {
   editor: any
 };
