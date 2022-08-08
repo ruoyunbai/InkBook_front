@@ -119,15 +119,6 @@ const routes: Array<RouteRecordRaw> = [
                     transition: "animate__bounceIn"
                 },
             },
-            // {
-            //     name:'test',
-            //     path:"/test",
-            //     component:()=>import('../views/projectDetail/test.vue'),
-            //     meta:{
-            //         title:"项目测试",
-            //         transition:"animate__bounceIn"
-            //     },
-            // },
             {
                 name: 'PersonalInfo',
                 path: "/PersonalInfo",
@@ -137,6 +128,15 @@ const routes: Array<RouteRecordRaw> = [
                     transition: "animate__bounceIn"
                 }
             },
+            {
+                name:'NewGroup',
+                path:"/NewGroup",
+                component:()=>import('../views/Group/new.vue'),
+                meta:{
+                    title:"新建团队",
+                    transition:"animate__bounceIn"
+                }
+            }
         ]
     },
     {
