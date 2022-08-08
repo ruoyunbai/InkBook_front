@@ -118,6 +118,15 @@ const routes:Array<RouteRecordRaw>=[
                     transition:"animate__bounceIn"
                 }
             },
+            {
+                name:'NewGroup',
+                path:"/NewGroup",
+                component:()=>import('../views/Group/new.vue'),
+                meta:{
+                    title:"新建团队",
+                    transition:"animate__bounceIn"
+                }
+            }
         ]
     },
 

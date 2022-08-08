@@ -6,17 +6,18 @@
 
       </n-gi>
       <n-gi span="1">
-        <div id="group_name">团队名称</div>
+        <n-image src="svg\group_svg\home.svg" />
+        <span id="group_name">团队名称</span>
+
       </n-gi>
-      <n-gi span="1">
-        <tk-select selected="请选择">
-          <template #selectDropDown>
-            <tk-select-item value="最新案例">最新案例</tk-select-item>
-            <tk-select-item value="最热案例">最热案例</tk-select-item>
-          </template>
-        </tk-select>
+      <n-gi span="2">
+
       </n-gi>
-      <n-gi span="4">
+      <n-gi span="3">
+        <el-button @click="handleClick()" class="add_group">
+          <n-image src="svg\group_svg\add.svg" class="add_group_img"/>
+          <span class="add_group_word">新建团队</span>
+        </el-button>
 
       </n-gi>
       <!-- v-model:value="" -->
@@ -68,10 +69,10 @@
           <span class="fifth tip_font" @click="changeTode(index)">
             <n-image src="svg\group_svg\manage.svg" />
           </span>
-<!--          <span v-if="changeDemo.show">-->
-<!--            <input type="text" v-model="changeDemo.val" class="tip_modify">-->
-<!--            <button @click="saveChange">保存</button>-->
-<!--          </span>-->
+          <!--          <span v-if="changeDemo.show">-->
+          <!--            <input type="text" v-model="changeDemo.val" class="tip_modify">-->
+          <!--            <button @click="saveChange">保存</button>-->
+          <!--          </span>-->
         </div>
       </li>
     </ul>
@@ -89,6 +90,14 @@
 import { computed, ref } from "vue";
 import { defineComponent } from 'vue'
 import { useMessage } from 'naive-ui'
+import { useRouter} from 'vue-router'
+
+const router = useRouter()
+const handleClick = () => {
+  router.push({
+    path: 'NewGroup',
+  })
+}
 
 interface todo {
   done: boolean,
@@ -161,6 +170,33 @@ function delAll() {
 </script>
 
 <style>
+
+.add_group{
+  height: 30px !important;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.add_group_img{
+  height: 30px;
+  width: 30px;
+}
+
+.add_group_word{
+  margin-left: 32px;
+  color: #000000;
+  font-family: Inria Sans;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: left;
+  position: absolute;
+}
+
+.add_group_word:hover{
+  color: #F5B544 !important;
+}
 
 #group_up_blank{
   height: 30px;
