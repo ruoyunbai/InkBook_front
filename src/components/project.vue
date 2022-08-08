@@ -1,7 +1,7 @@
 <template>
     <div class="user" style="background:#EDF5ED">
         <n-space vertical>
-            <p class="name"  style="margin:20px 10px 10px 30px">{{form.name}}</p>
+            <p class="name"  style="margin:20px 10px 10px 30px">{{props.oneProject.proj_name}}</p>
             <p class="state" style="margin:0px 10px 10px 30px">{{form.region}}</p>
             <div style="height:15px"></div>
             <n-button

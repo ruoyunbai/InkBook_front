@@ -1,4 +1,11 @@
 <template>
+   <n-drawer v-model:show="Dactive" :width="502" placement="right">
+    <n-drawer-content title="消息通知" :key="false">
+      《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说。
+      《
+
+    </n-drawer-content>
+  </n-drawer>
     <n-layout has-sider native-scrollbar="false">
         <n-layout-sider content-style="padding: 24px;
       backgroundColor:rgb(255,255,255)" :width="240" bordered :collapsed-width="0" show-trigger="bar"
@@ -17,11 +24,21 @@
             <div style="height: 30px;"></div>
             <div class="user">
                 <n-space vertical>
-                    <transition enter-active-class="animate__animated animate__fadeIn">
-                        <n-image width=56 preview-disabled height="56" style="margin:32px 0px 0px 0px"
-                            @click="() => { router.push('/personalInfo') }" src="svg\\主页svg\\Avatar.svg" />
-
+                    <div style="height:75px">
+                    <p style="position:absolute;"
+                     @click="openDrawer">消息</p>
+                    <transition @mouseenter="MouseOnUser"
+                    @mouseleave="MouseLeaveUser"
+    
+                    apear-active-class="animate__animated animate__swing"
+                    enter-active-class="animate__animated animate__swing">
+                
+                        <n-image 
+                         width=56 preview-disabled height="56" style="margin:32px 0px 0px 0px"                       
+                        @click="() => { router.push('/personalInfo') }" :src=avatar />
+                   
                     </transition>
+                    </div>
                     <p class="name" style="margin:10px 0px 0px 0px">{{ User.Name }}</p>
                     <p class="state">state</p>
                     <div style="height:15px"></div>
@@ -74,7 +91,7 @@ import axios from 'axios';
 import { useUserStore } from '../../store/User'
 import { onMounted, reactive } from '@vue/runtime-core';
 import { defineComponent, h, ref, onBeforeMount, onBeforeUnmount } from 'vue'
-import { NIcon, NImage, useMessage } from 'naive-ui'
+import { NIcon, NImage, SelectOption, useMessage } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
 import { useRouter } from 'vue-router'
@@ -88,14 +105,17 @@ onBeforeMount(() => {
 onBeforeUnmount(() => {
     // User.Login=true
 })
+const Dactive=ref(false)
 const Group = useGroupStore()
 const loading = ref(true)
 const router = useRouter()
+const isOnUser=ref(false)
 const cubeSrc = ref("svg\\主页svg\\icon-1.2s-47px.gif")
 const collapsed = ref(false)
 const defaultExpandedKeys = [2]
 const message = useMessage()
 const User = useUserStore()
+const avatar=ref("svg\\主页svg\\Avatar.svg")
 const menuOptions: MenuOption[] = reactive([
     {
         label: () =>
@@ -249,6 +269,18 @@ let cnt0 = 0
 const group = ref(null)
 const groupValue = ref("")
 const groupOptions: MenuOption[] = reactive([])
+const MouseOnUser=()=>{
+    isOnUser.value=true;
+    console.log("4444444")
+    avatar.value="svg\\主页svg\\Base.svg"
+}
+const openDrawer=()=>{
+    Dactive.value=true
+}
+const MouseLeaveUser=()=>{
+    isOnUser.value=false;
+     avatar.value="svg\\主页svg\\Avatar.svg"
+}
 const handleUpdateGroup = (value: string, option: SelectOption) => {
     Group.id = Number(option.key)
 // console.log("op")

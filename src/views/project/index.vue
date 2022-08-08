@@ -255,9 +255,10 @@ import {
 import { useDialog, NInput } from "naive-ui";
 // import Vditor from 'vditor'
 import axios from "axios";
+import { useProjectStore } from "../../store/Project";
 import { useUserStore } from "../../store/User";
 import { InputInst, useMessage } from "naive-ui";
-import { useProjectStore } from "../../store/Project";
+
 let text1: Ref<string> = ref("");
 const searched=ref(false)
 const Project = useProjectStore();
@@ -270,6 +271,13 @@ const formLabelWidth = '140px'
 const form = reactive({
   name: '',
   region: '',
+})
+Project.$subscribe((mutation, state)=>{
+    if(Project.operation=="")return
+    else{
+      
+      Project.operation=""
+    }
 })
 const search=()=>{
 axios({

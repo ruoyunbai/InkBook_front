@@ -6,12 +6,13 @@ import { Names } from './store-namespace'
 export const useProjectStore = defineStore("Project",{
     state:()=>{
         return {
-            "group_id": 0,
-            "proj_id": 0,
-            "proj_info": "string",
-            "proj_name": "string",
-            "status": 0,
-            "user_id": 0
+            group_id: 0,
+            proj_id: 0,
+            proj_info: "string",
+            proj_name: "string",
+            status: 0,
+            user_id: 0,
+            operation:"changeInfo",
         }
     },
     // getters:{
