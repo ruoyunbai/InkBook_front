@@ -1,474 +1,177 @@
 <template>
-  <div id="group_message">
-    <div id="group_name">我的团队</div>
-    <el-form :model="dengmiQueryForm" ref="dengmiQueryForm" label-width="80px" class="demo-ruleForm" size="mini">
-      <el-row>
-        <el-col span="8">
-          <el-form-item class="add_mem_input">
-            <el-input v-model="data.formData.Username"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col span="8">
-          <el-form-item>
-            <el-button type="primary" @click="addRow1" icon="el-icon-search" class="add_mem_btn">
-              <n-image class="add_mem_btn_img" src="svg/group_svg/plus.svg" />
-              <div class="btn_font">
-                邀请成员
-              </div>
-            </el-button>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
+  <div id="group_up_blank"></div>
+  <div id="group_up">
+    <n-grid x-gap="12" :cols="16">
+      <n-gi span="1">
+
+      </n-gi>
+      <n-gi span="1">
+        <div id="group_name">团队名称</div>
+      </n-gi>
+      <n-gi span="1">
+        <tk-select selected="请选择">
+          <template #selectDropDown>
+            <tk-select-item value="最新案例">最新案例</tk-select-item>
+            <tk-select-item value="最热案例">最热案例</tk-select-item>
+          </template>
+        </tk-select>
+      </n-gi>
+      <n-gi span="4">
+
+      </n-gi>
+      <!-- v-model:value="" -->
+      <n-gi span="5">
+        <n-input ref="inputInstRef" placeholder="输入成员昵称" clearable round size="large" style="margin-left: 19px" v-model:value="val">
+          <template #prefix>
+            <n-image src="svg\project_svg\search.svg"></n-image>
+          </template>
+        </n-input>
+      </n-gi>
+      <n-gi span="1">
+      </n-gi>
+      <n-gi span="3">
+        <el-button round color="#2772F0" size="large" @click="addTodo">
+          <template #icon>
+            <n-icon>
+              <n-image src="svg\project_svg\plus.svg" />
+            </n-icon>
+          </template>
+          <div class="commonText">
+            添加成员
+          </div>
+        </el-button>
+      </n-gi>
+
+    </n-grid>
   </div>
-  <div id="title">全部成员</div>
-
-  <div id="group_panel">
-    <el-table :data="data.admin" style="width: 90%" :header-cell-style="{ 'text-align': 'center', height: '80px' }"
-              :row-style="{ height: '55px' }" :cell-style="{ 'text-align': 'center' }">
-      <el-table-column prop="Username" label="昵称" />
-      <el-table-column prop="RealName" label="姓名" />
-      <el-table-column prop="Email" label="邮箱" />
-      <el-table-column prop="Status" label="职务">
-        <template #default="{ row }">
-          <span v-if="row.Status == 1">普通会员</span>
-          <span v-if="row.Status == 2">管理员</span>
-          <span v-if="row.Status == 3">创建者</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column fixed="right" label="操作">
-        <template #default="{ row }">
-          <!-- <el-button type="text" size="small" @click="handleDetail(row)"
-            >查看</el-button
-          > -->
-          <el-button type="text" size="small" @click="handlejiru(row)">加入管理员</el-button>
-          <!--  <el-button type="text" size="small" @click="handleEdit(row)"
-            >编辑</el-button
-          > -->
-          <el-button type="text" size="small" @click="handleDel(row)">删除</el-button>
-        </template>
-      </el-table-column>
-
-    </el-table>
-
-    <!--    <Dialog-->
-    <!--        v-if="dialogShow"-->
-    <!--        v-model:dialogShow="dialogShow"-->
-    <!--        :rowInfo="rowInfo"-->
-    <!--        :title="title"-->
-    <!--        :arrayNum="studentInfo.length"-->
-    <!--        @addRow="addRow"-->
-    <!--        @editRow="editRow"-->
-    <!--    />-->
-    <!-- 详情弹窗 -->
-    <Detail v-if="detailShow" :rowInfo="rowInfo" @closeDetail="closeDetail" />
+  <div id="group_title">
+    全部成员
   </div>
+  <div id="group_mid">
+    <div id="panel_title">
+      <div class="title_font first">昵称</div>
+      <div class="title_font second">邮箱</div>
+      <div class="title_font third">身份</div>
+      <div class="title_font forth"></div>
+      <div class="title_font fifth"></div>
+    </div>
+    <ul class="group_mem">
+      <li v-for="(todo, index) in todos" :key="todo.name">
+        <div class="person">
+          <input type="checkbox" v-model="todo.done" class="tip_checkbox">
+          <span class="first">{{ todo.name }}</span>
+          <span class="second">{{ todo.email }}</span>
+          <span class="third">{{ todo.identity }}</span>
+          <span class="forth" @click="deltodo(index)">
+            <n-image src="svg\group_svg\trash.svg" />
+          </span>
+          <span class="fifth tip_font" @click="changeTode(index)">
+            <n-image src="svg\group_svg\manage.svg" />
+          </span>
+<!--          <span v-if="changeDemo.show">-->
+<!--            <input type="text" v-model="changeDemo.val" class="tip_modify">-->
+<!--            <button @click="saveChange">保存</button>-->
+<!--          </span>-->
+        </div>
+      </li>
+    </ul>
+    <div id="del_all">
+      <input type="checkbox" v-model="isAll" id="del_checkbox">
+      <span class="del_font">全选</span>
+      <span class="del_font">{{ selNum }}/{{ len }}</span>
+      <button @click="delAll" id="del_btn">删除</button>
+    </div>
+  </div>
+
 </template>
 
-<script setup>
-import { reactive, ref, toRefs, onMounted } from "vue";
-import { ElMessageBox } from "element-plus";
-import Dialog from "./dialog.vue";
-import Detail from "./detail.vue";
-import { useRouter } from 'vue-router'
-import { useUserStore } from '../../store/User'
-import axios from 'axios'
-const router = useRouter();
-const User = useUserStore()
-onMounted(() => {
-  // localStorage.setItem("token","");
-  // let token = localStorage.getItem("token");
-  // if (token) {
-  //   // 判断当前的token是否存在
-  //    console.log("ceshi", token);
-  // } else {
-  //   router.push('/logIn')
-  //
-  // }
-  method.getstudent();
+<script lang="ts" setup>
+import { computed, ref } from "vue";
+import { defineComponent } from 'vue'
+import { useMessage } from 'naive-ui'
+
+interface todo {
+  done: boolean,
+  name: string,
+  email: string,
+  identity: string,
+}
+let val = ref('')
+let todos = ref<todo[]>([])
+// 增
+const addTodo=function() {
+  if (val.value) {
+    todos.value.push({
+      done: false,
+      name: val.value,
+      email: val.value+"@buaa.edu.cn",
+      identity: "普通成员",
+    })
+    val.value = ''
+  }
+}
+// 删
+function deltodo(index: number) {
+  todos.value.splice(index, 1)
+}
+// 全选功能实现
+let len = computed<number>(() => todos.value.length)
+let selNum = computed<number>(() => todos.value.filter(v => v.done).length)
+let isAll = computed<boolean>({
+  get() {
+    return len.value === 0 ? false : len.value == selNum.value
+  },
+  set(val: boolean) {
+    todos.value.forEach(v => { v.done = val })
+  }
 })
-
-
-const data = reactive({
-  dialogShow: false, // 新增/编辑弹框
-  detailShow: false, // 详情弹窗
-  rowInfo: {}, // 新增/编辑的数据
-  title: "", // 是新建还是修改
-  formData: {
-    Username: ""
-  },
-  group_id: 1,
-  admin: [
-    {
-      id: 1,
-      nickname: "昵称1",
-      name: "星星",
-      email: "qwr@qq.com",
-      identity: "管理员",
-    },
-    {
-      id: 2,
-      nickname: "昵称2",
-      name: "月亮",
-      email: "qwr11@qq.com",
-      identity: "管理员",
-    },
-  ],
-  studentInfo: [
-    {
-      id: 1,
-      nickname: "昵称1",
-      name: "星星",
-      email: "qwr@qq.com",
-      identity: "普通会员",
-      sex: "女",
-    },
-    {
-      id: 2,
-      nickname: "昵称2",
-      name: "月亮",
-      email: "qwr11@qq.com",
-      identity: "普通会员",
-    },
-  ],
-});
-const method = reactive({
-  handleNew() {
-    data.title = "新增";
-    data.rowInfo = {};
-    data.dialogShow = true;
-  },
-  handleDetail(val) {
-    data.detailShow = true;
-    data.rowInfo = val;
-  },
-  handleEdit(val) {
-    data.title = "修改";
-    data.dialogShow = true;
-    data.rowInfo = val;
-  },
-  handleDel(val) {
-    let that = this;
-    ElMessageBox.confirm("你确定删除这个学生的信息吗?", "提示", {
-      confirmButtonText: "确认",
-      cancelButtonText: "取消",
-      type: "warning",
-    })
-        .then(() => {
-          let params = {
-            group_id: data.group_id,
-            user_id: val.UserID,
-          };
-          axios({
-            url: axios.defaults.baseURL + "/group/remove_member",
-            method: "post",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": User.token
-            },
-            data: params,
-            transformRequest: [
-              function (data, headers) {
-                let data1 = JSON.stringify(data);
-                return data1;
-              },
-            ],
-          }).then(function (response) {
-            // 处理成功情况
-            console.log("response", response)
-            console.log(response.data);
-
-            if (response.data?.success) {
-
-
-            }
-          })
-          // that.$request.post("/group/remove_member", params).then((res) => {
-          //   if (res.data.code == 0) {
-          //     console.log("删除信息是", res.data);
-          //   } else {
-          //     console.log("登录信息是2", res);
-          //   }
-          // });
-          method.handleSure(val);
-        })
-        .catch(() => {
-          // catch error
-        });
-  },
-  handleSure(val) {
-    /* this.dialogVisible = false;
-    const index = data.studentInfo.findIndex((item) => item.id === val.id);
-    data.studentInfo.splice(index, 1); */
-    let that = this;
-    let params = {
-      group_id: data.group_id,
-      user_id: val.UserID,
-    };
-
-    axios({
-      url: axios.defaults.baseURL + "/group/remove_member",
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": User.token
-      },
-      data: params,
-      transformRequest: [
-        function (data, headers) {
-          let data1 = JSON.stringify(data);
-          return data1;
-        },
-      ],
-    }).then(function (response) {
-      // 处理成功情况
-      console.log("response", response)
-      console.log(response.data);
-
-      if (response.data?.success) {
-
-
-      }
-    })
-
-
-    // that.$request.post("/group/remove_member", params).then((res) => {
-    //   if (res.data.code == 0) {
-    //     console.log("删除信息是", res.data);
-    //   } else {
-    //     console.log("登录信息是2", res);
-    //   }
-    // });
-  },
-  handlejiru(val) {
-    /* this.dialogVisible = false;
-    const index = data.studentInfo.findIndex((item) => item.id === val.id);
-    data.studentInfo.splice(index, 1);
-    data.admin.push(val); */
-    let that = this;
-    let params = {
-      group_id: data.group_id,
-      status: 2,
-      user_id: val.UserID,
-    };
-
-    axios({
-      url: axios.defaults.baseURL + "/group/set_member_status",
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": User.token
-      },
-      data: params,
-      transformRequest: [
-        function (data, headers) {
-          let data1 = JSON.stringify(data);
-          return data1;
-        },
-      ],
-    }).then(function (response) {
-      // 处理成功情况
-      console.log("response", response)
-      console.log(response.data);
-
-      if (response.data?.success) {
-
-
-      }
-    })
-
-    // that.$request.post("/group/set_member_status", params).then((res) => {
-    //   if (res.data.code == 0) {
-    //     console.log("加入管理员", res.data);
-    //   } else {
-    //     console.log("登录信息是2", res);
-    //   }
-    // });
-    method.getstudent();
-  },
-
-  // 添加行
-  addRow(val) {
-    data.studentInfo.push(val);
-  },
-  addRow1() {
-    let that = this;
-    let params = {
-      group_id: data.group_id,
-      username: data.formData["Username"],
-    };
-
-    axios({
-      url: axios.defaults.baseURL + "/group/add_member",
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": User.token
-      },
-      data: params,
-      transformRequest: [
-        function (data, headers) {
-          let data1 = JSON.stringify(data);
-          return data1;
-        },
-      ],
-    }).then(function (response) {
-      // 处理成功情况
-      console.log("response", response)
-      console.log(response.data);
-
-      if (response.data?.success) {
-
-
-      }
-    })
-
-    // that.$request.post("/group/add_member", params).then((res) => {
-    //   if (res.data.code == 0) {
-    //     console.log("add信息是", res.data);
-    //   } else {
-    //     console.log("登录信息是2", res);
-    //   }
-    // });
-    method.getstudent();
-  },
-  // 编辑行
-  editRow(val) {
-    let index = data.studentInfo.findIndex(
-        (item, index) => item.id === val.id
-    );
-    data.studentInfo.splice(index, 1, val);
-  },
-  getstudent() {
-
-    axios({
-      url: axios.defaults.baseURL + "/group/get_groups",
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": User.token
-      },
-      data: {},
-      transformRequest: [
-        function (data, headers) {
-          let data1 = JSON.stringify(data);
-          return data1;
-        },
-      ],
-    }).then(function (response) {
-      // 处理成功情况
-      console.log("response", response)
-      console.log(response.data);
-      data.group_id=response.data.groups[0].GroupID
-      // console.log("group",response.data.groups[0])
-      // console.log("data",data.group_id)
-      if (response.data?.success) {
-        axios({
-          url: axios.defaults.baseURL + "/group/get_group_members",
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": User.token
-          },
-          data: {
-            group_id: data.group_id
-          },
-          transformRequest: [
-            function (data, headers) {
-              let data1 = JSON.stringify(data);
-              return data1;
-            },
-          ],
-        }).then(function (response) {
-          // 处理成功情况
-          console.log("response", response)
-          console.log(response.data);
-
-          if (response.data?.success) {
-            data.studentInfo=response.data?.members
-
-          }
-        })
-
-      }
-    })
-    /*  let params = {
-      group_id: 1,
-
-    }; */
-    // this.$request.post("/group/get_group_members", params).then((res) => {
-    // that.$request.post("/group/get_groups").then((res) => {
-    //   if (res.data.code == 0) {
-    //     console.log("列表是", res.data);
-    //     data.group_id = res.data.groups[0].GroupID;
-    //     console.log("group_id是", data.group_id);
-    //     let params = {
-    //       group_id: data.group_id,
-    //     };
-
-    //     that.$request
-    //         .post("/group/get_group_members", params)
-    //         .then((res) => {
-    //           if (res.data.code == 0) {
-    //             console.log("此团对成员", res.data);
-    //             data.studentInfo = res.data.members;
-    //           } else {
-    //             console.log("登录信息是20", res);
-    //           }
-    //         }); // localStorage.setItem("token",res.data.token);
-    //     //  this.$router.push({name:'home'})
-    //   } else {
-    //     console.log("信息是2", res);
-    //   }
-    // });
-  },
-  // 关闭详情弹窗
-  closeDetail() {
-    data.detailShow = false;
-  },
-});
-
-
-
+let changeDemo = ref({
+  show: false,
+  name: '',
+  val: '管理员',
+  changeIndex: -1
+})
+// 改
+function changeTode(i: number) {
+  const demo = todos.value[i]
+  changeDemo.value = {
+    show: true,
+    name: demo.name,
+    val: '管理员',
+    changeIndex: i
+  }
+  saveChange();
+}
+function saveChange() {
+  let { changeIndex, val } = changeDemo.value
+  todos.value[changeIndex].identity = val
+  changeDemo.value = {
+    show: false,
+    name: '',
+    val: '',
+    changeIndex: -1
+  }
+}
+// 全选删除
+function delAll() {
+  if (isAll.value) {
+    todos.value = []
+  }
+}
 </script>
-<style scoped>
-/deep/ .el-table__body .el-table__row.hover-row td {
-  background-color: #FFF8E8 !important;
+
+<style>
+
+#group_up_blank{
+  height: 30px;
 }
 
-/deep/ .el-table th {
-  font-family: Inria Sans;
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 24px;
-  letter-spacing: 0px;
+#group_up{
+  height: 105px;
 }
 
-/deep/ .el-table__row {
-  font-family: Nunito Sans;
-  font-weight: bold;
-  font-size: 15px;
-  line-height: normal;
-  letter-spacing: -0.25px;
-  text-align: left;
-}
-
-.operate_img {
-  height: 20px;
-  width: 20px;
-}
-
-#group_message {
-  height: 120px;
-  margin-bottom: 28px;
-  margin-top: 17px;
-  position: relative;
-}
-
-#group_name {
-  margin-left: 122px;
-  margin-top: 35px;
+#group_name{
+  margin-left: 22px;
   color: #000000;
   font-family: Inria Sans;
   font-weight: bold;
@@ -479,55 +182,11 @@ const method = reactive({
   position: absolute;
 }
 
-#group_intro {
-  margin-left: 272px;
-  margin-top: 46px;
-  color: #000000;
-  font-family: Nunito Sans;
-  font-size: 15px;
-  line-height: normal;
-  letter-spacing: -0.25px;
-  text-align: left;
-  position: absolute;
-}
-
-.add_mem_input {
-  margin-top: 39px;
-  margin-left: 540px;
-}
-
-.add_mem_input:deep(.el-input__inner) {
-  height: 46px !important;
-  width: 350px !important;
-}
-
-.add_mem_btn {
-  border-radius: 16px !important;
-  background: #2772F0 !important;
-  height: 46px;
-  width: 154px;
-  margin-top: 39px;
-}
-
-.add_mem_btn_img {
-  height: 20px;
-  width: 20px;
-}
-
-.btn_font {
-  color: #FFFFFF;
-  font-family: Inria Sans;
-  font-weight: bold;
-  font-size: 18px;
-  line-height: 24px;
-  letter-spacing: 0px;
-  text-align: left;
-}
-
-#title {
+#group_title{
   height: 34px;
   width: 96px;
   margin-left: 90px;
+  margin-bottom: 10px;
   color: #000000;
   font-family: Inria Sans;
   font-weight: bold;
@@ -535,23 +194,23 @@ const method = reactive({
   line-height: 34px;
   letter-spacing: 0px;
   text-align: left;
-
 }
 
-#group_panel {
-  margin-left: 64px;
-  margin-top: 29px;
-  width: 1172px;
-  height: 609px;
-  background-color: #ffffff;
+#group_mid{
+  width: 90%;
+  margin-left: 5%;
+  height: 700px;
+  background-color: #FFFFFF;
   border-radius: 24px;
-  padding-left: 5%;
-  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 #panel_title {
   position: relative;
-  height: 98px;
+  height: 68px;
+  border-bottom: 1px solid rgba(9, 27, 61, 0.5);
+  padding-left: 45px;
 }
 
 .title_font {
@@ -566,67 +225,89 @@ const method = reactive({
 .first {
   position: absolute;
   margin-left: 113px;
-  margin-top: 38px;
+  margin-top: 20px;
   height: 24px;
-  width: 40px;
+  width: 100px;
+  text-align: left;
 }
 
 .second {
   position: absolute;
-  margin-left: 342px;
-  margin-top: 38px;
+  margin-left: 292px;
+  margin-top: 20px;
   height: 24px;
-  width: 40px;
+  width: 300px;
+  text-align: left;
 }
 
 .third {
   position: absolute;
-  margin-left: 522px;
-  margin-top: 38px;
+  margin-left: 572px;
+  margin-top: 20px;
   height: 24px;
-  width: 40px;
+  width: 100px;
+  text-align: left;
 }
 
 .forth {
   position: absolute;
-  margin-left: 808px;
-  margin-top: 38px;
+  margin-left: 708px;
+  margin-top: 20px;
   height: 24px;
   width: 40px;
+  text-align: left;
 }
 
 .fifth {
   position: absolute;
-  margin-left: 984px;
-  margin-top: 38px;
+  margin-left: 804px;
+  margin-top: 20px;
   height: 24px;
   width: 40px;
+  text-align: left;
 }
 
-#panel_line {
-  height: 3px;
-  background: #091B3D;
-  mix-blend-mode: normal;
-  opacity: 0.05;
+.group_mem{
+  list-style-type: none;
 }
 
 .person {
   height: 61px;
-  width: 1080px;
+  width: 1100px;
   background-color: #FFF8E8;
-  margin-left: 46px;
+  margin-left: 6px;
   border-radius: 26px;
   margin-top: 17px;
   margin-bottom: 17px;
   position: relative;
 }
 
-.content_font {
-  font-family: 'Nunito Sans';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 15px;
-  line-height: 20px;
-  letter-spacing: -0.25px;
+.tip_checkbox{
+  height: 20px !important;
+  width: 20px !important;
+  margin-top: 20px;
+  margin-left: 20px;
 }
+
+#del_all{
+  margin-left: 1000px;
+  margin-top: 600px;
+  text-align: center;
+}
+
+#del_checkbox{
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.del_font{
+  font-weight: bold;
+  font-size: 15px;
+  margin-left: 5px;
+}
+
+#del_btn{
+  margin-left: 10px;
+}
+
 </style>
