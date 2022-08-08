@@ -363,7 +363,9 @@ const getProject = (clear: boolean = true) => {
           "Authorization": User.token
         },
         data: {
-          group_id: one_group_id
+          group_id: one_group_id,
+          is_desc: true,
+          order_by: 1
         },
         transformRequest: [
           function (data, headers) {
@@ -416,13 +418,10 @@ const project_create = () => {
       "Authorization": User.token
     },
     data: {
-      // post_id: props.onePost.post_id,
-      // user_id: User.Id,
-      // content: text.value,
-      // content:vditor.value!.getValue(),
-      group_id: one_group_id,//怎么获得团队id？
+      group_id: one_group_id,
       proj_info: form.region,
-      proj_name: form.name
+      proj_name: form.name,
+      top: 2
     },
     transformRequest: [
       function (data, headers) {
@@ -440,16 +439,12 @@ const project_create = () => {
       console.log("2");
       dialogCreateVisible.value = false;
 
-      // setTimeout(() => {
-      //   footRef.value.style.width = post.value?.offsetWidth + "px";
-      // }, 200);
     } else {
       message.error(response.data?.message);
     }
     console.log(response.data);
   });
 }
-
 
 </script>
 
