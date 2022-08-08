@@ -56,9 +56,12 @@
       <div class="title_font fifth"></div>
     </div>
     <div v-for="(member, index) in members">
-      <Bar :key="member.member_id" :oneMember="member"></Bar>
-    </div >
+      <Bar :key="member.member_id" :oneMember="member">
+      </Bar>
+    </div>
+    <Bar ></Bar>
     
+
     <!-- <ul class="group_mem">
       <li v-for="(todo, index) in todos" :key="todo.name">
         <div class="person">
