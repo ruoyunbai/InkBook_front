@@ -139,6 +139,15 @@ const routes: Array<RouteRecordRaw> = [
             },
         ]
     },
+    {
+        name:'homePage',
+        path:"/homePage",
+        component:()=>import('../views/HomePage/index.vue'),
+        meta:{
+            title:"首页",
+            transition:"animate__bounceIn"
+        }
+    },
 
     {
         name: 'ChangeProfile',

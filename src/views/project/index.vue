@@ -74,11 +74,6 @@
             name="2"
             title="&emsp;搜索结果">
               <n-divider></n-divider>
-              <!-- <el-table  style="width: 100%">
-                <el-table-column prop="obname" label="项目名称" width="280" />
-                <el-table-column prop="obstate" label="项目描述" width="580" />
-                <el-table-column prop="operation" label="操作" />
-              </el-table> -->
 
               <!--加载项目-->
               <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
@@ -86,11 +81,6 @@
                                <Card  :key="project.project_id" :one-project="project"></Card>
                 </n-grid-item>
               </n-grid>
-              <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
-              <n-grid-item>
-                <Card></Card>
-              </n-grid-item>
-            </n-grid> -->
 
               <template #header-extra>
                 <n-image preview-disabled  src="svg\project_svg\sort.svg" />
@@ -119,27 +109,70 @@
             </template>
             <n-collapse-item title="&emsp;全部项目">
               <n-divider></n-divider>
-              <!-- <el-table  style="width: 100%">
-                <el-table-column prop="obname" label="项目名称" width="280" />
-                <el-table-column prop="obstate" label="项目描述" width="580" />
-                <el-table-column prop="operation" label="操作" />
-              </el-table> -->
-
+              <n-space justify="end" style="margin:0px 10px 10px 20px">
+                <n-button
+                    round
+                    strong
+                    secondary
+                    type="info"
+                    @click="show('new')"
+                  >
+                    <template #icon>
+                      <n-image preview-disabled src="svg\project_svg\clock.svg">
+                      </n-image>
+                    </template>
+                  最新创建
+                  </n-button>
+                  <n-button
+                    round
+                    strong
+                    secondary
+                    type="info"
+                    @click="show('old')"
+                  >
+                    <template #icon>
+                      <n-image preview-disabled src="svg\project_svg\clock.svg">
+                      </n-image>
+                    </template>
+                    最早创建
+                  </n-button>
+                  <n-button
+                    round
+                    strong
+                    secondary
+                    type="info"
+                    @click="show('hot')"
+                  >
+                    <template #icon>
+                      <n-image
+                        preview-disabled
+                        src="svg\project_svg\hot.svg"
+                      >
+                      </n-image>
+                    </template>
+                    最多编辑
+                  </n-button>
+                  <n-button
+                    round
+                    strong
+                    secondary
+                    type="info"
+                    @click="show('recent')"
+                  >
+                    <template #icon>
+                      <n-image preview-disabled src="svg\project_svg\recent.svg">
+                      </n-image>
+                    </template>
+                    最近编辑
+                  </n-button>
+                </n-space>
               <!--加载项目-->
               <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
                 <n-grid-item v-for="(project, index) in projects">
                                <Card  :key="project.project_id" :oneProject="project"></Card>
                 </n-grid-item>
               </n-grid>
-              <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
-              <n-grid-item>
-                <Card></Card>
-              </n-grid-item>
-            </n-grid> -->
 
-              <template #header-extra>
-                <n-image preview-disabled  src="svg\project_svg\sort.svg" />
-              </template>
             </n-collapse-item>
           </n-collapse>
         </n-layout>
@@ -273,6 +306,75 @@ const form = reactive({
   region: '',
 })
 
+let sort_flag:number = 0;
+let desc_flag:boolean = true;
+//项目排序
+const show = (order1: string,clear: boolean = true) => {
+  // getPosts();
+  if (order1 == "new") {
+    sort_flag=1;
+    desc_flag = true;
+  }
+  if (order1 == "hot") {
+    sort_flag=3;
+    desc_flag = true;
+  }
+  if (order1 == "recent") {
+    sort_flag=2;
+    desc_flag = true;
+  }
+  if (order1 == "old") {
+    sort_flag=1;
+    desc_flag = false;
+  }
+  axios({
+        url: axios.defaults.baseURL + "/proj/get_proj_all",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          group_id: one_group_id,
+          is_desc: desc_flag,
+          order_by: sort_flag
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        if (response.data?.success) {
+          count = response.data?.count;
+          console.log(response.data);
+          let i = 0;
+          if (clear) while (projects.length != 0) projects.pop();
+          if (response.data != null)
+            for (i = 0; i < count; i++) {
+              let temp = reactive({
+                group_id: response.data.projs[i].group_id,
+                proj_id: response.data.projs[i].proj_id,
+                proj_info: response.data.projs[i].proj_info,
+                proj_name: response.data.projs[i].proj_name,
+                status: response.data.projs[i].status,
+                user_id: response.data.projs[i].user_id,
+              });
+              console.log("  projectid" + temp.proj_id);
+              projects.push(temp);
+            }
+          console.log(projects);
+          // User.Name=modelRef.value.name,
+          // User.Id=response.data.data.user_id,
+        } else {
+        }
+        console.log(response.data);
+      });
+};
+
 //修改项目
 Project.$subscribe((mutation, state)=>{
     if(Project.operation=="")return;
@@ -306,6 +408,29 @@ Project.$subscribe((mutation, state)=>{
     else if(Project.operation=="move_to_bin"){
       axios({
         url: axios.defaults.baseURL + "/proj/move_proj_to_bin",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          proj_id: Project.proj_id,
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log(response)
+        getProject();
+      })
+      Project.operation="";
+    }else if(Project.operation=="proj_copy"){
+      axios({
+        url: axios.defaults.baseURL + "/proj/copy_proj",
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -371,7 +496,6 @@ axios({
     }})
 
 
-  
 }
 
 
