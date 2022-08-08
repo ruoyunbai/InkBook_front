@@ -25,7 +25,7 @@ const routes:Array<RouteRecordRaw>=[
                     transition:"animate__bounceIn"
                 },
                 // children:[
-                    
+
                 // ]
             },
             {
@@ -109,17 +109,18 @@ const routes:Array<RouteRecordRaw>=[
             //         transition:"animate__bounceIn"
             //     },
             // },
+            {
+                name:'PersonalInfo',
+                path:"/PersonalInfo",
+                component:()=>import('../views/PersonalInfo/index.vue'),
+                meta:{
+                    title:"首页",
+                    transition:"animate__bounceIn"
+                }
+            },
         ]
     },
-    {
-        name:'PersonalInfo',
-        path:"/PersonalInfo",
-        component:()=>import('../views/PersonalInfo/index.vue'),
-        meta:{
-            title:"首页",
-            transition:"animate__bounceIn"
-        }
-    },
+
     {
         name:'ChangeProfile',
         path:"/changeProfile",
@@ -156,7 +157,7 @@ const routes:Array<RouteRecordRaw>=[
             transition:"animate__bounceIn"
         }
     },
-   
+
 
 ]
 const router=createRouter({
