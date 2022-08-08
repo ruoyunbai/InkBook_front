@@ -178,6 +178,8 @@ import { HocuspocusProvider } from '@hocuspocus/provider'
 import { useGroupStore } from '../../store/Group'
 import { messageConfig } from 'element-plus'
 import {useMessage} from 'naive-ui'
+import { WebsocketProvider } from 'y-websocket'
+
 const message=useMessage()
 const Group=useGroupStore()
 const User = useUserStore()
@@ -211,6 +213,8 @@ provider.on('synced', (synced: any) => {
 //   url: 'ws://121.40.165.18:8800',
 //   name: '',
 // })
+
+let wsProvider = new WebsocketProvider('wss://demos.yjs.dev', "gwx-"+Math.random().toString(36).slice(-8), ydoc)
 const saveDesign = () => {
     axios({
         url: axios.defaults.baseURL + "/doc/upload_document",
@@ -254,7 +258,7 @@ const editor = useEditor({
             // document:providerw.docunment
         }),
         CollaborationCursor.configure({
-            provider: provider,
+            provider: wsProvider,
             user: {
                 name: User.Name,
                 color: '#f783ac',
@@ -287,7 +291,7 @@ onBeforeMount(() => {
 })
 onBeforeUnmount(() => {
 
-    editor.value.destroy()
+    editor.value?.destroy()
     provider.destroy()
 
     console.log("quit!")
@@ -453,6 +457,7 @@ const enterDoc = () => {
             doc.name = options.value[i].label
         }
     }
+    wsProvider = new WebsocketProvider('wss://demos.yjs.dev', "gwx-"+doc.name, ydoc)
     axios({
         url: axios.defaults.baseURL + "/doc/enter_document",
         method: "post",
@@ -479,6 +484,8 @@ const enterDoc = () => {
             doc.name = response.data?.document.document_name
             editor.value?.chain()
                 .clearContent()
+                .focus()
+                .toggleBold()
                 .setContent(JSON.parse(response.data?.document.content)).run()
             //   protoLoading.value = false
 
@@ -493,16 +500,16 @@ const show = () => {
     console.log(JSON.stringify(editor.value?.getJSON()))
     console.log(editor.value?.getText())
     console.log(editor.value?.getHTML())
+    console.log("wsp",wsProvider)
+    // provider.disconnect()
+    // provider.roomName = 'example-document2'
+    // console.log(provider.roomName)
+    // provider.connect()
+    // console.log("room", provider.room)
+    // let t = new Y.Doc()
 
-    provider.disconnect()
-    provider.roomName = 'example-document2'
-    console.log(provider.roomName)
-    provider.connect()
-    console.log("room", provider.room)
-    let t = new Y.Doc()
-
-    provider = new WebrtcProvider('example-document2', t)
-    console.log("room", provider.room)
+    // provider = new WebrtcProvider('example-document2', t)
+    // console.log("room", provider.room)
 }
 
 // Registered with a WebRTC 
