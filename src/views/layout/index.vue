@@ -272,7 +272,7 @@ const groupOptions: MenuOption[] = reactive([])
 const MouseOnUser=()=>{
     isOnUser.value=true;
     console.log("4444444")
-    avatar.value="svg\\主页svg\\Base.svg"
+    avatar.value="svg\\主页svg\\Home.svg"
 }
 const openDrawer=()=>{
     Dactive.value=true
