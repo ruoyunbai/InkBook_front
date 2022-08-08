@@ -1,13 +1,13 @@
 <template>
     <div>
-        <n-modal v-model:show="showModal" class="custom-card" preset="card" :style="bodyStyle" title=" 请输入页面名字"
+        <n-modal v-model:show="showModal" class="custom-card" preset="card"  title=" 请输入文档名字"
             size="huge" :bordered="false">
             <template #header-extra>
                 取消
             </template>
             <n-input v-model:value="createName"></n-input>
             <template #footer>
-                <n-button @click="createPage">确定</n-button>
+                <n-button @click="createDoc">确定</n-button>
             </template>
         </n-modal>
         <n-button @click="show"></n-button>
@@ -21,7 +21,7 @@
                 </n-gi>
                 <n-gi span="3">
                     <n-space vertical>
-                        <n-select v-model:value="docValue" :options="options" remote :loading="protoLoading"
+                        <n-select v-model:value="docValue" :options="options" remote :loading="projLoading"
                             placeholder="请选文档" @update:value="enterDoc" class="choose" />
                     </n-space>
                 </n-gi>
@@ -31,8 +31,8 @@
                 </n-gi>
                 <n-gi span="2">
                     <n-space>
-                        <n-button type="warning" strong secondary :disabled="ProtoNotChosed" v-on:click="saveDesign"
-                            @click="() => { showModal = true }">新建页面</n-button>
+                        <n-button type="warning" strong secondary :disabled="ProjNotChosed" v-on:click="saveDesign"
+                            @click="() => { showModal = true }">新建文档</n-button>
                         <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
                     </n-space>
                 </n-gi>
@@ -47,22 +47,23 @@
 
             </n-grid>
         </n-card>
-        <div v-if="editor">
+        <menu-bar class="editor__header" :editor="editor" />
+        <!-- <div v-if="editor"> -->
 
-            <n-button @click="editor?.chain().focus().toggleBold().run()"
-                :class="{ 'is-active': editor.isActive('bold') }">
+            <!-- <n-button @click="editor?.chain().focus().toggleBold().run()"
+                :class="{ 'is-active': editor?.isActive('bold') }">
                 bold
             </n-button>
             <n-button @click="editor?.chain().focus().toggleItalic().run()"
-                :class="{ 'is-active': editor.isActive('italic') }">
+                :class="{ 'is-active': editor?.isActive('italic') }">
                 italic
             </n-button>
             <n-button @click="editor?.chain().focus().toggleStrike().run()"
-                :class="{ 'is-active': editor.isActive('strike') }">
+                :class="{ 'is-active': editor?.isActive('strike') }">
                 strike
             </n-button>
             <n-button @click="editor?.chain().focus().toggleCode().run()"
-                :class="{ 'is-active': editor.isActive('code') }">
+                :class="{ 'is-active': editor?.isActive('code') }">
                 code
             </n-button>
             <n-button @click="editor?.chain().focus().unsetAllMarks().run()">
@@ -72,47 +73,47 @@
                 clear nodes
             </n-button>
             <n-button @click="editor?.chain().focus().setParagraph().run()"
-                :class="{ 'is-active': editor.isActive('paragraph') }">
+                :class="{ 'is-active': editor?.isActive('paragraph') }">
                 paragraph
             </n-button>
             <n-button @click="editor?.chain().focus().toggleHeading({ level: 1 }).run()"
-                :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }">
+                :class="{ 'is-active': editor?.isActive('heading', { level: 1 }) }">
                 h1
             </n-button>
             <n-button @click="editor?.chain().focus().toggleHeading({ level: 2 }).run()"
-                :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }">
+                :class="{ 'is-active': editor?.isActive('heading', { level: 2 }) }">
                 h2
             </n-button>
             <n-button @click="editor?.chain().focus().toggleHeading({ level: 3 }).run()"
-                :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }">
+                :class="{ 'is-active': editor?.isActive('heading', { level: 3 }) }">
                 h3
             </n-button>
             <n-button @click="editor?.chain().focus().toggleHeading({ level: 4 }).run()"
-                :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }">
+                :class="{ 'is-active': editor?.isActive('heading', { level: 4 }) }">
                 h4
             </n-button>
             <n-button @click="editor?.chain().focus().toggleHeading({ level: 5 }).run()"
-                :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }">
+                :class="{ 'is-active': editor?.isActive('heading', { level: 5 }) }">
                 h5
             </n-button>
             <n-button @click="editor?.chain().focus().toggleHeading({ level: 6 }).run()"
-                :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }">
+                :class="{ 'is-active': editor?.isActive('heading', { level: 6 }) }">
                 h6
             </n-button>
             <n-button @click="editor?.chain().focus().toggleBulletList().run()"
-                :class="{ 'is-active': editor.isActive('bulletList') }">
+                :class="{ 'is-active': editor?.isActive('bulletList') }">
                 bullet list
             </n-button>
             <n-button @click="editor?.chain().focus().toggleOrderedList().run()"
-                :class="{ 'is-active': editor.isActive('orderedList') }">
+                :class="{ 'is-active': editor?.isActive('orderedList') }">
                 ordered list
             </n-button>
             <n-button @click="editor?.chain().focus().toggleCodeBlock().run()"
-                :class="{ 'is-active': editor.isActive('codeBlock') }">
+                :class="{ 'is-active': editor?.isActive('codeBlock') }">
                 code block
             </n-button>
             <n-button @click="editor?.chain().focus().toggleBlockquote().run()"
-                :class="{ 'is-active': editor.isActive('blockquote') }">
+                :class="{ 'is-active': editor?.isActive('blockquote') }">
                 blockquote
             </n-button>
             <n-button @click="editor?.chain().focus().setHorizontalRule().run()">
@@ -126,8 +127,8 @@
             </n-button>
             <n-button @click="editor?.chain().focus().redo().run()">
                 redo
-            </n-button>
-        </div>
+            </n-button> -->
+        <!-- </div> -->
         <br>
         <n-grid cols="100">
             <n-gi></n-gi>
@@ -140,8 +141,8 @@
                         <div class="editor__footer">
                             <div :class="`editor__status editor__status--${status}`">
                                 <template v-if="status === 'connected'">
-                                    {{ editor.storage.collaborationCursor.users.length }} user{{
-                                            editor.storage.collaborationCursor.users.length === 1 ? '' : 's'
+                                    {{ editor?.storage.collaborationCursor.users.length }} user{{
+                                            editor?.storage.collaborationCursor.users.length === 1 ? '' : 's'
                                     }} online in {{
         doc.name
 }}
@@ -179,7 +180,7 @@ import { useGroupStore } from '../../store/Group'
 import { messageConfig } from 'element-plus'
 import {useMessage} from 'naive-ui'
 import { WebsocketProvider } from 'y-websocket'
-
+import MenuBar from './MenuBar.vue'
 const message=useMessage()
 const Group=useGroupStore()
 const User = useUserStore()
@@ -191,6 +192,9 @@ const docValue = ref(null)
 const projvalue = ref(null)
 const projLoading = ref(true)
 const showModal=ref(false)
+// const ProjNotChosed=ref(true)
+const ProjNotChosed=ref(false)
+
 const doc = reactive({
     id: -1,
     name: ""
@@ -198,6 +202,9 @@ const doc = reactive({
 )
 const ydoc = new Y.Doc()
 let provider = new WebrtcProvider('example-document1', ydoc)
+const createDoc=()=>{
+
+}
 provider.on('status', (event: { status: any }) => {
     status.value = event.status
     console.log("status", event.status)
@@ -224,7 +231,7 @@ const saveDesign = () => {
             "Authorization": User.token
         },
         data: {
-            content: JSON.stringify(editor.value?.getJSON()),
+            content: JSON.stringify(editor?.value?.getJSON()),
             document_name: doc.name,
             proj_id: 1,
             document_id: doc.id
@@ -291,7 +298,7 @@ onBeforeMount(() => {
 })
 onBeforeUnmount(() => {
 
-    editor.value?.destroy()
+    editor?.value?.destroy()
     provider.destroy()
 
     console.log("quit!")
@@ -331,7 +338,7 @@ onBeforeUnmount(() => {
             "Authorization": User.token
         },
         data: {
-            context: JSON.stringify(editor.value?.getJSON()),
+            context: JSON.stringify(editor?.value?.getJSON()),
             document_name: doc.name,
             proj_id: 1,
             document_id: doc.id
@@ -454,7 +461,7 @@ const enterDoc = () => {
     for (let i = 0; i < options.value.length; i++) {
         if (docValue.value == options.value[i].value) {
             console.log("LABEL", options.value[i].label)
-            doc.name = options.value[i].label
+            doc.name = String(options.value[i].label)
         }
     }
     wsProvider = new WebsocketProvider('wss://demos.yjs.dev', "gwx-"+doc.name, ydoc)
@@ -482,7 +489,7 @@ const enterDoc = () => {
 
         if (response.data?.success) {
             doc.name = response.data?.document.document_name
-            editor.value?.chain()
+            editor?.value?.chain()
                 .clearContent()
                 .focus()
                 .toggleBold()
@@ -496,10 +503,10 @@ const enterDoc = () => {
 
 const show = () => {
     console.log("status", status.value)
-    console.log(editor.value?.getJSON())
-    console.log(JSON.stringify(editor.value?.getJSON()))
-    console.log(editor.value?.getText())
-    console.log(editor.value?.getHTML())
+    console.log(editor?.value?.getJSON())
+    console.log(JSON.stringify(editor?.value?.getJSON()))
+    console.log(editor?.value?.getText())
+    console.log(editor?.value?.getHTML())
     console.log("wsp",wsProvider)
     // provider.disconnect()
     // provider.roomName = 'example-document2'

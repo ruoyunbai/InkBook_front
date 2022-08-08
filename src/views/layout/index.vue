@@ -284,7 +284,8 @@ const MouseLeaveUser=()=>{
 const handleUpdateGroup = (value: string, option: SelectOption) => {
     Group.id = Number(option.key)
 // console.log("op")
-    groupValue.value = option.label
+    if(option.label!=null)
+    groupValue.value = String(option.label)
     console.log("value", option)
 
 }
