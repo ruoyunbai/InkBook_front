@@ -128,7 +128,7 @@
               <!--加载项目-->
               <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
                 <n-grid-item v-for="(project, index) in projects">
-                               <Card  :key="project.project_id" :one-project="project"></Card>
+                               <Card  :key="project.project_id" :oneProject="project"></Card>
                 </n-grid-item>
               </n-grid>
               <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
@@ -272,13 +272,41 @@ const form = reactive({
   name: '',
   region: '',
 })
+
+//修改项目
 Project.$subscribe((mutation, state)=>{
-    if(Project.operation=="")return
+    if(Project.operation=="")return;
     else{
-      
-      Project.operation=""
+      axios({
+        url: axios.defaults.baseURL + "/proj/update_proj",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          proj_id: Project.proj_id,
+          proj_info: Project.proj_info,
+          proj_name: Project.proj_name,
+          top: 1
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log(response)
+        getProject();
+      })
+
+      Project.operation="";
     }
 })
+
+
 const search=()=>{
 axios({
     url: axios.defaults.baseURL + "/proj/get_proj_by_name",
@@ -399,6 +427,7 @@ const getProject = (clear: boolean = true) => {
                 status: response.data.projs[i].status,
                 user_id: response.data.projs[i].user_id,
               });
+              console.log("  projectid" + temp.proj_id);
               projects.push(temp);
             }
           console.log(projects);
