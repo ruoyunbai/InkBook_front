@@ -53,7 +53,7 @@
                 <router-view enter-active-class="animate__animated animate__fadeIn"></router-view>
             </transition> -->
             <router-view v-slot="{ Component }">
-                <transition enter-active-class="animate__animated animate__bounceInLeft" >
+                <transition enter-active-class="animate__animated animate__bounceInLeft">
                     <component :is="Component" />
                 </transition>
             </router-view>
@@ -250,12 +250,14 @@ const group = ref(null)
 const groupValue = ref("")
 const groupOptions: MenuOption[] = reactive([])
 const handleUpdateGroup = (value: string, option: SelectOption) => {
-    Group.id = Number(value)
+    Group.id = Number(option.key)
+// console.log("op")
     groupValue.value = option.label
     console.log("value", option)
 
 }
 onBeforeMount(() => {
+
     axios({
         url: axios.defaults.baseURL + "/group/get_groups",
         method: "post",
@@ -282,13 +284,24 @@ onBeforeMount(() => {
             let d = response.data?.groups
             for (let i = 0; i < response.data?.count; i++) {
                 groupOptions.push({
-                    label: d[i].GroupName,
-                    key: d[i].GroupID
+                    label: d[i].group_name,
+                    key: d[i].group_id
                 })
-                loading.value = false
-                groupValue.value = d[0].GroupName
+                
+                if (Group.id != -1&&Group.id!=null) {
 
-                Group.id = d[0].GroupID
+                    if(Group.id== d[i].group_id)
+                    {
+                        groupValue.value = d[i].group_name
+                        console.log("yyyyy")
+                    }
+                }
+                
+            }
+            loading.value = false
+             if (Group.id == -1||Group.id==null) {
+                    groupValue.value = d[0].group_name
+                    Group.id = d[0].group_id
             }
         }
     })

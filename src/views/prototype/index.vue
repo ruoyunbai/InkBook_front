@@ -14,7 +14,7 @@
     <n-grid :cols="20">
       <n-gi span="3">
         <n-space vertical>
-          <n-select v-model:value="value" :options="options" remote :loading="protoLoading" placeholder="请选择原型"
+          <n-select v-model:value="value" :options="options" remote :loading="protoLoading" placeholder="请选择项目"
             @update:value="getPPages(false)" class="choose" />
         </n-space>
       </n-gi>
@@ -92,7 +92,7 @@ const bodyStyle = {
 //   footer: 'soft'
 // }
 onBeforeMount(() => {
-  getProtos()
+  getProjs()
   minHeight.value=height.value+"px"
 })
 const changeHeight = () => {
@@ -117,16 +117,18 @@ const changeWidth = () => {
 const options = ref<SelectOption[]>([])
 const optionsPage = ref<SelectOption[]>([])
 
-const getProtos = () => {
+const getProjs = () => {
   axios({
-    url: axios.defaults.baseURL + "/file/get_proj_prototypes",
+    url: axios.defaults.baseURL + "/proj/get_proj_all",
     method: "post",
     headers: {
       "Content-Type": "application/json",
       "Authorization": User.token
     },
     data: {
-      proj_id: 1
+      group_id: 1,
+      is_desc: true,
+      order_by: 0
     },
     transformRequest: [
       function (data, headers) {
@@ -145,8 +147,8 @@ const getProtos = () => {
 
 
         options.value.push({
-          label: response.data?.prototypes[i]?.prototype_name,
-          value: response.data?.prototypes[i]?.prototype_id
+          label: response.data?.projs[i]?.proj_name,
+          value: response.data?.projs[i]?.proj_id
         })
 
       }
@@ -234,14 +236,14 @@ const getPage = () => {
 const getPPages = (set:boolean=false) => {
   pageNotChosed.value = true
   axios({
-    url: axios.defaults.baseURL + "/ppage/get_ppages",
+    url: axios.defaults.baseURL + "/ppage/get_proj_ppages",
     method: "post",
     headers: {
       "Content-Type": "application/json",
       "Authorization": User.token
     },
     data: {
-      prototype_id: value.value
+      proj_id: value.value
     },
     transformRequest: [
       function (data, headers) {
@@ -383,7 +385,7 @@ const createJson = (str: String) => {
       "Authorization": User.token
     },
     data: {
-      prototype_id: value.value,
+      proj_id: value.value,
       ppage_name: createName.value,
       ppage_data: str
     },

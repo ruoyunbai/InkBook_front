@@ -21,13 +21,13 @@
                     <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
                 </n-space>
             </n-gi>
-            <n-gi span="2">
-                <n-space>
-                    <n-button type="warning" strong secondary :disabled="nopageChosed" v-on:click="saveDesign">保存设计
-                    </n-button>
+        <!--   <n-gi span="2"> -->
+                <!-- <n-space> -->
+                    <!-- <n-button type="warning" strong secondary :disabled="nopageChosed" v-on:click="saveDesign">保存设计 -->
+                    <!-- </n-button> -->
                     <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
-                </n-space>
-            </n-gi>
+                <!-- </n-space> -->
+            <!-- </n-gi>  --> 
 
 
         </n-grid>
@@ -166,7 +166,7 @@ const doc = reactive({
 }
 )
 const ydoc = new Y.Doc()
-const provider = new WebrtcProvider('example-document1', ydoc)
+let provider = new WebrtcProvider('example-document1', ydoc)
 provider.on('status', (event: { status: any }) => {
       status.value = event.status
       console.log("status",event.status)
@@ -182,6 +182,37 @@ provider.on('synced', (synced: any) => {
 //   url: 'ws://121.40.165.18:8800',
 //   name: '',
 // })
+const saveDesign=()=>{
+     axios({
+        url: axios.defaults.baseURL + "/doc/upload_document",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            content: JSON.stringify(editor.value?.getJSON()),
+            document_name: doc.name,
+            proj_id: 1,
+            document_id: doc.id
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("response", response)
+        console.log(response.data);
+
+        if (response.data?.success) {
+
+        }
+    })
+}
 const editor = useEditor({
      autofocus: true,
     extensions: [
@@ -259,7 +290,7 @@ onBeforeUnmount(() => {
         }
     })
     axios({
-        url: axios.defaults.baseURL + "/file/upload_document",
+        url: axios.defaults.baseURL + "/doc/upload_document",
         method: "post",
         headers: {
             "Content-Type": "application/json",
@@ -305,7 +336,7 @@ const getRandomColor=()=> {
     }
 const getDocs = () => {
     axios({
-        url: axios.defaults.baseURL + "/file/get_proj_documents",
+        url: axios.defaults.baseURL + "/doc/get_proj_documents",
         method: "post",
         headers: {
             "Content-Type": "application/json",
@@ -348,7 +379,7 @@ const enterDoc = () => {
         }
     }
     axios({
-        url: axios.defaults.baseURL + "/file/enter_document",
+        url: axios.defaults.baseURL + "/doc/enter_document",
         method: "post",
         headers: {
             "Content-Type": "application/json",
@@ -373,7 +404,7 @@ const enterDoc = () => {
             doc.name = response.data?.document.document_name
             editor.value?.chain()
                 .clearContent()
-                .setContent(JSON.parse).run()
+                .setContent(JSON.parse(response.data?.document.content)).run()
             //   protoLoading.value = false
 
         }
@@ -387,8 +418,16 @@ const show = () => {
     console.log(JSON.stringify(editor.value?.getJSON()))
     console.log(editor.value?.getText())
     console.log(editor.value?.getHTML())
-
-
+   
+    provider.disconnect()
+    provider.roomName='example-document2'
+    console.log(provider.roomName)
+    provider.connect()
+    console.log("room",provider.room)
+    let t = new Y.Doc()
+    provider.
+    provider = new WebrtcProvider('example-document2', t)
+    console.log("room",provider.room)
 }
 
 // Registered with a WebRTC 
