@@ -201,21 +201,21 @@ const doc = reactive({
 }
 )
 const ydoc = new Y.Doc()
-let provider = new WebrtcProvider('example-document1', ydoc)
+// let provider = new WebrtcProvider('example-document1', ydoc)
 const createDoc=()=>{
 
 }
-provider.on('status', (event: { status: any }) => {
-    status.value = event.status
-    console.log("status", event.status)
-});
-provider.on('synced', (synced: any) => {
-    // NOTE: This is only called when a different browser connects to this client
-    // Windows of the same browser communicate directly with each other
-    // Although this behavior might be subject to change.
-    // It is better not to expect a synced event when using y-webrtc
-    console.log('synced!', synced)
-})
+// provider.on('status', (event: { status: any }) => {
+//     status.value = event.status
+//     console.log("status", event.status)
+// });
+// provider.on('synced', (synced: any) => {
+//     // NOTE: This is only called when a different browser connects to this client
+//     // Windows of the same browser communicate directly with each other
+//     // Although this behavior might be subject to change.
+//     // It is better not to expect a synced event when using y-webrtc
+//     console.log('synced!', synced)
+// })
 // const providerw = new HocuspocusProvider({
 //   url: 'ws://121.40.165.18:8800',
 //   name: '',
@@ -299,7 +299,8 @@ onBeforeMount(() => {
 onBeforeUnmount(() => {
 
     editor?.value?.destroy()
-    provider.destroy()
+    // provider.destroy()
+    wsProvider.destroy()
 
     console.log("quit!")
     if (doc.id == -1) return
