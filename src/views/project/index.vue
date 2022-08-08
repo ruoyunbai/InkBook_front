@@ -74,11 +74,6 @@
             name="2"
             title="&emsp;搜索结果">
               <n-divider></n-divider>
-              <!-- <el-table  style="width: 100%">
-                <el-table-column prop="obname" label="项目名称" width="280" />
-                <el-table-column prop="obstate" label="项目描述" width="580" />
-                <el-table-column prop="operation" label="操作" />
-              </el-table> -->
 
               <!--加载项目-->
               <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
@@ -86,11 +81,6 @@
                                <Card  :key="project.project_id" :one-project="project"></Card>
                 </n-grid-item>
               </n-grid>
-              <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
-              <n-grid-item>
-                <Card></Card>
-              </n-grid-item>
-            </n-grid> -->
 
               <template #header-extra>
                 <n-image preview-disabled  src="svg\project_svg\sort.svg" />
@@ -119,11 +109,6 @@
             </template>
             <n-collapse-item title="&emsp;全部项目">
               <n-divider></n-divider>
-              <!-- <el-table  style="width: 100%">
-                <el-table-column prop="obname" label="项目名称" width="280" />
-                <el-table-column prop="obstate" label="项目描述" width="580" />
-                <el-table-column prop="operation" label="操作" />
-              </el-table> -->
 
               <!--加载项目-->
               <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
@@ -131,14 +116,50 @@
                                <Card  :key="project.project_id" :oneProject="project"></Card>
                 </n-grid-item>
               </n-grid>
-              <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
-              <n-grid-item>
-                <Card></Card>
-              </n-grid-item>
-            </n-grid> -->
 
               <template #header-extra>
-                <n-image preview-disabled  src="svg\project_svg\sort.svg" />
+                  <n-button
+                  round
+                  strong
+                  secondary
+                  :type="typeNew"
+                  @click="show('new')"
+                >
+                  <template #icon>
+                    <n-image preview-disabled src="svg/板块界面svg/Group-1.svg">
+                    </n-image>
+                  </template>
+                 最新创建
+                </n-button>
+                <n-button
+                  round
+                  strong
+                  secondary
+                  :type="typeTop"
+                  @click="show('top')"
+                >
+                  <template #icon>
+                    <n-image
+                      preview-disabled
+                      src="svg/板块界面svg/arrow-up-right.svg"
+                    >
+                    </n-image>
+                  </template>
+                  最多编辑
+                </n-button>
+                <n-button
+                  round
+                  strong
+                  secondary
+                  :type="typeHot"
+                  @click="show('hot')"
+                >
+                  <template #icon>
+                    <n-image preview-disabled src="svg/板块界面svg/whh_hot.svg">
+                    </n-image>
+                  </template>
+                  最近编辑
+                </n-button>
               </template>
             </n-collapse-item>
           </n-collapse>
@@ -306,6 +327,29 @@ Project.$subscribe((mutation, state)=>{
     else if(Project.operation=="move_to_bin"){
       axios({
         url: axios.defaults.baseURL + "/proj/move_proj_to_bin",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          proj_id: Project.proj_id,
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log(response)
+        getProject();
+      })
+      Project.operation="";
+    }else if(Project.operation=="proj_copy"){
+      axios({
+        url: axios.defaults.baseURL + "/proj/copy_proj",
         method: "post",
         headers: {
           "Content-Type": "application/json",

@@ -1,7 +1,10 @@
 <template>
     <div class="user" style="background:#EDF5ED">
         <n-space vertical>
-            <p class="name"  style="margin:20px 10px 10px 30px">{{props.oneProject.proj_name}}</p>
+            <n-space justify="end">
+                <n-image style="margin:15px 15px 10px 10px" height="25" preview-disabled @click="proj_copy()" src="svg\project_svg\copy.svg"/>
+            </n-space>
+            <p class="name"  style="margin:0px 10px 10px 30px">{{props.oneProject.proj_name}}</p>
             <p class="state" style="margin:0px 10px 10px 30px">{{props.oneProject.proj_info}}</p>
             <div style="height:15px"></div>
             <n-button
@@ -116,6 +119,11 @@ const move_proj_to_bin = () =>{
     Project.proj_id=props.oneProject.proj_id;
     Project.operation="move_to_bin";
     dialogEditVisible.value = false;
+}
+
+const proj_copy= () =>{
+    Project.proj_id=props.oneProject.proj_id;
+    Project.operation="proj_copy";
 }
 
 type Props = {
