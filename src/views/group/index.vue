@@ -127,7 +127,9 @@ import axios from "axios";
 import { useMemberStore } from "../../store/Member";
 import { useUserStore } from "../../store/User";
 import { useDialog,InputInst, useMessage } from "naive-ui";
+import { useRouter } from "vue-router"
 
+const router = useRouter();
 
 const Member = useMemberStore();
 const message = useMessage();
@@ -268,54 +270,67 @@ const getMembers = (clear: boolean = true) => {
       console.log(response.data);
       let i = 0;
       if (clear) while (members.length != 0) members.pop();
-      if (response.data != null)
-      one_group_id = response.data.groups[0].group_id;
-      console.log("one_group_id" + one_group_id);
-      axios({
-        url: axios.defaults.baseURL + "/group/get_group_members",
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": User.token
-        },
-        data: {
-          group_id: one_group_id,
-        },
-        transformRequest: [
-          function (data, headers) {
-            let data1 = JSON.stringify(data);
-            console.log(data1);
-            return data1;
-          },
-        ],
-      }).then(function (response) {
-        // 处理成功情况
-        if (response.data?.success) {
-          count = response.data?.count;
-          console.log(response.data);
-          let i = 0;
-          if (clear) while (members.length != 0) members.pop();
-          if (response.data != null)
-            for (i = 0; i < count; i++) {
-              let temp = reactive({
-                email: response.data.members[i].email,
-                real_name: response.data.members[i].real_name,
-                status: response.data.members[i].status,
-                user_id: response.data.members[i].user_id,
-                username: response.data.members[i].username,
-              });
-              console.log("!!!user_id" + temp.user_id);
-              members.push(temp);
-            }
-          console.log(members);
-          // User.Name=modelRef.value.name,
-          // User.Id=response.data.data.user_id,
-        } else {
+      if (response.data != null){
+        if(response.data.count==0){
+          router.push({
+          name:"NewGroup",
+          // params:{
+          //   proj_id:props.oneProject.proj_id,
+          // }
+          })
         }
-        console.log(response.data);
-      });
-      // User.Name=modelRef.value.name,
-      // User.Id=response.data.data.user_id,
+        else{
+           one_group_id = response.data.groups[0].group_id;
+          console.log("one_group_id" + one_group_id);
+          axios({
+            url: axios.defaults.baseURL + "/group/get_group_members",
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": User.token
+            },
+            data: {
+              group_id: one_group_id,
+            },
+            transformRequest: [
+              function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+              },
+            ],
+          }).then(function (response) {
+            // 处理成功情况
+            if (response.data?.success) {
+              count = response.data?.count;
+              console.log(response.data);
+              let i = 0;
+              if (clear) while (members.length != 0) members.pop();
+              if (response.data != null)
+                for (i = 0; i < count; i++) {
+                  let temp = reactive({
+                    email: response.data.members[i].email,
+                    real_name: response.data.members[i].real_name,
+                    status: response.data.members[i].status,
+                    user_id: response.data.members[i].user_id,
+                    username: response.data.members[i].username,
+                  });
+                  console.log("!!!user_id" + temp.user_id);
+                  members.push(temp);
+                }
+              console.log(members);
+              // User.Name=modelRef.value.name,
+              // User.Id=response.data.data.user_id,
+            } else {
+            }
+            console.log(response.data);
+          });
+
+        }
+         
+        // User.Name=modelRef.value.name,
+        // User.Id=response.data.data.user_id, 
+        }
     } else {
     }
     console.log(response.data);
