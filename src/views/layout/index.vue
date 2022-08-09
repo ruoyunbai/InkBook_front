@@ -9,32 +9,54 @@ border-radius: 30px 0px 0px 0px;" v-model:show="Dactive" :width="502" placement=
 
                 <p class="notificationtitle">消息通知</p>
             </template>
-            《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说。《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
-            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说
-            《
+            <div>
+              <!--      待确认的邀请-->
+              <div class="undefine frame1">
+                <n-image src="svg\主页svg\unread.svg" class="noti_img"/>
+                <span class="noti_font">@用户1   邀请你加入团队</span>
+                <n-button color="#FFFFFF" text-color="#2772F0"
+                          style="position: absolute; width: 94px; height: 37px; margin-left: 115px; margin-top: 60px; border-radius: 16px">
+                  <n-image src="svg\主页svg\yes.svg" />
+                  <span class="btn_font">同意</span>
+                </n-button>
+                <n-button color="#FFFFFF" text-color="#2772F0"
+                          style="position: absolute; width: 94px; height: 37px; margin-left: 225px; margin-top: 60px; border-radius: 16px">
+                  <n-image src="svg\主页svg\no.svg" />
+                  <span class="btn_font">拒绝</span>
+                </n-button>
+              </div>
+              <!--      已拒绝的邀请-->
+              <div class="refuse frame1">
+                <n-image src="svg\主页svg\read.svg" class="noti_img"/>
+                <span class="noti_font">@用户1   邀请你加入团队</span>
+                <n-button color="#FFFFFF" text-color="#2772F0"
+                          style="position: absolute; width: 125px; height: 37px; margin-left: 185px; margin-top: 60px; border-radius: 16px">
+                  <n-image src="svg\主页svg\no.svg" />
+                  <span class="btn_font">已拒绝</span>
+                </n-button>
+              </div>
+              <!--      已同意的邀请-->
+              <div class="agree frame1">
+                <n-image src="svg\主页svg\read.svg" class="noti_img"/>
+                <span class="noti_font">@用户1   邀请你加入团队</span>
+                <n-button color="#FFFFFF" text-color="#2772F0"
+                          style="position: absolute; width: 125px; height: 37px; margin-left: 185px; margin-top: 60px; border-radius: 16px">
+                  <n-image src="svg\主页svg\yes.svg" />
+                  <span class="btn_font">已同意</span>
+                </n-button>
+              </div>
+              <!--      管理员收到拒绝邀请的通知-->
+              <div class="refuse_bc frame2">
+                <n-image src="svg\主页svg\sound.svg" class="noti_img2"/>
+                <span class="noti_font">@用户1   已进入团队</span>
+              </div>
+              <!--      全体成员收到同意邀请的通知-->
+              <div class="agree_bc frame2">
+                <n-image src="svg\主页svg\triangle.svg" class="noti_img2"/>
+                <span class="noti_font">@用户1   拒绝加入团队</span>
+              </div>
+            </div>
+
 
         </n-drawer-content>
     </n-drawer>
@@ -57,7 +79,8 @@ border-radius: 30px 0px 0px 0px;" v-model:show="Dactive" :width="502" placement=
             <div class="user">
                 <n-space vertical>
                     <div style="height:75px">
-                        <p style="position:absolute;" @click="openDrawer">消息</p>
+                      <p style="position:absolute; margin-top: 17px; margin-left: 113px; z-index: 5;"
+                         @click="openDrawer"><n-image src="svg\主页svg\notification.svg" preview-disabled style=" height: 30px; width: 25px"/></p>
                         <transition @mouseenter="MouseOnUser" @mouseleave="MouseLeaveUser"
                             apear-active-class="animate__animated animate__swing"
                             enter-active-class="animate__animated animate__swing">
@@ -613,4 +636,57 @@ background-color .3s var(--n-bezier),
         color: rgba(9, 27, 61, 0.5);
     }
 }
+
+.frame1{
+  width: 345px;
+  height: 109px;
+  border-radius: 26px;
+  background-color: #FFF8E8;
+  margin-bottom: 15px;
+  padding-left: 30px;
+  padding-top: 5px;
+  position: relative;
+}
+
+.frame2{
+  width: 345px;
+  height: 77px;
+  border-radius: 26px;
+  background-color: #FFF8E8;
+  margin-bottom: 15px;
+  padding-left: 30px;
+  padding-top: 5px;
+  position: relative;
+}
+
+.noti_font{
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 140%;
+  position: absolute;
+  margin-top: 20px;
+  margin-left: 45px;
+}
+
+.noti_img{
+  position: absolute;
+  margin-top: 10px;
+}
+
+.noti_img2{
+  position: absolute;
+  margin-top: 18px;
+}
+
+.btn_font{
+  font-family: 'Inria Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 24px;
+  margin-left: 5px;
+}
+
 </style>

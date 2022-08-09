@@ -18,9 +18,9 @@
                     <n-image preview-disabled src="svg\project_svg\toDetail.svg">
                     </n-image>
                   </template>
-                <router-link to="/projectDetail" style="text-decoration: none">
-                    <p class="buttonText2">进入项目</p>    
-                </router-link>
+                <!-- <router-link to="/projectDetail" style="text-decoration: none"> -->
+                    <p class="buttonText2" @click="toDetail()">进入项目</p>    
+                <!-- </router-link> -->
             </n-button>
 
             <n-button
@@ -96,6 +96,9 @@ import axios from "axios";
 import { useProjectStore } from "../store/Project";
 import { useUserStore } from "../store/User";
 import { InputInst, useMessage } from "naive-ui";
+import { useRouter } from "vue-router"
+
+const router = useRouter();
 
 const Project = useProjectStore();
 
@@ -110,10 +113,17 @@ const form = reactive({
   region: '项目描述',
 })
 
+// type projectDetail ={
+//   proj_id:number,
+//   proj_name:String,
+//   proj_state:String
+// }
+
+
+
 onBeforeMount(()=>{
     form.region=props.oneProject.proj_info
     form.name=props.oneProject.proj_name
-
 })
 
 //修改项目
@@ -134,6 +144,15 @@ const move_proj_to_bin = () =>{
 const proj_copy= () =>{
     Project.proj_id=props.oneProject.proj_id;
     Project.operation="proj_copy";
+}
+
+const toDetail = () =>{
+  router.push({
+    name:"projectDetail",
+    params:{
+      proj_id:props.oneProject.proj_id,
+    }
+  })
 }
 
 type Props = {
