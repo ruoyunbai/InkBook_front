@@ -1,9 +1,7 @@
 <template>
     <div>
-        <n-modal v-model:show="showModal" 
-        style="width:500px"
-        class="custom-card" preset="card" title=" 请输入文档名字" size="huge"
-            :bordered="false">
+        <n-modal v-model:show="showModal" style="width:500px" class="custom-card" preset="card" title=" 请输入文档名字"
+            size="huge" :bordered="false">
             <template #header-extra>
                 取消
             </template>
@@ -12,18 +10,34 @@
                 <n-button @click="createDoc">确定</n-button>
             </template>
         </n-modal>
-        <n-card :bordered="false">
-            <n-grid :cols="20">
+        <!-- <n-card :bordered="false" > -->
+        <div>
+            <n-grid :cols="100">
+                <n-gi></n-gi>
                 <n-gi span="3">
+                    <n-image preview-disabled src="svg\doc\形状 (1).svg"></n-image>
+                </n-gi>
+                <n-gi span="10">
+                    <div style="font-family: 'Roboto';
+font-style: normal;
+font-weight: 700;
+font-size: 32px;
+line-height: 34px;
+color: #000000;">多人文档</div>
+                </n-gi>
+                <n-gi span="10"></n-gi>
+                <n-gi span="15">
                     <n-space vertical>
                         <n-select v-model:value="projvalue" :options="projoptions" remote :loading="projLoading"
-                            placeholder="请选择项目" @update:value="getDocs()" class="choose" />
+                            placeholder="请选择项目" @update:value="getDocs()" class="choose selectP" />
                     </n-space>
                 </n-gi>
-                <n-gi span="3">
+                <n-gi></n-gi>
+                <n-gi span="15">
                     <n-space vertical>
                         <n-select v-model:value="docValue" :options="options" remote :loading="projLoading"
-                            placeholder="请选文档" @update:value="enterDoc" class="choose" />
+                            placeholder="请选文档" @update:value="enterDoc" class="choose selectP" />
+
                     </n-space>
                 </n-gi>
                 <!-- <n-gi></n-gi> -->
@@ -32,22 +46,36 @@
                 </n-gi>
                 <n-gi span="2">
                     <n-space>
-                        <n-button type="warning" strong secondary :disabled="ProjNotChosed" v-on:click="saveDesign"
+                        <n-button bordered type="info" strong :disabled="ProjNotChosed" v-on:click="saveDesign"
                             @click="() => { showModal = true }">新建文档</n-button>
                         <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
                     </n-space>
                 </n-gi>
-                <!--   <n-gi span="2"> -->
-                <!-- <n-space> -->
-                <!-- <n-button type="warning" strong secondary :disabled="nopageChosed" v-on:click="saveDesign">保存设计 -->
-                <!-- </n-button> -->
-                <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
-                <!-- </n-space> -->
-                <!-- </n-gi>  -->
+                <n-gi span="5"></n-gi>
+                <n-gi span="2">
+                    <n-space>
+                        <n-button bordered type="info" strong :disabled="ProjNotChosed" v-on:click="saveDesign"
+                            @click="() => { showModal = true }">导出文档</n-button>
+                        <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
+                    </n-space>
+                </n-gi>
+                <n-gi span="5">
+                </n-gi>
+
+                    <n-gi span="10">
+                        <n-space vertical>
+
+                            <n-select v-model:value="docValue" :options="options" remote :loading="projLoading"
+                                placeholder="更多模板" @update:value="enterDoc" class="choose selectP" />
+                        </n-space>
+                      
+                    </n-gi>
 
 
             </n-grid>
-        </n-card>
+
+        </div>
+        <!-- </n-card> -->
 
         <!-- <div v-if="editor"> -->
 
@@ -148,8 +176,8 @@ import { HocuspocusProvider } from '@hocuspocus/provider'
 import { useGroupStore } from '../../store/Group'
 import { messageConfig } from 'element-plus'
 import { useMessage } from 'naive-ui'
-import { useRouter ,useRoute} from 'vue-router'
-const route=useRoute()
+import { useRouter, useRoute } from 'vue-router'
+const route = useRoute()
 const router = useRouter()
 const message = useMessage()
 const Group = useGroupStore()
@@ -181,7 +209,7 @@ const createDoc = () => {
             "Authorization": User.token
         },
         data: {
-            document_name:createName.value,
+            document_name: createName.value,
             proj_id: 1,
         },
         transformRequest: [
@@ -195,13 +223,13 @@ const createDoc = () => {
         // 处理成功情况
         console.log("response", response)
         console.log(response.data);
-        showModal.value=false 
-        
+        showModal.value = false
+
         if (response.data?.success) {
             message.success(response.data?.message)
             getDocs(true)
-            
-        }else{
+
+        } else {
             message.error(response.data?.message)
         }
     })
@@ -218,7 +246,7 @@ const enterDoc = () => {
         }
     }
     // console.log("name11111111111",route.name)
-    if (route.name==="docContent") {
+    if (route.name === "docContent") {
         router.push({
             name: "docContent0",
             params: doc
@@ -337,8 +365,8 @@ const getProjs = () => {
         }
     })
 }
-const getDocs = (set=false) => {
-    projLoading.value=false
+const getDocs = (set = false) => {
+    projLoading.value = false
     axios({
         url: axios.defaults.baseURL + "/doc/get_proj_documents",
         method: "post",
@@ -369,10 +397,10 @@ const getDocs = (set=false) => {
                     value: response.data?.documents[i]?.document_id
                 })
             }
-            if(set){
-                doc.id=response.data?.documents[0]?.document_id
-                doc.name=response.data?.documents[0]?.document_name
-                docValue.value=response.data?.documents[0]?.document_name
+            if (set) {
+                doc.id = response.data?.documents[0]?.document_id
+                doc.name = response.data?.documents[0]?.document_name
+                docValue.value = response.data?.documents[0]?.document_name
                 enterDoc()
             }
             //   protoLoading.value = false
@@ -494,6 +522,31 @@ const createName = ref("")
 </style>
 
 <style lang="less" scoped>
+.selectP {
+    :deep(.n-base-selection-label) {
+        /* Colors / Blue / 100% */
+
+        background: #2772F0;
+        border-radius: 16px;
+    }
+
+    :deep(.n-base-selection__border) {
+        // background: #2772F0;
+        border-radius: 16px;
+    }
+
+    :deep(.n-base-selection--active) {
+        background: #2772F0;
+        border-radius: 16px;
+    }
+
+    :deep(.n-base-selection__state-border) {
+        // background: #2772F0;
+        border-radius: 16px;
+    }
+
+}
+
 .choose {
     border-width: 0px;
 
@@ -513,6 +566,7 @@ const createName = ref("")
         font-style: normal;
         font-weight: 700;
         font-size: 24px;
+        // background-color: aqua;
         line-height: 34px;
         /* identical to box height, or 142% */
         color: rgba(9, 27, 61, 0.5);

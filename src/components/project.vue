@@ -72,9 +72,10 @@
                 </span>
                 </template>
             </el-dialog>
-        
+           
         </n-space>
     </div>
+  
 </template>
 
 <script lang="ts" setup>
@@ -124,7 +125,6 @@ const form = reactive({
 onBeforeMount(()=>{
     form.region=props.oneProject.proj_info
     form.name=props.oneProject.proj_name
-
 })
 
 //修改项目
@@ -149,8 +149,8 @@ const proj_copy= () =>{
 
 const toDetail = () =>{
   router.push({
-    path:"/projectDetail",
-    query:{
+    name:"projectDetail",
+    params:{
       proj_id:props.oneProject.proj_id,
     }
   })

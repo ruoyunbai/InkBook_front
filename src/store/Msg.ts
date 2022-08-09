@@ -3,15 +3,10 @@ import { defineStore } from 'pinia'
 import { Names } from './store-namespace'
 
  
-export const useDetailStore = defineStore("Detail",{
+export const useMsgStore = defineStore( Names.Msg,{
     state:()=>{
         return {
-            proj_id: 0,
-            proj_info: "string",
-            proj_name: "string",
-            status: 0,
-            user_id: 0,
-            operation:"",
+            opt:""
         }
     },
     // getters:{

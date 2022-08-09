@@ -167,11 +167,24 @@
                   </n-button>
                 </n-space>
               <!--加载项目-->
-              <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
-                <n-grid-item  v-for="(project, index) in projects">
-                               <Card  :key="project.project_id" :oneProject="project"></Card>
-                </n-grid-item>
-              </n-grid>
+              <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen"> -->
+               <!-- <n-space> -->
+              <transition-group
+                name="projs"
+                tag="p"
+                enter-active-class="animate__animated animate__backInLeft"
+                appear-active-class="animate__animated animate__backInLeft"
+                style="position:relative;"
+            >
+
+               <div style="float: left;width:240px" :key="project.proj_id"  v-for="(project, index) in projects">
+                               <Card   :oneProject="project"></Card>
+                              
+        
+              </div>
+                <!-- </n-space> -->
+                </transition-group>
+              <!-- </n-grid> -->
 
             </n-collapse-item>
           </n-collapse>
@@ -290,7 +303,7 @@ import { useDialog, NInput } from "naive-ui";
 import axios from "axios";
 import { useProjectStore } from "../../store/Project";
 import { useUserStore } from "../../store/User";
-import { InputInst, useMessage } from "naive-ui";
+import { InputInst, useMessage,NGrid,NSpace } from "naive-ui";
 
 let text1: Ref<string> = ref("");
 const searched=ref(false)
@@ -342,7 +355,6 @@ const show = (order1: string,clear: boolean = true) => {
         transformRequest: [
           function (data, headers) {
             let data1 = JSON.stringify(data);
-            console.log(data1);
             return data1;
           },
         ],
@@ -637,7 +649,7 @@ const project_create = () => {
 .allprojs-move{
   transition: transform 1s;
 }
-.posts-move {
+.projs-move {
   transition: transform 1s;
 }
 .headTitle {

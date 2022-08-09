@@ -9,7 +9,7 @@
         <n-form
             ref="formRef"
             :model="model"
-            :rules="rules"
+           
             label-placement="left"
             label-width="auto"
             require-mark-placement="right-hanging"
@@ -33,7 +33,7 @@
             />
           </n-form-item>
           <div style="display: flex; justify-content: flex-end">
-            <n-button @click="handleValidateButtonClick"
+            <n-button @click="create_group()"
                       style="border-radius: 5px 5px 5px 20px; width: 100px;height: 30px;"
                       color="#F5B544" text-color="#FFFFFF">
               确认创建
@@ -50,35 +50,95 @@
 
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { FormInst, FormItemRule, useMessage } from 'naive-ui'
+<script setup lang="ts">
+import Card from "../../components/project.vue";
+import {
+  onUpdated,
+  toRaw,
+  reactive,
+  onBeforeMount,
+  ref,
+  onMounted,
+  StyleValue,
+  Ref,
+  getCurrentInstance,
+  h,
+} from "vue";
+import { useDialog, NInput } from "naive-ui";
+// import Vditor from 'vditor'
+import axios from "axios";
+import { useProjectStore } from "../../store/Project";
+import { useUserStore } from "../../store/User";
+import { InputInst, useMessage } from "naive-ui";
+import { useRouter } from "vue-router"
 
-export default defineComponent({
-  setup () {
-    const formRef = ref<FormInst | null>(null)
-    const message = useMessage()
-    return {
-      formRef,
-      size: ref('medium'),
-      model: ref({
-        inputValue: null,
-        textareaValue: null,
-      }),
-      handleValidateButtonClick (e: MouseEvent) {
-        e.preventDefault()
-        formRef.value?.validate((errors) => {
-          if (!errors) {
-            message.success('创建成功')
-          } else {
-            console.log(errors)
-            message.error('创建失败')
-          }
-        })
-      }
-    }
-  }
+const router = useRouter();
+const User = useUserStore();
+const message = useMessage();
+// const inputTitle = ref<string>("");
+// const inputTitle = ref<string>("");
+const model = reactive({
+  inputValue: '',
+  textareaValue: '',
 })
+
+const create_group = () =>{
+  console.log("111111");
+  axios({
+        url: axios.defaults.baseURL + "/group/create_group",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          group_info: model.textareaValue,
+          group_name: model.inputValue
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log(response);
+        let selected_group_id = response.data.group.group_id;
+        router.push({
+          name:"group",
+          params:{
+            proj_id:selected_group_id,
+          }
+          })
+      })
+}
+
+// export default defineComponent({
+//   setup () {
+//     const formRef = ref<FormInst | null>(null)
+//     const message = useMessage()
+//     return {
+//       formRef,
+//       size: ref('medium'),
+//       model: ref({
+//         inputValue: null,
+//         textareaValue: null,
+//       }),
+//       handleValidateButtonClick (e: MouseEvent) {
+//         e.preventDefault()
+//         formRef.value?.validate((errors) => {
+//           if (!errors) {
+//             message.success('创建成功')
+//           } else {
+//             console.log(errors)
+//             message.error('创建失败')
+//           }
+//         })
+//       }
+//     }
+//   }
+// })
 </script>
 
 <style>

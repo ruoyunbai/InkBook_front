@@ -6,7 +6,12 @@
 
       </n-gi>
       <n-gi span="1">
-        <div id="group_name">团队名称</div>
+
+        <div id="group_name">
+          <n-icon>
+              <n-image src="svg\project_svg\group_home.svg" />
+            </n-icon>
+          团队名称</div>
       </n-gi>
       <n-gi span="1">
         <tk-select selected="请选择">
@@ -30,10 +35,10 @@
       <n-gi span="1">
       </n-gi>
       <n-gi span="3">
-        <el-button round color="#2772F0" size="large" @click="addTodo">
+        <el-button round color="#2772F0" size="large" @click="dialogEditVisible = true">
           <template #icon>
             <n-icon>
-              <n-image src="svg\members_svg\plus.svg" />
+              <n-image src="svg\project_svg\white_plus.svg" />
             </n-icon>
           </template>
           <div class="commonText">
@@ -50,9 +55,10 @@
   <div id="group_mid">
     <div id="panel_title">
       <div class="title_font first">昵称</div>
-      <div class="title_font second">邮箱</div>
-      <div class="title_font third">身份</div>
       <div class="title_font forth"></div>
+      <div class="title_font second">邮箱</div>
+      <div class="title_font third"></div>
+      <div class="title_font forth">身份</div>
       <div class="title_font fifth"></div>
     </div>
     <div v-for="(member, index) in members">
@@ -81,6 +87,24 @@
       <span class="del_font">{{ selNum }}/{{ len }}</span>
       <button @click="delAll" id="del_btn">删除</button>
     </div> -->
+
+
+    <el-dialog v-model="dialogEditVisible" title="&ensp; &ensp; 邀请成员">
+        <el-form :model="form">
+        <el-form-item label="" :label-width="formLabelWidth">
+            <el-input v-model="form.name" autocomplete="off" placeholder="待邀请成员的用户名"/>
+        </el-form-item>
+        </el-form>
+        <template #footer>
+        <span class="dialog-footer">
+            <el-button @click="dialogEditVisible = false">取消</el-button>
+            <el-button type="primary" @click="invite_member()"
+            >立即邀请</el-button
+            >
+        </span>
+        </template>
+    </el-dialog>
+
   </div>
 
 </template>
@@ -103,18 +127,61 @@ import axios from "axios";
 import { useMemberStore } from "../../store/Member";
 import { useUserStore } from "../../store/User";
 import { useDialog,InputInst, useMessage } from "naive-ui";
+import { useRouter } from "vue-router"
+
+const router = useRouter();
 
 const Member = useMemberStore();
+const message = useMessage();
 const User = useUserStore();
+const dialogEditVisible = ref(false)
+const formLabelWidth = '100px'
 let count: number = 0;
 let one_group_id: number;
 const members: any[] = reactive([]);
+const form = reactive({
+  name: '',
+})
 
 onBeforeMount(() => {
   getMembers();
   console.log("1");
 });
 
+const invite_member = () =>{
+  axios({
+    url: axios.defaults.baseURL + "/group/invite_member",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": User.token
+    },
+    data: {
+      group_id: one_group_id,
+      username: form.name
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
+    console.log(response.data);
+    if (response.data?.success) {
+      message.success("邀请成功");
+      getMembers();
+      console.log("2!!");
+      dialogEditVisible.value = false;
+
+    } else {
+      message.error(response.data?.message);
+    }
+    console.log(response.data);
+  });
+}
 
 //删除成员 设为管理员
 Member.$subscribe((mutation, state)=>{
@@ -203,54 +270,67 @@ const getMembers = (clear: boolean = true) => {
       console.log(response.data);
       let i = 0;
       if (clear) while (members.length != 0) members.pop();
-      if (response.data != null)
-      one_group_id = response.data.groups[0].group_id;
-      console.log("one_group_id" + one_group_id);
-      axios({
-        url: axios.defaults.baseURL + "/group/get_group_members",
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": User.token
-        },
-        data: {
-          group_id: one_group_id,
-        },
-        transformRequest: [
-          function (data, headers) {
-            let data1 = JSON.stringify(data);
-            console.log(data1);
-            return data1;
-          },
-        ],
-      }).then(function (response) {
-        // 处理成功情况
-        if (response.data?.success) {
-          count = response.data?.count;
-          console.log(response.data);
-          let i = 0;
-          if (clear) while (members.length != 0) members.pop();
-          if (response.data != null)
-            for (i = 0; i < count; i++) {
-              let temp = reactive({
-                email: response.data.members[i].email,
-                real_name: response.data.members[i].real_name,
-                status: response.data.members[i].status,
-                user_id: response.data.members[i].user_id,
-                username: response.data.members[i].username,
-              });
-              console.log("!!!user_id" + temp.user_id);
-              members.push(temp);
-            }
-          console.log(members);
-          // User.Name=modelRef.value.name,
-          // User.Id=response.data.data.user_id,
-        } else {
+      if (response.data != null){
+        if(response.data.count==0){
+          router.push({
+          name:"NewGroup",
+          // params:{
+          //   proj_id:props.oneProject.proj_id,
+          // }
+          })
         }
-        console.log(response.data);
-      });
-      // User.Name=modelRef.value.name,
-      // User.Id=response.data.data.user_id,
+        else{
+          one_group_id = response.data.groups[0].group_id;//不对，团队是可以切换的！！！
+          console.log("one_group_id" + one_group_id);
+          axios({
+            url: axios.defaults.baseURL + "/group/get_group_members",
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": User.token
+            },
+            data: {
+              group_id: one_group_id,
+            },
+            transformRequest: [
+              function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+              },
+            ],
+          }).then(function (response) {
+            // 处理成功情况
+            if (response.data?.success) {
+              count = response.data?.count;
+              console.log(response.data);
+              let i = 0;
+              if (clear) while (members.length != 0) members.pop();
+              if (response.data != null)
+                for (i = 0; i < count; i++) {
+                  let temp = reactive({
+                    email: response.data.members[i].email,
+                    real_name: response.data.members[i].real_name,
+                    status: response.data.members[i].status,
+                    user_id: response.data.members[i].user_id,
+                    username: response.data.members[i].username,
+                  });
+                  console.log("!!!user_id" + temp.user_id);
+                  members.push(temp);
+                }
+              console.log(members);
+              // User.Name=modelRef.value.name,
+              // User.Id=response.data.data.user_id,
+            } else {
+            }
+            console.log(response.data);
+          });
+
+        }
+         
+        // User.Name=modelRef.value.name,
+        // User.Id=response.data.data.user_id, 
+        }
     } else {
     }
     console.log(response.data);
