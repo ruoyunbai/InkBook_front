@@ -6,7 +6,12 @@
 
       </n-gi>
       <n-gi span="1">
-        <div id="group_name">团队名称</div>
+
+        <div id="group_name">
+          <n-icon>
+              <n-image src="svg\project_svg\group_home.svg" />
+            </n-icon>
+          团队名称</div>
       </n-gi>
       <n-gi span="1">
         <tk-select selected="请选择">
@@ -33,7 +38,7 @@
         <el-button round color="#2772F0" size="large" @click="addTodo">
           <template #icon>
             <n-icon>
-              <n-image src="svg\members_svg\plus.svg" />
+              <n-image src="svg\project_svg\white_plus.svg" />
             </n-icon>
           </template>
           <div class="commonText">
