@@ -227,9 +227,9 @@
 </template>
 
 <script lang="ts" setup>
-// import DocItem from "./document.vue";
-// import UmlItem from "./uml.vue";
-// import ProtoItem from "./prototype.vue";
+import DocItem from "./document.vue";
+import UmlItem from "./uml.vue";
+import ProtoItem from "./prototype.vue";
 import { onBeforeMount, onMounted, reactive, Ref, ref, toRefs } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { useMessage } from "naive-ui";
