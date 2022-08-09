@@ -61,6 +61,7 @@
       <div class="title_font forth">身份</div>
       <div class="title_font fifth"></div>
     </div> -->
+     <div style="margin:1px 10px 0px 10px">&ensp;</div>
       <n-grid x-gap="0" :cols="80">
         <n-gi span="7">
         </n-gi>
