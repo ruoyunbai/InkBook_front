@@ -1,60 +1,22 @@
 <template>
-  <div class="trash_head">
-    <n-image src="svg\trash_svg\shape.svg" class="title_img"/>
-    <div class="title_font">已删除内容</div>
+  <div class="one_trash project">
+    <div class="wrap">
+      <div class="tip_first">UML图名称</div>
+      <div class="tip_btn">
+        <n-button style=" width: 200px;height: 40px; border-radius: 12px; border: 1px solid #cdcdcd"
+                  color="transparent" text-color="#2772F0">
+          <n-image src="svg\trash_svg\recover.svg" />
+          <span class="btn_font">恢复</span>
+        </n-button>
+      </div>
+    </div>
   </div>
-  <div class="trash_body">
-<!--    项目-->
-    <ProTrash></ProTrash>
-<!--    文档-->
-    <FileTrash></FileTrash>
-<!--    设计原型-->
-    <DesignTrash></DesignTrash>
-<!--    uml-->
-    <UmlTrash></UmlTrash>
-  </div>
-
 </template>
 
-<script setup lang="ts">
-
-import {
-  onUpdated,
-  toRaw,
-  reactive,
-  onBeforeMount,
-  ref,
-  onMounted,
-  StyleValue,
-  Ref,
-  getCurrentInstance,
-  h,
-} from "vue";
-import { useDialog, NInput } from "naive-ui";
-// import Vditor from 'vditor'
-import ProTrash from '../../components/trash/pro_trash.vue';
-import FileTrash from '../../components/trash/file_trash.vue';
-import DesignTrash from '../../components/trash/design_trash.vue';
-import UmlTrash from '../../components/trash/uml_trash.vue';
-import axios from "axios";
-import { useProjectStore } from "../../store/Project";
-import { useUserStore } from "../../store/User";
-import { InputInst, useMessage } from "naive-ui";
-
-let text1: Ref<string> = ref("");
-const searched=ref(false)
-const Project = useProjectStore();
-const User = useUserStore();
-const message = useMessage();
-const input=ref("")
-//对话框
-const dialogCreateVisible = ref(false)
-const formLabelWidth = '140px'
-const form = reactive({
-  name: '',
-  region: '',
-})
-
+<script>
+export default {
+  name: "uml_trash"
+}
 </script>
 
 <style>
