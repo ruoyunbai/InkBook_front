@@ -72,9 +72,10 @@
                 </span>
                 </template>
             </el-dialog>
-        
+           
         </n-space>
     </div>
+  
 </template>
 
 <script lang="ts" setup>
@@ -201,6 +202,7 @@ const props: any = withDefaults(defineProps<Props>(), {
 
 <style>
      .user {
+    
     /* opacity: 0.10000000149011612; */
     border-radius: 16px;
     /*background: rgb(245, 181, 68, 0.1);*/
