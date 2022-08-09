@@ -11,7 +11,7 @@
           <n-icon>
               <n-image src="svg\project_svg\group_home.svg" />
             </n-icon>
-          团队名称</div>
+          团队管理</div>
       </n-gi>
       <n-gi span="1">
         <tk-select selected="请选择">

@@ -1,5 +1,6 @@
 <template>
-    <div class="user" style="background:#EDF5ED">
+  <div class="parent" style="background:#FFFFFF">
+    <div class="user" style="background:#EDF5ED;margin:15px 25px 15px 15px" >
         <n-space vertical>
             <n-space justify="end">
                 <n-image style="margin:15px 15px 10px 10px" height="25" preview-disabled @click="proj_copy()" src="svg\project_svg\copy.svg"/>
@@ -75,7 +76,7 @@
            
         </n-space>
     </div>
-  
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -201,6 +202,9 @@ const props: any = withDefaults(defineProps<Props>(), {
 </script>
 
 <style>
+    .parent{
+      border-radius: 16px;
+    }
      .user {
     /* opacity: 0.10000000149011612; */
     border-radius: 16px;
