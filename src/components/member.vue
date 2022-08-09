@@ -6,12 +6,12 @@
         <n-gi span="1">
             <n-image style="margin:7px 0px 0px 0px;align:right;" height="30" preview-disabled @click="toPersonInfo()" src="svg\project_svg\sun.svg" />
         </n-gi>
-        <n-gi span="16">
+        <n-gi span="12">
           <div class="name" style="margin:10px 10px 10px 30px">
           {{props.oneMember.username}}
           </div>
         </n-gi>
-        <n-gi span="24">
+        <n-gi span="28">
           <div class="name" style="margin:10px 10px 10px 30px">{{props.oneMember.email}}</div>
         </n-gi>
         <n-gi span="16">
@@ -24,6 +24,7 @@
           </div>
         </n-gi>
       </n-grid>
+
     </div>
 </template>
 

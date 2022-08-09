@@ -12,10 +12,10 @@
       </div>
       <div class="card_body">
         <div class="body_left">
-          <!-- <n-space vertical align="center">
-            <n-avatar :size="90" :src="Ava" style="border-radius: 10px"></n-avatar> -->
-            <!-- <span class="NAME">{{ Name }}</span> -->
-            <!-- <n-button
+          <n-space vertical align="center">
+            <n-avatar :size="90" :src="Ava" style="border-radius: 10px"></n-avatar>
+            <span class="NAME">{{ Name }}</span>
+            <n-button
                 color="#F5B544"
                 size="large"
                 @click="UserExit"
@@ -23,8 +23,8 @@
                 v-show="isSelf"
             >
               <p class="buttonText3">退出登录</p>
-            </n-button> -->
-          <!-- </n-space> -->
+            </n-button>
+          </n-space>
         </div>
         <div class="body_mid">
           <div class="user_info">
@@ -88,14 +88,13 @@ import { useUserStore } from "../../store/User";
 const User = useUserStore();
 const message = useMessage();
 const route = useRoute();
-onBeforeMount(()=>{
+const nickName: any = ref("");
+const realName: any = ref("");
+const email: any = ref("");
+onMounted(()=>{
     get_info();
-    console.log( "!!route.query.user_id"+route.query.user_id);
+    console.log( "!!route.params.user_id"+route.params.user_id);
 })
-let nickName=ref<String>("false");
-let realName=ref<String>("false");
-let email=ref<String>("false");
-
 const get_info = () =>{
   axios({
     url: axios.defaults.baseURL + "/user/info",
@@ -105,7 +104,7 @@ const get_info = () =>{
       "Authorization": User.token
     },
     data: {
-      user_id: route.params.user_id
+      user_id: +route.params.user_id
     },
     transformRequest: [
       function (data, headers) {
@@ -118,9 +117,12 @@ const get_info = () =>{
     // 处理成功情况
     console.log(response.data);
     if (response.data?.success) {
-      nickName = response.data.user.username,
-      email=response.data.user.email,
-      realName=response.data.user.real_name
+      nickName.value = response.data.user.username,
+      email.value=response.data.user.email,
+      realName.value=response.data.user.real_name
+      console.log( "!!nickName"+nickName.value);
+      console.log( "!!email"+email);
+      console.log( "!!realName"+realName);
     } else {
       message.error(response.data?.message);
     }
