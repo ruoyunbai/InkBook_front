@@ -5,7 +5,7 @@
     :width="height"
     :height="width"
     class="ifra"
-    src="https://www.iodraw.com/diagram/#Uhttps://www.iodraw.com/diagram/templates/uml/uml_1.xml">
+    src="https://www.iodraw.com/diagram/">
 </iframe>
 </div>
 </template>
@@ -26,7 +26,7 @@ onMounted(()=>{
 <style>
 .ifra{
     position: absolute;
-    height: 60%;
+    height: 75%;
     width:98%
 }
 </style>
