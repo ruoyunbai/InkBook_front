@@ -249,6 +249,9 @@ import { usePrototypeStore } from "../../store/prototype";
 import { useUmlStore } from "../../store/Uml";
 import { useDocumentStore } from "../../store/Document";
 
+import { useRoute } from "vue-router"
+const route = useRoute();
+
 // import { FileReadOptions } from "fs/promises";
 const User = useUserStore();
 const Detail = useDetailStore();
@@ -289,6 +292,7 @@ onBeforeMount(() => {
 });
 
 let this_proj_id: number = 0;
+this_proj_id = Number(route.params.proj_id);
 const getProjectDetail = (clear: boolean = true) => {
   axios({
     url: axios.defaults.baseURL + "/proj/get_proj_by_id",
