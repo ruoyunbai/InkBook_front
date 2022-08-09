@@ -111,6 +111,15 @@ const routes: Array<RouteRecordRaw> = [
                 },
             },
             {
+                name: 'docCenter',
+                path: "/docCenter",
+                component: () => import('../views/docCenter/index.vue'),
+                meta: {
+                    title: "首页",
+                    transition: "animate__bounceIn"
+                },
+            },
+            {
                 name: 'projectDetail',
                 path: "/projectDetail",
                 component: () => import('../views/projectDetail/projectDetail.vue'),

@@ -338,6 +338,7 @@ const getProjs = () => {
     })
 }
 const getDocs = (set=false) => {
+    projLoading.value=false
     axios({
         url: axios.defaults.baseURL + "/doc/get_proj_documents",
         method: "post",
@@ -357,11 +358,12 @@ const getDocs = (set=false) => {
         ],
     }).then(function (response) {
         // 处理成功情况
-        console.log("response", response)
-        console.log(response.data);
+        console.log("responseDocs", response)
+        // console.log(response.data);
         while (options.value.length != 0) options.value.pop()
         if (response.data?.success) {
             for (let i = 0; i < response.data?.count; i++) {
+                console.log("onePush")
                 options.value.push({
                     label: response.data?.documents[i]?.document_name,
                     value: response.data?.documents[i]?.document_id

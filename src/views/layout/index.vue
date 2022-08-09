@@ -1,32 +1,43 @@
 <template>
-   <n-drawer
-   :show-mask="false"
-   :on-after-leave="afterDClocsed"
-   style="position: absolute;width: 394px;height: 983px;right: 0px;top: 41px;background: #FFFFFF;box-shadow: 0px 0px 32px rgba(10, 32, 66, 0.08);
-border-radius: 30px 0px 0px 0px;"
-   v-model:show="Dactive" :width="502" placement="right">
-    <n-drawer-content 
-    :native-scrollbar="false"
-    title="消息通知" >
-    <template #header>
-        <n-image
-        preview-disabled
-        @click="Dactive=false"
-        src="svg\主页svg\close.svg"
-        ></n-image>
-        <div style="height:25px"></div>
-        <n-image
-        preview-disabled
-        src="svg\主页svg\notification.svg"
-        ></n-image>
-        
-       <p class="notificationtitle">消息通知</p>
-      </template>
-      《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说。《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说
-      《
+    <n-drawer :show-mask="false" :on-after-leave="afterDClocsed" style="position: absolute;width: 394px;height: 983px;right: 0px;top: 41px;background: #FFFFFF;box-shadow: 0px 0px 32px rgba(10, 32, 66, 0.08);
+border-radius: 30px 0px 0px 0px;" v-model:show="Dactive" :width="502" placement="right">
+        <n-drawer-content :native-scrollbar="false" title="消息通知">
+            <template #header>
+                <n-image preview-disabled @click="Dactive = false" src="svg\主页svg\close.svg"></n-image>
+                <div style="height:25px"></div>
+                <n-image preview-disabled src="svg\主页svg\notification.svg"></n-image>
 
-</n-drawer-content>
-  </n-drawer>
+                <p class="notificationtitle">消息通知</p>
+            </template>
+            《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说。《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965
+            年出版的小说《斯通纳》是美国作家约翰·威廉姆斯在 1965 年出版的小说
+            《
+
+        </n-drawer-content>
+    </n-drawer>
     <n-layout has-sider :native-scrollbar="false">
         <n-layout-sider content-style="padding: 24px;
       backgroundColor:rgb(255,255,255)" :width="240" bordered :collapsed-width="0" show-trigger="bar"
@@ -46,19 +57,15 @@ border-radius: 30px 0px 0px 0px;"
             <div class="user">
                 <n-space vertical>
                     <div style="height:75px">
-                    <p style="position:absolute;"
-                     @click="openDrawer">消息</p>
-                    <transition @mouseenter="MouseOnUser"
-                    @mouseleave="MouseLeaveUser"
-    
-                    apear-active-class="animate__animated animate__swing"
-                    enter-active-class="animate__animated animate__swing">
-                
-                        <n-image 
-                         width=56 preview-disabled height="56" style="margin:32px 0px 0px 0px"                       
-                        @click="() => { router.push('/personalInfo') }" :src=avatar />
-                   
-                    </transition>
+                        <p style="position:absolute;" @click="openDrawer">消息</p>
+                        <transition @mouseenter="MouseOnUser" @mouseleave="MouseLeaveUser"
+                            apear-active-class="animate__animated animate__swing"
+                            enter-active-class="animate__animated animate__swing">
+
+                            <n-image width=56 preview-disabled height="56" style="margin:32px 0px 0px 0px"
+                                @click="() => { router.push('/personalInfo') }" :src=avatar />
+
+                        </transition>
                     </div>
                     <p class="name" style="margin:10px 0px 0px 0px">{{ User.Name }}</p>
                     <p class="state">state</p>
@@ -127,17 +134,17 @@ onBeforeMount(() => {
 onBeforeUnmount(() => {
     // User.Login=true
 })
-const Dactive=ref(false)
+const Dactive = ref(false)
 const Group = useGroupStore()
 const loading = ref(true)
 const router = useRouter()
-const isOnUser=ref(false)
+const isOnUser = ref(false)
 const cubeSrc = ref("svg\\主页svg\\icon-1.2s-47px.gif")
 const collapsed = ref(false)
 const defaultExpandedKeys = [2]
 const message = useMessage()
 const User = useUserStore()
-const avatar=ref("svg\\主页svg\\Avatar.svg")
+const avatar = ref("svg\\主页svg\\Avatar.svg")
 const menuOptions: MenuOption[] = reactive([
     {
         label: () =>
@@ -269,6 +276,27 @@ const menuOptions: MenuOption[] = reactive([
             RouterLink,
             {
                 to: {
+                    path: '/docCenter',
+                    // params: {
+                    //     lang: 'zh-CN'
+                    // }
+                }
+            },
+            "文档中心",
+        ),
+        key: 8,
+        icon: () => h(
+            NImage,
+            {
+                previewDisabled: true, src: 'svg\\主页svg\\Group-8.svg'
+            }
+        )
+    },
+    {
+        label: () => h(
+            RouterLink,
+            {
+                to: {
                     path: '/trash',
                     // params: {
                     //     lang: 'zh-CN'
@@ -291,33 +319,33 @@ let cnt0 = 0
 const group = ref(null)
 const groupValue = ref("")
 
-const groupOptions:SelectMixedOption[]= reactive([])
-const MouseOnUser=()=>{
-    isOnUser.value=true;
-    avatar.value="svg\\主页svg\\Home.svg"
+const groupOptions: SelectMixedOption[] = reactive([])
+const MouseOnUser = () => {
+    isOnUser.value = true;
+    avatar.value = "svg\\主页svg\\Home.svg"
 }
-const openDrawer=()=>{
-    Dactive.value=true
+const openDrawer = () => {
+    Dactive.value = true
     let x: HTMLElement = <HTMLElement>document.body.parentNode;
     if (x != null) {
-    x.style.overflowY = "hidden";
-  }
+        x.style.overflowY = "hidden";
+    }
 }
-const afterDClocsed=()=>{
+const afterDClocsed = () => {
     let x: HTMLElement = <HTMLElement>document.body.parentNode;
     if (x != null) {
-    x.style.overflowY = "auto";
-  }
+        x.style.overflowY = "auto";
+    }
 }
-const MouseLeaveUser=()=>{
-    isOnUser.value=false;
-     avatar.value="svg\\主页svg\\Avatar.svg"
+const MouseLeaveUser = () => {
+    isOnUser.value = false;
+    avatar.value = "svg\\主页svg\\Avatar.svg"
 }
 const handleUpdateGroup = (value: string, option: SelectOption) => {
     Group.id = Number(option.key)
-// console.log("op")
-    if(option.label!=null)
-    groupValue.value = String(option.label)
+    // console.log("op")
+    if (option.label != null)
+        groupValue.value = String(option.label)
     console.log("value", option)
 
 }
@@ -352,24 +380,23 @@ onBeforeMount(() => {
                     label: d[i].group_name,
                     key: d[i].group_id,
                     value: d[i].group_id,
-                    type:null
+                    type: null
 
                 })
-                
-                if (Group.id != -1&&Group.id!=null) {
 
-                    if(Group.id== d[i].group_id)
-                    {
+                if (Group.id != -1 && Group.id != null) {
+
+                    if (Group.id == d[i].group_id) {
                         groupValue.value = d[i].group_name
                         console.log("yyyyy")
                     }
                 }
-                
+
             }
             loading.value = false
-             if (Group.id == -1||Group.id==null) {
-                    groupValue.value = d[0].group_name
-                    Group.id = d[0].group_id
+            if (Group.id == -1 || Group.id == null) {
+                groupValue.value = d[0].group_name
+                Group.id = d[0].group_id
             }
         }
     })
@@ -409,6 +436,8 @@ const handleUpdateValue = (key: string, item: MenuOption) => {
         menuLists[7][1]
     menuOptions[2] =
         menuLists[5][2]
+    menuOptions[3] =
+        menuLists[5][3]
     let n = Number(key)
     switch (n) {
         case 1: menuOptions[0] =
@@ -429,10 +458,13 @@ const handleUpdateValue = (key: string, item: MenuOption) => {
         case 6: menuOptions[1] =
             menuLists[6][1]
             break;
-        case 7: menuOptions[2] =
-            menuLists[7][2]
+        case 7: menuOptions[3] =
+            menuLists[8][3]
             break;
-
+        case 8:
+            menuOptions[2] =
+                menuLists[7][2]
+            break;
     }
     //      menuOptions[Number(key)-1]=
     // menuLists[Number(key)]
@@ -464,20 +496,21 @@ onMounted(()=>{
 </script>
 
 <style scoped >
-.notificationtitle{
+.notificationtitle {
     position: relative;
 
-left: 25px;
-top:-22px;
+    left: 25px;
+    top: -22px;
 
-font-family: 'Nunito';
-font-style: normal;
-font-weight: 700;
-font-size: 16px;
-line-height: 22px;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
 
-color: #242424;
+    color: #242424;
 }
+
 .state {
     opacity: 0.4000000059604645;
     color: #091B3D;

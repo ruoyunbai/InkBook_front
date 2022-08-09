@@ -88,14 +88,15 @@
       <n-gi span="99">
         <n-card content-style="padding:0px;
           border-radius: 0.75rem;">
-          <div class="editor" v-if="editor">
-            <editor-content class="editor__content" :editor="editor" />
+          <div   class="editor" v-if="editor">
+            <editor-content
+             class="editor__content" :editor="editor" />
             <div class="editor__footer">
               <div :class="`editor__status editor__status--${status}`">
                 <template v-if="status === 'connected'">
                   {{ editor?.storage.collaborationCursor.users.length }} user{{
                       editor?.storage.collaborationCursor.users.length === 1 ? '' : 's'
-                  }} online in {{doc.name}}
+                  }} online in {{ doc.name }}
                 </template>
                 <template v-else>
                   offline
@@ -122,7 +123,7 @@ import * as Y from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 import { ref, onBeforeMount, onBeforeUnmount, reactive, onMounted } from 'vue'
-import axios from "axios"
+import axios, { AxiosPromise } from "axios"
 import { useUserStore } from '../../store/User'
 import { SelectOption } from 'naive-ui'
 import { HocuspocusProvider } from '@hocuspocus/provider'
@@ -133,7 +134,7 @@ import { WebsocketProvider } from 'y-websocket'
 import MenuBar from './MenuBar.vue'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
-const router=useRouter()
+const router = useRouter()
 const message = useMessage()
 const Group = useGroupStore()
 const User = useUserStore()
@@ -179,10 +180,11 @@ let editor: any
 console.log("params", route.params)
 
 if (route.params.id != undefined) {
-  doc.id=Number(route.params.id)
-  doc.name=String(route.params.name)
+  doc.id = Number(route.params.id)
+  doc.name = String(route.params.name)
   wsProvider = new WebsocketProvider('wss://demos.yjs.dev', "gwx-" + String(Group.id) + "-" + route.params.name, ydoc)
-  
+
+
   editor = useEditor({
     autofocus: true,
     extensions: [
@@ -202,11 +204,90 @@ if (route.params.id != undefined) {
         },
       }),
     ],
-    content: ""
+    content: "",
+  
   })
+  // editor.value.on('beforeCreate', (editor:any) => {
+  //     console.log("created,","len",editor?.storage.collaborationCursor.users.length)
+  //     if(editor?.storage.collaborationCursor.users.length === 1 )
+  //     {
+  //       console.log("you are first")
+  //     axios({
+  //       url: axios.defaults.baseURL + "/doc/enter_document",
+  //       method: "post",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Authorization": User.token
+  //       },
+  //       data: {
+  //         document_id: doc.id
+  //       },
+  //       transformRequest: [
+  //         function (data, headers) {
+  //           let data1 = JSON.stringify(data);
+  //           console.log(data1);
+  //           return data1;
+  //         },
+  //       ],
+  //     }).then(function (response) {
+  //       // 处理成功情况
+  //       console.log("responseContent", response.data?.document.content)
+  //       // console.log(response.data);
+
+  //       if (response.data?.success) {
+  //         // doc.name = response.data?.document.document_name
+  //           editor?.value?.chain()
+  //             .clearContent()
+  //             .focus()
+  //             .toggleBold()
+  //             .setContent(JSON.parse(response.data?.document.content)).run()
+  //           //   protoLoading.value = false
+          
+  //       }
+  //     })}
+    
+  // })
+  setTimeout(() => {
+    console.log("lenth",editor?.value.storage.collaborationCursor.users.length)
+     if(editor?.value.storage.collaborationCursor.users.length === 1 )
+      {
+        console.log("you are first")
+      axios({
+        url: axios.defaults.baseURL + "/doc/enter_document",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          document_id: doc.id
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("responseContent", response.data?.document.content)
+        // console.log(response.data);
+
+        if (response.data?.success) {
+          // doc.name = response.data?.document.document_name
+            editor?.value?.chain()
+              .clearContent()
+              .focus()
+              .toggleBold()
+              .setContent(JSON.parse(response.data?.document.content)).run()
+            //   protoLoading.value = false
+          
+        }
+      })}
+  }, 3000);
   status.value = "connected"
   function beforeLeave(event: any) {
-
     console.log("leave doc!!!!!!")
     editor?.value?.destroy()
     wsProvider?.destroy()
@@ -268,14 +349,14 @@ if (route.params.id != undefined) {
       }
     })
   }
-  
+
   window.addEventListener("beforeunload", beforeLeave);
   onBeforeUnmount(() => {
     window.removeEventListener("beforeunload", beforeLeave)
     console.log("leave doc!!!!!!")
     editor?.value?.destroy()
     wsProvider.destroy()
-    console.log("quit!","docid",doc.id)
+    console.log("quit!", "docid", doc.id)
     if (doc.id == -1) return
     axios({
       url: axios.defaults.baseURL + "/doc/quit_document",
@@ -480,7 +561,7 @@ const getDocs = () => {
     }
   })
 }
-const enterDoc = () => {
+const enterDoc = (clear: boolean = false) => {
   doc.id = Number(docValue.value)
   console.log("docid", doc.id)
   for (let i = 0; i < options.value.length; i++) {
@@ -519,14 +600,15 @@ const enterDoc = () => {
 
     if (response.data?.success) {
       // doc.name = response.data?.document.document_name
-      if (response.data?.rank == 1) {
-        editor?.value?.chain()
-          .clearContent()
-          .focus()
-          .toggleBold()
-          .setContent(JSON.parse(response.data?.document.content)).run()
-        //   protoLoading.value = false
-      }
+      if (clear)
+        if (response.data?.rank == 1) {
+          editor?.value?.chain()
+            .clearContent()
+            .focus()
+            .toggleBold()
+            .setContent(JSON.parse(response.data?.document.content)).run()
+          //   protoLoading.value = false
+        }
 
     }
   })
