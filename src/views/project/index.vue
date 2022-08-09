@@ -168,7 +168,7 @@
                 </n-space>
               <!--加载项目-->
               <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
-                <n-grid-item v-for="(project, index) in projects">
+                <n-grid-item  v-for="(project, index) in projects">
                                <Card  :key="project.project_id" :oneProject="project"></Card>
                 </n-grid-item>
               </n-grid>
@@ -634,6 +634,9 @@ const project_create = () => {
 
 
 <style scoped>
+.allprojs-move{
+  transition: transform 1s;
+}
 .posts-move {
   transition: transform 1s;
 }
