@@ -9,7 +9,7 @@ import axios from 'axios'
 import VueDragResize from 'vue-drag-resize'
 
 
-import  'animate.css';
+import animated from 'animate.css';
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 // import { createPinia } from 'pinia'
