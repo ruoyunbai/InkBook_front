@@ -35,7 +35,7 @@
       <n-gi span="1">
       </n-gi>
       <n-gi span="3">
-        <el-button round color="#2772F0" size="large" @click="addTodo">
+        <el-button round color="#2772F0" size="large" @click="dialogEditVisible = true">
           <template #icon>
             <n-icon>
               <n-image src="svg\project_svg\white_plus.svg" />
@@ -87,6 +87,24 @@
       <span class="del_font">{{ selNum }}/{{ len }}</span>
       <button @click="delAll" id="del_btn">删除</button>
     </div> -->
+
+
+    <el-dialog v-model="dialogEditVisible" title="&ensp; &ensp; 邀请成员">
+        <el-form :model="form">
+        <el-form-item label="" :label-width="formLabelWidth">
+            <el-input v-model="form.name" autocomplete="off" placeholder="待邀请成员的用户名"/>
+        </el-form-item>
+        </el-form>
+        <template #footer>
+        <span class="dialog-footer">
+            <el-button @click="dialogEditVisible = false">取消</el-button>
+            <el-button type="primary" @click="invite_member()"
+            >立即邀请</el-button
+            >
+        </span>
+        </template>
+    </el-dialog>
+
   </div>
 
 </template>
@@ -110,17 +128,58 @@ import { useMemberStore } from "../../store/Member";
 import { useUserStore } from "../../store/User";
 import { useDialog,InputInst, useMessage } from "naive-ui";
 
+
 const Member = useMemberStore();
+const message = useMessage();
 const User = useUserStore();
+const dialogEditVisible = ref(false)
+const formLabelWidth = '100px'
 let count: number = 0;
 let one_group_id: number;
 const members: any[] = reactive([]);
+const form = reactive({
+  name: '',
+})
 
 onBeforeMount(() => {
   getMembers();
   console.log("1");
 });
 
+const invite_member = () =>{
+  axios({
+    url: axios.defaults.baseURL + "/group/invite_member",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": User.token
+    },
+    data: {
+      group_id: one_group_id,
+      username: form.name
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
+    console.log(response.data);
+    if (response.data?.success) {
+      message.success("邀请成功");
+      getMembers();
+      console.log("2!!");
+      dialogEditVisible.value = false;
+
+    } else {
+      message.error(response.data?.message);
+    }
+    console.log(response.data);
+  });
+}
 
 //删除成员 设为管理员
 Member.$subscribe((mutation, state)=>{
