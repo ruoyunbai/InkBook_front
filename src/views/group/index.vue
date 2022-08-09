@@ -100,10 +100,11 @@ import {
 } from "vue";
 import Bar from "../../components/member.vue";
 import axios from "axios";
-// import { usememberstore } from "../../store/members";
+import { useMemberStore } from "../../store/Member";
 import { useUserStore } from "../../store/User";
 import { useDialog,InputInst, useMessage } from "naive-ui";
 
+const Member = useMemberStore();
 const User = useUserStore();
 let count: number = 0;
 let one_group_id: number;
@@ -114,7 +115,70 @@ onBeforeMount(() => {
   console.log("1");
 });
 
-//获取项目
+
+//删除成员 设为管理员
+Member.$subscribe((mutation, state)=>{
+    if(Member.operation=="")return;
+    else if(Member.operation=="remove_member"){
+        console.log("user_id"+ Member.user_id);
+        axios({
+        url: axios.defaults.baseURL + "/group/remove_member",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          group_id: one_group_id,
+          user_id: Member.user_id
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("response"+Member.user_id);
+        console.log(response)
+        getMembers();
+      })
+      Member.operation="";
+    }
+    else if(Member.operation=="set_status"){
+      axios({
+        url: axios.defaults.baseURL + "/group/set_member_status",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          group_id: one_group_id,
+          status: 2,
+          user_id: Member.user_id
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("response"+Member.user_id);
+        console.log(response)
+        getMembers();
+      })
+      Member.operation="";
+    }
+
+
+})
+
+//获取成员
+//status:1 普通成员 2管理员 3创建者
 const getMembers = (clear: boolean = true) => {
   axios({
     url: axios.defaults.baseURL + "/group/get_groups",
@@ -175,7 +239,7 @@ const getMembers = (clear: boolean = true) => {
                 user_id: response.data.members[i].user_id,
                 username: response.data.members[i].username,
               });
-              // console.log("  membersid" + temp.proj_id);
+              console.log("!!!user_id" + temp.user_id);
               members.push(temp);
             }
           console.log(members);

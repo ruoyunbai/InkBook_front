@@ -13,7 +13,10 @@
           <div class="name" style="margin:10px 10px 10px 30px">{{props.oneMember.status}}</div>
         </n-gi>
         <n-gi span="4">
-          <div class="name" style="margin:10px 10px 10px 30px">操作</div>
+          <div class="name" style="margin:10px 10px 10px 30px">
+            <n-image style="margin:5px 15px 5px 10px" height="20" preview-disabled @click="set_status()" src="svg\project_svg\set_status.svg"/>
+            <n-image style="margin:5px 15px 5px 10px" height="20" preview-disabled @click="remove_member()" src="svg\project_svg\dele_mem.svg"/>
+          </div>
         </n-gi>
       </n-grid>
     </div>
@@ -35,16 +38,27 @@ import {
 import { useDialog, NInput } from "naive-ui";
 // import Vditor from 'vditor'
 import axios from "axios";
-import { useProjectStore } from "../store/Project";
+import { useMemberStore } from "../store/Member";
 import { useUserStore } from "../store/User";
 import { InputInst, useMessage } from "naive-ui";
 
+const Member = useMemberStore();
+const set_status = () =>{
+    Member.user_id=props.oneMember.user_id;
+    Member.operation="set_status";
+}
 
+const remove_member = () =>{
+    Member.user_id=props.oneMember.user_id;
+    console.log("inner!!user_id"+ props.oneMember.user_id);
+    Member.operation="remove_member";
+    
+}
 
 
 type Props = {
   oneMember?: {
-    name?: string;
+    user_id?: number;
     time?: number;
     tags?: string[];
     title?: string;
@@ -52,7 +66,6 @@ type Props = {
     watches?: number;
     comments?: number;
     ups?: number;
-    user_id?: number;
     post_id?: number;
     clear?: boolean;
     like_status?: number;
