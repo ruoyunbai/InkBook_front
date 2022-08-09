@@ -55,9 +55,10 @@
   <div id="group_mid">
     <div id="panel_title">
       <div class="title_font first">昵称</div>
-      <div class="title_font second">邮箱</div>
-      <div class="title_font third">身份</div>
       <div class="title_font forth"></div>
+      <div class="title_font second">邮箱</div>
+      <div class="title_font third"></div>
+      <div class="title_font forth">身份</div>
       <div class="title_font fifth"></div>
     </div>
     <div v-for="(member, index) in members">
