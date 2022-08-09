@@ -9,55 +9,16 @@ border-radius: 30px 0px 0px 0px;" v-model:show="Dactive" :width="502" placement=
 
                 <p class="notificationtitle">消息通知</p>
             </template>
-            <div>
-              <!--      待确认的邀请-->
-              <div class="undefine frame1">
-                <n-image src="svg\主页svg\unread.svg" class="noti_img"/>
-                <span class="noti_font">@用户1   邀请你加入团队</span>
-                <n-button color="#FFFFFF" text-color="#2772F0"
-                          style="position: absolute; width: 94px; height: 37px; margin-left: 115px; margin-top: 60px; border-radius: 16px">
-                  <n-image src="svg\主页svg\yes.svg" />
-                  <span class="btn_font">同意</span>
-                </n-button>
-                <n-button color="#FFFFFF" text-color="#2772F0"
-                          style="position: absolute; width: 94px; height: 37px; margin-left: 225px; margin-top: 60px; border-radius: 16px">
-                  <n-image src="svg\主页svg\no.svg" />
-                  <span class="btn_font">拒绝</span>
-                </n-button>
-              </div>
-              <!--      已拒绝的邀请-->
-              <div class="refuse frame1">
-                <n-image src="svg\主页svg\read.svg" class="noti_img"/>
-                <span class="noti_font">@用户1   邀请你加入团队</span>
-                <n-button color="#FFFFFF" text-color="#2772F0"
-                          style="position: absolute; width: 125px; height: 37px; margin-left: 185px; margin-top: 60px; border-radius: 16px">
-                  <n-image src="svg\主页svg\no.svg" />
-                  <span class="btn_font">已拒绝</span>
-                </n-button>
-              </div>
-              <!--      已同意的邀请-->
-              <div class="agree frame1">
-                <n-image src="svg\主页svg\read.svg" class="noti_img"/>
-                <span class="noti_font">@用户1   邀请你加入团队</span>
-                <n-button color="#FFFFFF" text-color="#2772F0"
-                          style="position: absolute; width: 125px; height: 37px; margin-left: 185px; margin-top: 60px; border-radius: 16px">
-                  <n-image src="svg\主页svg\yes.svg" />
-                  <span class="btn_font">已同意</span>
-                </n-button>
-              </div>
-              <!--      管理员收到拒绝邀请的通知-->
-              <div class="refuse_bc frame2">
-                <n-image src="svg\主页svg\sound.svg" class="noti_img2"/>
-                <span class="noti_font">@用户1   已进入团队</span>
-              </div>
-              <!--      全体成员收到同意邀请的通知-->
-              <div class="agree_bc frame2">
-                <n-image src="svg\主页svg\triangle.svg" class="noti_img2"/>
-                <span class="noti_font">@用户1   拒绝加入团队</span>
-              </div>
-            </div>
-
-
+             <transition-group
+                name="msgs"
+                tag="p"
+                enter-active-class="animate__animated animate__backInLeft"
+                appear-active-class="animate__animated animate__backInLeft"
+                style="position:relative;"
+            >
+                <user-message v-for="msg in msgs" :key="msg.message_id" :M="msg"></user-message>       
+                    <div style="height:600px"></div>
+             </transition-group>
         </n-drawer-content>
     </n-drawer>
     <n-layout has-sider :native-scrollbar="false">
@@ -148,6 +109,15 @@ import { RouterLink } from 'vue-router'
 import { useRouter } from 'vue-router'
 import { SelectProps } from 'element-plus/es/components/select-v2/src/defaults';
 import { SelectMixedOption } from 'naive-ui/lib/select/src/interface';
+import userMessage from '../../components/message/index.vue'
+import { useMsgStore } from "../../store/Msg";
+const Msg=useMsgStore()
+Msg.$subscribe(()=>{
+    if(Msg.opt=="change"){
+        Msg.opt=""
+        getMsgs()
+    }
+})
 onBeforeMount(() => {
     let l = localStorage.getItem("Login")
     if (l != "true") {
@@ -157,6 +127,7 @@ onBeforeMount(() => {
 onBeforeUnmount(() => {
     // User.Login=true
 })
+const msgs:any=reactive([])
 const Dactive = ref(false)
 const Group = useGroupStore()
 const loading = ref(true)
@@ -423,7 +394,40 @@ onBeforeMount(() => {
             }
         }
     })
+  getMsgs()
 })
+const getMsgs=()=>{
+       axios({
+        url: axios.defaults.baseURL + "/user/get_messages",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("responseMsg", response)
+        console.log(response.data);
+        while(msgs.length!=0)msgs.pop()
+        if (response.data?.success) {
+            let d = response.data?.messages
+            for (let i = 0; i < response.data?.count; i++) {
+                msgs.push(d[i])
+            }
+
+          
+        }
+    })
+}
 const reloadenter = () => {
     if (cnt0 == 0) {
         cubeSrc.value = "svg\\主页svg\\icon-1.3s-47px2.gif"
@@ -519,6 +523,9 @@ onMounted(()=>{
 </script>
 
 <style scoped >
+.msgs{
+    transition: transform 1s;
+}
 .notificationtitle {
     position: relative;
 

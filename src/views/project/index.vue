@@ -168,9 +168,19 @@
                 </n-space>
               <!--加载项目-->
               <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
-                <n-grid-item  v-for="(project, index) in projects">
-                               <Card  :key="project.project_id" :oneProject="project"></Card>
-                </n-grid-item>
+               <!-- <transition-group
+                name="projs"
+                tag="NGrid"
+                enter-active-class="animate__animated animate__backInLeft"
+                appear-active-class="animate__animated animate__backInLeft"
+                style="position:relative;"
+            > -->
+
+               <n-gi :key="project.proj_id"  v-for="(project, index) in projects">
+                               <Card   :oneProject="project"></Card>
+                
+              </n-gi>
+                <!-- </transition-group> -->
               </n-grid>
 
             </n-collapse-item>
@@ -290,7 +300,7 @@ import { useDialog, NInput } from "naive-ui";
 import axios from "axios";
 import { useProjectStore } from "../../store/Project";
 import { useUserStore } from "../../store/User";
-import { InputInst, useMessage } from "naive-ui";
+import { InputInst, useMessage,NGrid } from "naive-ui";
 
 let text1: Ref<string> = ref("");
 const searched=ref(false)
@@ -342,7 +352,6 @@ const show = (order1: string,clear: boolean = true) => {
         transformRequest: [
           function (data, headers) {
             let data1 = JSON.stringify(data);
-            console.log(data1);
             return data1;
           },
         ],
@@ -637,7 +646,7 @@ const project_create = () => {
 .allprojs-move{
   transition: transform 1s;
 }
-.posts-move {
+.projs-move {
   transition: transform 1s;
 }
 .headTitle {
