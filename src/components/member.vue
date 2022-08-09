@@ -10,12 +10,12 @@
           <div class="name" style="margin:10px 10px 10px 30px">{{props.oneMember.email}}</div>
         </n-gi>
         <n-gi span="4">
-          <div class="name" style="margin:10px 10px 10px 30px">{{props.oneMember.status}}</div>
+          <div class="name" style="margin:10px 10px 10px 30px">{{identity_text}}</div>
         </n-gi>
         <n-gi span="4">
           <div class="name" style="margin:10px 10px 10px 30px">
-            <n-image style="margin:5px 15px 5px 10px" height="20" preview-disabled @click="set_status()" src="svg\project_svg\set_status.svg"/>
-            <n-image style="margin:5px 15px 5px 10px" height="20" preview-disabled @click="remove_member()" src="svg\project_svg\dele_mem.svg"/>
+            <n-image style="margin:5px 15px 5px 10px" height="20" preview-disabled @click="set_status()" src="svg\project_svg\set_status.svg" v-show="props.oneMember.status==1"/>
+            <n-image style="margin:5px 15px 5px 10px" height="20" preview-disabled @click="remove_member()" src="svg\project_svg\dele_mem.svg"  v-show="props.oneMember.status==1"/>
           </div>
         </n-gi>
       </n-grid>
@@ -43,6 +43,18 @@ import { useUserStore } from "../store/User";
 import { InputInst, useMessage } from "naive-ui";
 
 const Member = useMemberStore();
+let identity_text: Ref<string> = ref("");
+
+onBeforeMount(() => {
+  if(props.oneMember.status == 1){
+    identity_text.value="普通成员";
+  }else if(props.oneMember.status == 2){
+    identity_text.value="管理员";
+  }else if(props.oneMember.status == 3){
+    identity_text.value="创建者";
+  }
+});
+
 const set_status = () =>{
     Member.user_id=props.oneMember.user_id;
     Member.operation="set_status";
@@ -54,7 +66,6 @@ const remove_member = () =>{
     Member.operation="remove_member";
     
 }
-
 
 type Props = {
   oneMember?: {
