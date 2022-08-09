@@ -87,8 +87,7 @@
       <n-gi></n-gi>
       <n-gi span="99">
         <n-card content-style="padding:0px;
-  
-  border-radius: 0.75rem;">
+          border-radius: 0.75rem;">
           <div class="editor" v-if="editor">
             <editor-content class="editor__content" :editor="editor" />
             <div class="editor__footer">
@@ -96,9 +95,7 @@
                 <template v-if="status === 'connected'">
                   {{ editor?.storage.collaborationCursor.users.length }} user{{
                       editor?.storage.collaborationCursor.users.length === 1 ? '' : 's'
-                  }} online in {{
-    doc.name
-}}
+                  }} online in {{doc.name}}
                 </template>
                 <template v-else>
                   offline
@@ -135,6 +132,8 @@ import { useMessage } from 'naive-ui'
 import { WebsocketProvider } from 'y-websocket'
 import MenuBar from './MenuBar.vue'
 import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
+const router=useRouter()
 const message = useMessage()
 const Group = useGroupStore()
 const User = useUserStore()
@@ -151,9 +150,10 @@ const ProjNotChosed = ref(false)
 const route = useRoute()
 const doc = reactive({
   id: -1,
-  name: ""
+  name: "room"
 }
 )
+const status = ref('connecting')
 let ydoc = new Y.Doc()
 // let provider = new WebrtcProvider('example-document1', ydoc)
 const createDoc = () => {
@@ -174,13 +174,16 @@ const createDoc = () => {
 //   url: 'ws://121.40.165.18:8800',
 //   name: '',
 // })
-let wsProvider:any
-let editor:any
-  console.log("params",route.params)
+let wsProvider: any
+let editor: any
+console.log("params", route.params)
 
 if (route.params.id != undefined) {
-   wsProvider = new WebsocketProvider('wss://demos.yjs.dev', "gwx-" + String(Group.id) + "-" + route.params.name, ydoc)
-   editor = useEditor({
+  doc.id=Number(route.params.id)
+  doc.name=String(route.params.name)
+  wsProvider = new WebsocketProvider('wss://demos.yjs.dev', "gwx-" + String(Group.id) + "-" + route.params.name, ydoc)
+  
+  editor = useEditor({
     autofocus: true,
     extensions: [
       StarterKit.configure({
@@ -201,14 +204,144 @@ if (route.params.id != undefined) {
     ],
     content: ""
   })
+  status.value = "connected"
+  function beforeLeave(event: any) {
+
+    console.log("leave doc!!!!!!")
+    editor?.value?.destroy()
+    wsProvider?.destroy()
+    console.log("quit!")
+    if (doc.id == -1) return
+    axios({
+      url: axios.defaults.baseURL + "/doc/quit_document",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": User.token
+      },
+      data: {
+        document_id: doc.id
+      },
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          console.log(data1);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log("response", response)
+      console.log(response.data);
+
+      if (response.data?.success) {
+
+      }
+    })
+    axios({
+      url: axios.defaults.baseURL + "/doc/upload_document",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": User.token
+      },
+      data: {
+        content: JSON.stringify(editor?.value?.getJSON()),
+        document_name: doc.name,
+        proj_id: 1,
+        document_id: doc.id
+      },
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          console.log(data1);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log("response", response)
+      console.log(response.data);
+
+      if (response.data?.success) {
+
+      }
+    })
+  }
+  
+  window.addEventListener("beforeunload", beforeLeave);
+  onBeforeUnmount(() => {
+    window.removeEventListener("beforeunload", beforeLeave)
+    console.log("leave doc!!!!!!")
+    editor?.value?.destroy()
+    wsProvider.destroy()
+    console.log("quit!","docid",doc.id)
+    if (doc.id == -1) return
+    axios({
+      url: axios.defaults.baseURL + "/doc/quit_document",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": User.token
+      },
+      data: {
+        document_id: doc.id
+      },
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          console.log(data1);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log("response", response)
+      console.log(response.data);
+
+      if (response.data?.success) {
+
+      }
+    })
+    axios({
+      url: axios.defaults.baseURL + "/doc/upload_document",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": User.token
+      },
+      data: {
+        content: JSON.stringify(editor?.value?.getJSON()),
+        document_name: doc.name,
+        proj_id: 1,
+        document_id: doc.id
+      },
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          console.log(data1);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log("response", response)
+      console.log(response.data);
+
+      if (response.data?.success) {
+
+      }
+    })
+  })
 } else {
-   editor = useEditor({
+  editor = useEditor({
     autofocus: true,
     extensions: [
-        StarterKit,
-      ],
+      StarterKit,
+    ],
     content: ""
   })
+
 }
 
 // let wsProvider = new WebsocketProvider('wss://demos.yjs.dev', "gwx-" + Math.random().toString(36).slice(-8), ydoc)
@@ -250,139 +383,9 @@ onMounted(() => {
 onBeforeMount(() => {
 
 })
-// function beforeLeave(event: any) {
-//   console.log("leave doc!!!!!!")
-//   editor?.value?.destroy()
-//   // provider.destroy()
-//   wsProvider.destroy()
 
-//   console.log("quit!")
-//   if (doc.id == -1) return
 
-//   axios({
-//     url: axios.defaults.baseURL + "/file/quit_document",
-//     method: "post",
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Authorization": User.token
-//     },
-//     data: {
-//       document_id: doc.id
-//     },
-//     transformRequest: [
-//       function (data, headers) {
-//         let data1 = JSON.stringify(data);
-//         console.log(data1);
-//         return data1;
-//       },
-//     ],
-//   }).then(function (response) {
-//     // 处理成功情况
-//     console.log("response", response)
-//     console.log(response.data);
 
-//     if (response.data?.success) {
-
-//     }
-//   })
-//   axios({
-//     url: axios.defaults.baseURL + "/doc/upload_document",
-//     method: "post",
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Authorization": User.token
-//     },
-//     data: {
-//       content: JSON.stringify(editor?.value?.getJSON()),
-//       document_name: doc.name,
-//       proj_id: 1,
-//       document_id: doc.id
-//     },
-//     transformRequest: [
-//       function (data, headers) {
-//         let data1 = JSON.stringify(data);
-//         console.log(data1);
-//         return data1;
-//       },
-//     ],
-//   }).then(function (response) {
-//     // 处理成功情况
-//     console.log("response", response)
-//     console.log(response.data);
-
-//     if (response.data?.success) {
-
-//     }
-//   })
-// }
-// window.addEventListener("beforeunload", beforeLeave);
-// onBeforeUnmount(() => {
-//   window.removeEventListener("beforeunload", beforeLeave)
-//   console.log("leave doc!!!!!!")
-//   editor?.value?.destroy()
-//   // provider.destroy()
-//   wsProvider.destroy()
-
-//   console.log("quit!")
-//   if (doc.id == -1) return
-
-//   axios({
-//     url: axios.defaults.baseURL + "/file/quit_document",
-//     method: "post",
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Authorization": User.token
-//     },
-//     data: {
-//       document_id: doc.id
-//     },
-//     transformRequest: [
-//       function (data, headers) {
-//         let data1 = JSON.stringify(data);
-//         console.log(data1);
-//         return data1;
-//       },
-//     ],
-//   }).then(function (response) {
-//     // 处理成功情况
-//     console.log("response", response)
-//     console.log(response.data);
-
-//     if (response.data?.success) {
-
-//     }
-//   })
-//   axios({
-//     url: axios.defaults.baseURL + "/doc/upload_document",
-//     method: "post",
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Authorization": User.token
-//     },
-//     data: {
-//       content: JSON.stringify(editor?.value?.getJSON()),
-//       document_name: doc.name,
-//       proj_id: 1,
-//       document_id: doc.id
-//     },
-//     transformRequest: [
-//       function (data, headers) {
-//         let data1 = JSON.stringify(data);
-//         console.log(data1);
-//         return data1;
-//       },
-//     ],
-//   }).then(function (response) {
-//     // 处理成功情况
-//     console.log("response", response)
-//     console.log(response.data);
-
-//     if (response.data?.success) {
-
-//     }
-//   })
-// })
-const status = ref('connecting')
 const getRandomElement = (list: string | any[]) => {
   return list[Math.floor(Math.random() * list.length)]
 }
@@ -488,6 +491,10 @@ const enterDoc = () => {
   }
   let t = new Y.Doc()
   wsProvider = new WebsocketProvider('wss://demos.yjs.dev', "gwx1-" + doc.name, t)
+  wsProvider.on('status', (event: { status: string }) => {
+    status.value = event.status
+    console.log("status")
+  })
   axios({
     url: axios.defaults.baseURL + "/doc/enter_document",
     method: "post",
@@ -511,7 +518,7 @@ const enterDoc = () => {
     console.log(response.data);
 
     if (response.data?.success) {
-      doc.name = response.data?.document.document_name
+      // doc.name = response.data?.document.document_name
       if (response.data?.rank == 1) {
         editor?.value?.chain()
           .clearContent()

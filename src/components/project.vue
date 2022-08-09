@@ -109,9 +109,7 @@ const form = reactive({
   name: '项目1',
   region: '项目描述',
 })
-const deletProj=()=>{
 
-}
 onBeforeMount(()=>{
     form.region=props.oneProject.proj_info
     form.name=props.oneProject.proj_name

@@ -1,6 +1,8 @@
 <template>
     <div>
-        <n-modal v-model:show="showModal" class="custom-card" preset="card" title=" 请输入文档名字" size="huge"
+        <n-modal v-model:show="showModal" 
+        style="width:500px"
+        class="custom-card" preset="card" title=" 请输入文档名字" size="huge"
             :bordered="false">
             <template #header-extra>
                 取消
@@ -171,6 +173,38 @@ const doc = reactive({
 
 // let provider = new WebrtcProvider('example-document1', ydoc)
 const createDoc = () => {
+    axios({
+        url: axios.defaults.baseURL + "/doc/create_document",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            document_name:createName.value,
+            proj_id: 1,
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                console.log(data1);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("response", response)
+        console.log(response.data);
+        showModal.value=false 
+        
+        if (response.data?.success) {
+            message.success(response.data?.message)
+            getDocs(true)
+            
+        }else{
+            message.error(response.data?.message)
+        }
+    })
 
 }
 let pushN = 0
@@ -303,7 +337,7 @@ const getProjs = () => {
         }
     })
 }
-const getDocs = () => {
+const getDocs = (set=false) => {
     axios({
         url: axios.defaults.baseURL + "/doc/get_proj_documents",
         method: "post",
@@ -333,6 +367,12 @@ const getDocs = () => {
                     value: response.data?.documents[i]?.document_id
                 })
             }
+            if(set){
+                doc.id=response.data?.documents[0]?.document_id
+                doc.name=response.data?.documents[0]?.document_name
+                docValue.value=response.data?.documents[0]?.document_name
+                enterDoc()
+            }
             //   protoLoading.value = false
 
         }
@@ -343,10 +383,7 @@ const getDocs = () => {
 
 // Registered with a WebRTC 
 let roomName = ""
-const createName = () => {
-    roomName += ""
-    // provider
-}
+const createName = ref("")
 
 
 
