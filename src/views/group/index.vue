@@ -280,7 +280,7 @@ const getMembers = (clear: boolean = true) => {
           })
         }
         else{
-           one_group_id = response.data.groups[0].group_id;
+          one_group_id = response.data.groups[0].group_id;//不对，团队是可以切换的！！！
           console.log("one_group_id" + one_group_id);
           axios({
             url: axios.defaults.baseURL + "/group/get_group_members",
