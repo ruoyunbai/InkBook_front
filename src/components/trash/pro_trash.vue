@@ -12,7 +12,7 @@
                 size="large"
                 color="#DADADA"
                 ghost
-                @click="move_out()"
+                @click="recover_proj()"
             >
                 <template #icon>
                     <n-image preview-disabled src="svg\project_svg\toDetail.svg">
@@ -83,6 +83,11 @@ const Project = useProjectStore();
 const move_proj_to_bin = () =>{
   Project.proj_id=props.oneProject.proj_id;
   Project.operation="delete_proj";
+}
+
+const recover_proj = () =>{
+  Project.proj_id=props.oneProject.proj_id;
+  Project.operation="recover_proj";
 }
 
 type Props = {
