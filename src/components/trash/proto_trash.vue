@@ -14,12 +14,14 @@
         />
       </n-gi>
       <n-gi span="8">
-        <div display="inline">{{ props.oneUML.uml_name }}</div>
+        <div display="inline">
+          {{ props.oneProto.ppage_name }}
+        </div>
       </n-gi>
       <n-gi span="1">
         <n-image
           preview-disabled
-          @click="recoverUML"
+          @click="recoverProto"
           width="20"
           src="svg\trash_svg\recover_file.svg"
         />
@@ -41,9 +43,9 @@
               <Delete />
             </el-icon>
           </template>
-          确定要永久删除UML图吗？
+          确定要永久删除原型页面吗？
           <template #action>
-            <n-button size="small" @click="move_uml_from_bin()">
+            <n-button size="small" @click="move_proto_from_bin()">
               确定
             </n-button>
           </template>
@@ -65,34 +67,34 @@ import {
   Star,
 } from "@element-plus/icons-vue";
 import { onBeforeMount, reactive, ref } from "vue";
-import { useUmlStore } from "../../store/Uml";
+import { usePrototypeStore } from "../../store/prototype";
 import router from "../../router";
 
 const dialogEditVisible = ref(false);
 const formLabelWidth = "140px";
-const UML = useUmlStore();
+const Proto = usePrototypeStore();
 
 const file = reactive({
-  name: "UML图",
+  name: "设计原型页面",
 });
 
 onBeforeMount(() => {
-  file.name = props.oneUML.uml_name;
-  console.log(props.oneUML);
+  file.name = props.oneProto.ppage_name;
+  console.log(props.oneProto);
 });
 
-const recoverUML = () => {
-  UML.uml_id = props.oneUML.uml_id;
-  UML.operation = "recover";
+const recoverProto = () => {
+  Proto.ppage_id = props.oneProto.ppage_id;
+  Proto.operation = "recover";
 };
 
-const move_uml_from_bin = () => {
-  UML.uml_id = props.oneUML.uml_id;
-  UML.operation = "delete_complete";
+const move_proto_from_bin = () => {
+  Proto.ppage_id = props.oneProto.ppage_id;
+  Proto.operation = "delete_complete";
 };
 
 type Props = {
-  oneUML?: {
+  oneProto?: {
     name?: string;
     time?: number;
     tags?: string[];
@@ -112,7 +114,7 @@ type Props = {
   };
 };
 const props: any = withDefaults(defineProps<Props>(), {
-  oneUML: () => {
+  oneProto: () => {
     return {
       name: "123",
       time: 0,
@@ -146,7 +148,6 @@ const props: any = withDefaults(defineProps<Props>(), {
 
   height: 45px;
   width: 100%;
-
   margin-bottom: 10px;
 }
 </style>

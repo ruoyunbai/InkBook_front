@@ -14,12 +14,14 @@
         />
       </n-gi>
       <n-gi span="8">
-        <div display="inline">{{ props.oneUML.uml_name }}</div>
+        <!-- <router-link to="/document" style="text-decoration: none; color: black"> -->
+        <div display="inline">{{ props.oneDoc.document_name }}</div>
+        <!-- </router-link> -->
       </n-gi>
       <n-gi span="1">
         <n-image
           preview-disabled
-          @click="recoverUML"
+          @click="recoverDoc"
           width="20"
           src="svg\trash_svg\recover_file.svg"
         />
@@ -41,9 +43,9 @@
               <Delete />
             </el-icon>
           </template>
-          确定要永久删除UML图吗？
+          确定要永久删除文档吗？
           <template #action>
-            <n-button size="small" @click="move_uml_from_bin()">
+            <n-button size="small" @click="move_doc_from_bin()">
               确定
             </n-button>
           </template>
@@ -51,7 +53,6 @@
       </n-gi>
     </n-grid>
   </div>
-
 </template>
 
 <script lang="ts" setup>
@@ -65,34 +66,34 @@ import {
   Star,
 } from "@element-plus/icons-vue";
 import { onBeforeMount, reactive, ref } from "vue";
-import { useUmlStore } from "../../store/Uml";
+import { useDocumentStore } from "../../store/Document";
 import router from "../../router";
 
 const dialogEditVisible = ref(false);
 const formLabelWidth = "140px";
-const UML = useUmlStore();
+const Doc = useDocumentStore();
 
 const file = reactive({
-  name: "UML图",
+  name: "文档",
 });
 
 onBeforeMount(() => {
-  file.name = props.oneUML.uml_name;
-  console.log(props.oneUML);
+  file.name = props.oneDoc.document_name;
+  console.log(props.oneDoc);
 });
 
-const recoverUML = () => {
-  UML.uml_id = props.oneUML.uml_id;
-  UML.operation = "recover";
+const recoverDoc = () => {
+  Doc.document_id = props.oneDoc.document_id;
+  Doc.operation = "recover";
 };
 
-const move_uml_from_bin = () => {
-  UML.uml_id = props.oneUML.uml_id;
-  UML.operation = "delete_complete";
+const move_doc_from_bin = () => {
+  Doc.document_id = props.oneDoc.document_id;
+  Doc.operation = "delete_complete";
 };
 
 type Props = {
-  oneUML?: {
+  oneDoc?: {
     name?: string;
     time?: number;
     tags?: string[];
@@ -112,7 +113,7 @@ type Props = {
   };
 };
 const props: any = withDefaults(defineProps<Props>(), {
-  oneUML: () => {
+  oneDoc: () => {
     return {
       name: "123",
       time: 0,
