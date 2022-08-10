@@ -333,6 +333,7 @@ import { useDialog, NInput } from "naive-ui";
 import axios from "axios";
 import { useProjectStore } from "../../store/Project";
 import { useUserStore } from "../../store/User";
+import { useGroupStore } from '../../store/Group'
 import { InputInst, useMessage,NGrid,NSpace } from "naive-ui";
 
 let text1: Ref<string> = ref("");
@@ -340,6 +341,7 @@ const searched=ref(false)
 const Project = useProjectStore();
 const User = useUserStore();
 const message = useMessage();
+const Group = useGroupStore();
 const input=ref("")
 //对话框
 const dialogCreateVisible = ref(false)
@@ -378,7 +380,7 @@ const show = (order1: string,clear: boolean = true) => {
           "Authorization": User.token
         },
         data: {
-          group_id: one_group_id,
+          group_id: Group.id,
           is_desc: desc_flag,
           order_by: sort_flag
         },
@@ -444,7 +446,7 @@ const show2 = (order1: string,clear: boolean = true) => {
           "Authorization": User.token
         },
         data: {
-          group_id: one_group_id,
+          group_id: Group.id,
           is_desc: desc_flag,
           order_by: sort_flag
         },
@@ -510,7 +512,7 @@ const show3 = (order1: string,clear: boolean = true) => {
           "Authorization": User.token
         },
         data: {
-          group_id: one_group_id,
+          group_id: Group.id,
           is_desc: desc_flag,
           order_by: sort_flag
         },
@@ -648,6 +650,8 @@ Project.$subscribe((mutation, state)=>{
         ],
       }).then(function (response) {
         // 处理成功情况
+        console.log("!!!!!"+Project.proj_info)
+        console.log("!!!!!"+Project.proj_name)
         console.log("!!!!!! "+Project.top);
         console.log("!!!!!! "+ response);
         getProject();
@@ -752,7 +756,7 @@ const getProject = (clear: boolean = true) => {
           "Authorization": User.token
         },
         data: {
-          group_id: one_group_id,
+          group_id: Group.id,
           is_desc: true,
           order_by: 1
         },
@@ -834,7 +838,7 @@ const getCreProject = (clear: boolean = true) => {
           "Authorization": User.token
         },
         data: {
-          group_id: one_group_id,
+          group_id: Group.id,
           is_desc: true,
           order_by: 1
         },
@@ -918,7 +922,7 @@ const getInvProject = (clear: boolean = true) => {
           "Authorization": User.token
         },
         data: {
-          group_id: one_group_id,
+          group_id: Group.id,
           is_desc: true,
           order_by: 1
         },
@@ -976,7 +980,7 @@ const project_create = () => {
       "Authorization": User.token
     },
     data: {
-      group_id: one_group_id,
+      group_id: Group.id,
       proj_info: form.region,
       proj_name: form.name,
       top: 1

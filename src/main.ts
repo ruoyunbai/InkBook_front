@@ -68,8 +68,9 @@ store.use(piniaPlugin({
   key:"sebbs"
 }))
 
-axios.defaults.baseURL = 'https://inkbook.mina.moe/api/v1';
-// axios.defaults.baseURL = 'http://43.138.77.133:8889/api/v1';
+// axios.defaults.baseURL = 'https://inkbook.mina.moe/api/v1';
+axios.defaults.baseURL = 'http://43.138.77.133:8889/api/v1';
+
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers.post['Content-Type']="application/json"
@@ -83,7 +84,7 @@ axios.defaults.headers.post['Content-Type']="application/json"
 axios.defaults.transformRequest=[
   function (data, headers) {
     let data1 = JSON.stringify(data);
-    
+
     return data1;
   },
 ]

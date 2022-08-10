@@ -154,11 +154,12 @@ import Bar from "../../components/member.vue";
 import axios from "axios";
 import { useMemberStore } from "../../store/Member";
 import { useUserStore } from "../../store/User";
+import { useGroupStore } from '../../store/Group'
 import { useDialog,InputInst, useMessage } from "naive-ui";
 import { useRouter } from "vue-router"
 
 const router = useRouter();
-
+const Group = useGroupStore();
 const Member = useMemberStore();
 const message = useMessage();
 const User = useUserStore();
@@ -185,7 +186,7 @@ const invite_member = () =>{
       "Authorization": User.token
     },
     data: {
-      group_id: one_group_id,
+      group_id: Group.id,
       username: form.name
     },
     transformRequest: [
@@ -224,7 +225,7 @@ Member.$subscribe((mutation, state)=>{
           "Authorization": User.token
         },
         data: {
-          group_id: one_group_id,
+          group_id: Group.id,
           user_id: Member.user_id
         },
         transformRequest: [
@@ -276,7 +277,7 @@ Member.$subscribe((mutation, state)=>{
           "Authorization": User.token
         },
         data: {
-          group_id: one_group_id,
+          group_id: Group.id,
           status: 1,
           user_id: Member.user_id
         },
@@ -344,7 +345,7 @@ const getMembers = (clear: boolean = true) => {
               "Authorization": User.token
             },
             data: {
-              group_id: one_group_id,
+              group_id: Group.id,
             },
             transformRequest: [
               function (data, headers) {
