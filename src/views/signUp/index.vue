@@ -203,6 +203,7 @@ const handleValidateButtonClick = (e: MouseEvent) => {
         data: {
               username:modelRef.value.name,
               password:modelRef.value.password,
+              email:modelRef.value.email,
         },
         transformRequest: [
           function (data, headers) {

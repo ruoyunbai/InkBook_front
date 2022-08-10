@@ -8,7 +8,9 @@ export const useMsgStore = defineStore( Names.Msg,{
         return {
             opt:"",
             Dopt:"",
-            Iopt:""
+            DMname:"",
+            Iopt:"",
+            
         }
     },
     // getters:{

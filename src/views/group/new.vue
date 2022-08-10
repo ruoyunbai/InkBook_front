@@ -13,7 +13,7 @@
             label-placement="left"
             label-width="auto"
             require-mark-placement="right-hanging"
-            :size="small"
+            size="small"
             :style="{
       maxWidth: '400px'
     }"

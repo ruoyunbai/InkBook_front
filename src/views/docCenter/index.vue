@@ -308,6 +308,7 @@ const endAddDoc=(data:Tree)=>{
         isProj:data.isProj,
         level:data.level+1,
         isRoot:false,
+        show:false,
         id:-1, label: newDocName.value, children: [], isDir: false }
     if (!data.children) {
         data.children = []
@@ -357,6 +358,7 @@ const endAddDir=(data:Tree)=>{
         isProj:data.isProj,
         level:data.level+1,
         isRoot:false,
+        show:false,
         id:-1, label: newDirName.value, children: [], isDir: true }
     if (!data.children) {
         data.children = []

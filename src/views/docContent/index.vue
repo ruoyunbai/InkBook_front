@@ -149,6 +149,8 @@ import { saveAs } from 'file-saver'
 import ImageModule from 'docxtemplater-image-module-free'
 import html2canvas from "html2canvas"
 import JsPDF from "jspdf";
+import { tsTypeParameterDeclaration } from '@babel/types'
+import { loadSVGFromString } from 'fabric/fabric-impl'
 const editorRef=ref()
 const Msg=useMsgStore()
 const router = useRouter()
@@ -166,7 +168,6 @@ const showModal = ref(false)
 // const ProjNotChosed=ref(true)
 const ProjNotChosed = ref(false)
 const route = useRoute()
-
 const doc = reactive({
   id: -1,
   name: "room"
@@ -174,141 +175,118 @@ const doc = reactive({
 )
 const status = ref('connecting')
 let ydoc = new Y.Doc()
-// let provider = new WebrtcProvider('example-document1', ydoc)
+
 Msg.$subscribe(()=>{
   if(Msg.Dopt=="word"){
     console.log("word")
     Msg.Dopt=""
     let html=outHTML()
-    console.log(html)
+    outDoc(html)
     // const blob = new Blob([html], { type: 'application/msword;charset=utf-8' })
     // FileSaver.saveAs(blob, "my" + '.doc')
     // toImage()
     // printOut()
+    //  editor?.value?.chain()
+    //         .clearContent()
+    //         .focus()
+    //         .toggleBold()
+    //         .setContent(tt).run()
       //   let converted = htmlDocx.asBlob(html);
       // FileSaver.saveAs(converted, '文件名.docx');
   }
+  if(Msg.Dopt=="load"){
+    Msg.Dopt=""
+    let modelName=Msg.DMname
+    loadModel(modelName)
+  }
+  if(Msg.Dopt=="pdf"){
+    console.log("pdf")
+    Msg.Dopt=""
+    let html=outHTML()
+    outPdf(html)
+  }
 })
-const printOut=()=> {
-      let DomName = editorRef.value
-      console.log("正在帮您导出......");
-        window.pageYOffset = 0; // 滚动置顶
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      //title，随意设置，也可以提出来做参数，传入进来，自己发挥
-      var title = "测试啊"; // 导出名字
-      var shareContent = DomName; //需要截图的包裹的（原生的）DOM 对象
-      //打印看有没有获取到dom
-      console.log(shareContent);
-      var width = shareContent.offsetWidth; //获取dom 宽度
-      var height = shareContent.offsetHeight; //获取dom 高度
-      var canvas = document.createElement("canvas"); //创建一个canvas节点
-      var scale = 2; //定义任意放大倍数 支持小数
-      canvas.width = width * scale; //定义canvas 宽度 * 缩放，在此我是把canvas放大了2倍
-      canvas.height = height * scale; //定义canvas高度 *缩放
-      if(canvas!=null&&canvas.getContext("2d")!=null)
-      canvas.getContext("2d").scale(scale, scale); //获取context,设置scale
-      html2canvas(DomName, {
-        //允许跨域图片的加载
-        useCORS: true,
-     //将分辨率提高到特定的DPI 提高四倍
-        // scale: 2, //按比例增加分辨率
-      }).then((canvas: { getContext: (arg0: string) => any; toDataURL: (arg0: string, arg1: number) => any })=>{
-        var context = canvas.getContext("2d");
-        // 【重要】关闭抗锯齿
-        context.mozImageSmoothingEnabled = false;
-        context.webkitImageSmoothingEnabled = false;
-        context.msImageSmoothingEnabled = false;
-        context.imageSmoothingEnabled = false;
-        var imgData = canvas.toDataURL("image/", 1.0); //转化成base64格式,可上网了解此格式
-        var img = new Image();
-        img.src = imgData;
-        img.onload = function() {
-          img.width = img.width / 2; //因为在上面放大了2倍，生成image之后要/2
-          img.height = img.height / 2;
-          img.style.transform = "scale(0.5)";
-          if (width >height) {
-            //此可以根据打印的大小进行自动调节
-            var doc = new JsPDF("l", "mm", [
-             width * 0.555,
-              height * 0.555
-            ]);
-          } else {
-            var doc = new JsPDF("p", "mm", [
-              width * 0.555,
-              height * 0.555
-            ]);
-          }
-          doc.addImage(
-            imgData,
-            "jpeg",
-            10,
-            0,
-           width * 0.505,
-            height * 0.545
-          );
-          doc.save(title + "-文件.pdf");
-          console.log("倒数3秒导出啦");
-        };
-      });
+const loadModel=(name:string)=>{
+  axios({
+    url: 'http://127.0.0.1:3000/json/'+name+'.json',
+    method: "get",
+    headers: {
+      "Content-Type": "application/json",
+    } 
+  }).then(function (response) {
+    console.log("res",response)
+            editor?.value?.chain()
+            .clearContent()
+            .focus()
+            .toggleBold()
+            .setContent(response.data).run() 
     }
+  )
+}
+const outDoc=(str:string)=>{
+  axios({
+        url: axios.defaults.baseURL + "/convert_html_to_docx",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          content:str
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("responseContent", response.data)
+        // console.log(response.data);
+        window.open("https://inkbook.mina.moe/media/temp/"+response.data.url)
+        if (response.data?.success) {
+          // doc.name = response.data?.document.document_name
+           
+          
+        }
+      })
+}
+const outPdf=(str:string)=>{
+  axios({
+        url: axios.defaults.baseURL + "/convert_html_to_pdf",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          content:str
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("responseContent", response.data)
+        // console.log(response.data);
+        window.open("https://inkbook.mina.moe/media/temp/"+response.data.url)
+        if (response.data?.success) {
+          // doc.name = response.data?.document.document_name
+           
+          
+        }
+      })
+}
+
 
 const outHTML=()=>{
  return editor.value.getHTML()
 }
-// const toImage= ()=> {
-//             // 手动创建一个 canvas 标签
-//             const canvas = document.createElement("canvas")
-//             // 获取父标签，意思是这个标签内的 DOM 元素生成图片
-//             // imageTofile是给截图范围内的父级元素自定义的ref名称
-//             let canvasBox = editorRef.value.offsetHeight
-//             // 获取父级的宽高
-//             const width =editorRef.value.offsetWidth
-//             const height = editorRef.value.offsetHeight
-//             // 宽高 * 2 并放大 2 倍 是为了防止图片模糊
-//             canvas.width = width * 2
-//             canvas.height = height * 2
-//             canvas.style.width = width + 'px'
-//             canvas.style.height = height + 'px'
-//             const context = canvas.getContext("2d");
-//             if(context!=null)
-//             context.scale(2, 2);
-//             const options = {
-//                 backgroundColor: null,
-//                 canvas: canvas,
-//                 useCORS: true
-//             }
-//             html2canvas(canvasBox, options).then((canvas) => {
-//                 // toDataURL 图片格式转成 base64
-//                 let dataURL = canvas.toDataURL("image/png")
-//                 console.log(dataURL)
-//                 downloadImage(dataURL)
-//             })
-//         }
-//         //下载图片
-//      const   downloadImage=(url: string) =>{
-//             // 如果是在网页中可以直接创建一个 a 标签直接下载 
-//             let a = document.createElement('a')
-//             a.href = url
-//             a.download = '首页截图'
-//             a.click()
-//         }
 
-// provider.on('status', (event: { status: any }) => {
-//     status.value = event.status
-//     console.log("status", event.status)
-// });
-// provider.on('synced', (synced: any) => {
-//     // NOTE: This is only called when a different browser connects to this client
-//     // Windows of the same browser communicate directly with each other
-//     // Although this behavior might be subject to change.
-//     // It is better not to expect a synced event when using y-webrtc
-//     console.log('synced!', synced)
-// })
-// const providerw = new HocuspocusProvider({
-//   url: 'ws://121.40.165.18:8800',
-//   name: '',
-// })
 let wsProvider: any
 let editor: any
 console.log("params", route.params)
@@ -595,8 +573,9 @@ const saveDesign = () => {
 onMounted(() => {
 
 })
+let tt=""
 onBeforeMount(() => {
-
+   
 })
 
 
@@ -745,6 +724,7 @@ const enterDoc = (clear: boolean = false) => {
         }
 
     }
+    
   })
   status.value = "connected"
 }

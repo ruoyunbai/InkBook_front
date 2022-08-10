@@ -17,7 +17,7 @@
                 <n-gi span="3">
                     <n-image preview-disabled src="svg\doc\形状 (1).svg"></n-image>
                 </n-gi>
-                <n-gi span="10">
+                <n-gi span="13">
                     <div style="font-family: 'Roboto';
 font-style: normal;
 font-weight: 700;
@@ -25,7 +25,7 @@ font-size: 32px;
 line-height: 34px;
             color: #000000;">多人文档</div>
                 </n-gi>
-                <n-gi span="10"></n-gi>
+                <n-gi span="8"></n-gi>
                 <n-gi span="15">
                     <n-space vertical>
                         <n-select v-model:value="projvalue" :options="projoptions" remote :loading="projLoading"
@@ -54,8 +54,8 @@ line-height: 34px;
                 <n-gi span="1"></n-gi>
                 <n-gi span="10">
                      <n-space vertical>
-                            <n-select v-model:value="docValue" :options="options"  :loading="Modelloading"
-                                placeholder="更多模板" @update:value="enterDoc" class="choose selectP" />
+                            <n-select v-model:value="modelValue" :options="modelOptions"  :loading="Modelloading"
+                                placeholder="更多模板" @update:value="importModel" class="choose selectP" />
                     </n-space>
                 </n-gi>
                 <n-gi span="1">
@@ -63,12 +63,12 @@ line-height: 34px;
 
                     <n-gi span="10">
                         <n-space vertical>
-                            <n-select v-model:value="outMethod" :options="outOptions" :loading="outputing"
+                            <!-- :loading="outputing" -->
+                            <n-select v-model:value="outMethod" :options="outOptions" 
                                 placeholder="导出文档" @update:value="output" class="choose selectP" />
                         </n-space>
                       
                     </n-gi>
-
 
             </n-grid>
 
@@ -189,28 +189,55 @@ const Group = useGroupStore()
 const User = useUserStore()
 const options = ref<SelectOption[]>([])
 const outMethod=ref("")
+const modelOptions:SelectOption[]=[
+    {
+        label:"会议纪要",
+        value:"会议纪要"
+    },
+    {
+        label:"项目规划",
+        value:"项目规划"
+    },
+    {
+        label:"需求文档",
+        value:"需求文档"
+    },
+]
+const modelValue=ref(null)
 const outOptions = ref<SelectOption[]>([])
 const projoptions = ref<SelectOption[]>([])
 const docChosed = ref(false)
 const docId = ref(-1)
 const docValue = ref(null)
-const projvalue = ref(null)
+const projvalue = ref()
 const projLoading = ref(true)
 const showModal = ref(false)
 // const ProjNotChosed=ref(true)
 const ProjNotChosed = ref(false)
+
 outOptions.value.push({
     label:"word",
     value:1
 })
+outOptions.value.push({
+    label:"pdf",
+    value:2
+})
 const output=()=>{
+
     console.log(outMethod.value)
     if(Number(outMethod.value)==1){
         Msg.Dopt="word"
         // console.log("yes")
+    }else{
+        Msg.Dopt="pdf"
     }
+    outMethod.value="导出文档"
 }
-
+const importModel=()=>{
+    Msg.DMname=String(modelValue.value)
+    Msg.Dopt="load"
+}
 const doc = reactive({
     id: -1,
     name: ""
