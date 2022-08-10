@@ -109,7 +109,6 @@ const get_info = () =>{
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        
         return data1;
       },
     ],

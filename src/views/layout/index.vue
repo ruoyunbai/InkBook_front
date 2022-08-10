@@ -47,7 +47,7 @@ border-radius: 30px 0px 0px 0px;" v-model:show="Dactive" :width="502" placement=
                             enter-active-class="animate__animated animate__swing">
 
                             <n-image width=56 preview-disabled height="56" style="margin:32px 0px 0px 0px"
-                                @click="() => { router.push('/personalInfo') }" :src=avatar />
+                                @click="toPerson" :src=avatar />
 
                         </transition>
                     </div>
@@ -114,6 +114,12 @@ import { useMsgStore } from "../../store/Msg";
 import { ElLoadingService } from 'element-plus';
 const Msg=useMsgStore()
 const lingSrc=ref("svg\\主页svg\\notification.svg")
+const toPerson=() => { router.push({
+                                    name:'PersonalInfo',
+                                    params: {
+                                        user_id:User.Id
+                                    }
+    })}
 Msg.$subscribe(()=>{
     if(Msg.opt=="change"){
         Msg.opt=""
@@ -150,7 +156,7 @@ const menuOptions: MenuOption[] = reactive([
                     to: {
                         path: '/group',
                         // params: {
-                        //     lang: 'zh-CN'
+                        //     user_id:User.id
                         // }
                     }
                 },

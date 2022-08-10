@@ -28,50 +28,56 @@
     </div>
     <div class="center_mid">
         <div class="center_edit">
-             <router-view></router-view>
+            <router-view></router-view>
         </div>
         <div class="center_menu">
             <n-space vertical :size="12">
                 <div class="custom-tree-container">
-             
-                    <el-tree 
-                    
-                    highlight-current="true"
-                    @node-click="enterDoc"
-                    draggable :data="dataSource" node-key="id" default-expand-all
-                        :expand-on-click-node="false">
+
+                    <el-tree highlight-current="true" @node-click="enterDoc" draggable :data="dataSource" node-key="id"
+                        default-expand-all :expand-on-click-node="false">
                         <template #default="{ node, data }">
                             <span class="custom-tree-node">
                                 <!-- <n-space> -->
-                                <n-image v-if="!data.isDir" preview-disabled
-                                src="svg\doc\documents.svg"
-                                style="padding:0;margin:0"
-                                ></n-image>
-                                <n-image v-if="data.isDir" preview-disabled
-                                src="svg\doc\doc.svg"
-                                style="padding:0;margin:0"
-                                ></n-image>
-                               <span
-                               style="padding:0;margin:0;position:relative;"> {{ node.label }}</span>
-                                <n-input  @blur="" v-if="data.inputingDir" size="small">12</n-input>
-                                
+                                    <div>
+                                       
+                                <n-image v-if="!data.isDir" preview-disabled src="svg\doc\documents.svg"
+                                    style="padding:0;margin:0"></n-image>
+
+                                <n-image v-if="data.isDir" preview-disabled src="svg\doc\doc.svg"
+                                    style="padding:0;margin:0"></n-image>
+                                    </div>
+                                    
+                                <span style="padding:0;margin:0;position:relative;"> {{ node.label }}</span>
+                                <n-input @blur="" v-if="data.renaming" size="small"></n-input>
+
                                 <!-- <span>{{ node.id }}</span> -->
                                 <!-- <span>{{data}}</span> -->
-                                <span v-if="data.label!='项目文档区'">
-                                    <a v-if="data.isDir&&!data.inputingDir"  @click="appendDir(data)"> 添加文件夹 </a>
-                                    <n-input  @blur="" v-if="data.inputingDir" size="small">12</n-input>
-                                    
-                                    <a v-if="data.isDir&&!data.inputingDoc" @click="appendDoc(data)"> 添加文档 </a>
-                                    <n-input  @blur="" v-if="data.inputingDoc" size="small">12</n-input>
-                                    
-                                    <a v-if="data.isDir&&!data.inputingDoc" @click="appendDoc(data)"> 改名 </a>
-                
-                                    <a style="margin-left: 8px" @click="remove(node, data)"> Delete </a>
-                                   
-                </span>
+                                <span>
+                                <!-- 添加文件夹 -->
+                                    <n-image preview-disabled v-if="!data.inputingDir&&!(data.isProj)&&data.isDir" @click="appendDir(data)"
+                                        src="svg\doc\dir+.svg"></n-image>
+                                    <n-input v-model:value="newDirName"  @blur="endAddDir(data)" v-if="data.inputingDir" size="small"></n-input>
+                               
+                               <!-- 添加文件 -->
+                                    <n-image preview-disabled v-if="data.isDir && !data.inputingDoc" @click="appendDoc(data)"
+                                        src="svg\doc\doc+.svg"></n-image>
+                                    <n-input @blur="" v-if="data.inputingDoc" size="small"></n-input>
+                               
+                               <!-- rename -->
+                                    <n-image preview-disabled v-if="!(data.isProj&&data.isDir&&(data.level==1||data.level==2))&&!data.isRoot" @click="appendDoc(data)"
+                                        src="svg\doc\rename.svg"></n-image>
+
+                                <!-- delete -->
+                                    <n-image preview-disabled  @click="remove(node, data)"
+                                    v-if="!(data.isProj&&data.isDir&&(data.level==1||data.level==2))&&!data.isRoot"
+                                    width="20"
+                                        src="svg\group_svg\trash.svg"></n-image>
+
+                                </span>
 
                                 <!-- </n-space> -->
-                           </span>
+                            </span>
                         </template>
                     </el-tree>
                 </div>
@@ -129,37 +135,44 @@ color: #000000;">团队文档中心</div>
 import { reactive, ref, onMounted, onBeforeMount } from 'vue'
 import type Node from 'element-plus/es/components/tree/src/model/node'
 import axios from 'axios'
-import {useUserStore} from  '../../store/User'
-import {useGroupStore} from '../../store/Group'
+import { useUserStore } from '../../store/User'
+import { useGroupStore } from '../../store/Group'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
-const route=useRoute()
-const router=useRouter()
+const route = useRoute()
+const router = useRouter()
 
-const User=useUserStore()
-const Group=useGroupStore()
+const User = useUserStore()
+const Group = useGroupStore()
 const showModal = ref(false)
 const createName = ref("")
+const newDirName=ref("")
 interface Tree {
     id: number
     name?: string
     label: string
     type1?: string
-    children?: Tree[]|null|undefined
-    isDir:boolean
-    inputingDir?:boolean
-    inputingDoc?:boolean
-    renaming?:boolean
+    children?: Tree[] | null | undefined
+    isDir: boolean
+    inputingDir?: boolean
+    inputingDoc?: boolean
+    renaming?: boolean
+    isProj?:boolean
+    isRoot?:boolean
+    level:number
 }
 let id = 1000
-const doc={
-    id:-1,
-    name:""
+let doc = {
+    id: -1,
+    name: ""
 }
-const enterDoc=(tar: { id: number; label: string },node: any,event: any)=>{
-    console.log(tar,node,event)
-    doc.id=tar.id
-    doc.name=tar.label
+const enterDoc = (tar: { isDir: any; id: number; label: string }, node: any, event: any) => {
+    console.log(tar, node, event)
+    if (tar.isDir) return
+    if (doc.id == tar.id) return
+
+    doc.id = tar.id
+    doc.name = tar.label
     if (route.name === "docCContent") {
         router.push({
             name: "docCContent0",
@@ -182,7 +195,7 @@ onBeforeMount(() => {
             "Authorization": User.token
         },
         data: {
-            group_id:Group.id
+            group_id: Group.id
         },
         transformRequest: [
             function (data, headers) {
@@ -194,60 +207,84 @@ onBeforeMount(() => {
         // 处理成功情况
         console.log("responseDoc", response.data)
         if (response.data?.success) {
-               let d=response.data
-               let root=d.file
-                console.log("root",root)
-                let t=createTree(root)
-                console.log(t)
-                dataSource.value.push(t)
+            let d = response.data
+            let root = d.file
+            console.log("root", root)
+            let t = createTree(root)
+            console.log(t)
+            t.isRoot=true
+            dataSource.value.push(t)
         }
     })
 })
-const createTree=(src:any)=>{
-    let t:Tree={
-        id:-1,
-        label:"",
-        name:"tre",
-        children:null,
-        isDir:false
+const createTree = (src: any,isProj=false,level=0) => {
+    let t: Tree = {
+        id: -1,
+        label: "",
+        name: "tre",
+        children: null,
+        isDir: false,
+        level:0
     }
-    t.id=src.file_id
-    t.label=src.file_name
-    t.isDir=src.is_dir==1?true:false
-    t.inputingDir=false
-    t.inputingDoc=false
-    t.renaming=false
-    if(src!=null){
-        t.children=[]
-        if(src.contained_files!=null)
-        for(let i=0;i<src.contained_files?.length;i++){
-            // console.log("contained",src.contained_files[i])
-            // console.log(createTree(src.contained_files[i]))
-            t.children.push(createTree(src.contained_files[i]))
-            // t.children.push(undefined)
-        }
+    t.id = src.file_id
+    t.label = src.file_name
+    t.isDir = src.is_dir == 1 ? true : false
+    t.inputingDir = false
+    t.inputingDoc = false
+    t.renaming = false
+    t.isProj=false
+    t.isRoot=false
+    t.level=level
+    let tis=false
+    if(src.file_name=="项目文档区"||isProj)
+    {
+        t.isProj=true
+        tis=true
+    }
+    if (src != null) {
+        t.children = []
+        if (src.contained_files != null)
+            for (let i = 0; i < src.contained_files?.length; i++) {
+                // console.log("contained",src.contained_files[i])
+                // console.log(createTree(src.contained_files[i]))
+                
+                t.children.push(createTree(src.contained_files[i],tis,level+1))
+                // t.children.push(undefined)
+            }
     }
     return t
 }
 
 const appendDoc = (data: Tree) => {
 
-    const newChild = { id: id++, label: 'new', children: [],isDir:false }
+    const newChild = { id: id++, label: 'new', children: [], isDir: false }
     if (!data.children) {
         data.children = []
     }
     data.children.push(newChild)
-   
+
+    dataSource.value = [...dataSource.value]
+}
+
+const endAddDir=(data:Tree)=>{
+    data.inputingDir=false
+        const newChild = { 
+        inputingDir:false,inputingDoc:false,renaming:false,
+        isProj:data.isProj,
+        level:data.level+1,
+        isRoot:false,
+        id: id++, label: newDirName.value, children: [], isDir: true }
+
+    if (!data.children) {
+        data.children = []
+    }
+    newDirName.value=""
+    data.children.push(newChild)
     dataSource.value = [...dataSource.value]
 }
 const appendDir = (data: Tree) => {
-    const newChild = { id: id++, label: 'new', children: [],isDir:true }
-    if (!data.children) {
-        data.children = []
-    }
-    data.children.push(newChild)
-     data.inputingDir=true
-    dataSource.value = [...dataSource.value]
+    data.inputingDir = true
+    
 }
 
 const remove = (node: Node, data: Tree) => {
@@ -269,7 +306,7 @@ const dataSource = ref<Tree[]>([])
     flex: 1;
     display: flex;
     align-items: center;
-    /* justify-content: space-between; */
+    justify-content: space-between;
     font-size: 14px;
     padding-right: 8px;
 }
