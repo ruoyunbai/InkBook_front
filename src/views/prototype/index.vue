@@ -276,7 +276,7 @@ const getPPages = (set:boolean=false) => {
       }
       
       if(set){
-        pageId.value=optionsPage.value[optionsPage.value.length-1].value
+        pageId.value=optionsPage.value[0].value
       }
     }
     pageNotChosed.value = false
@@ -432,7 +432,7 @@ const createDesign = () => {
       design: design
     }
     createJson(JSON.stringify(t))
-  
+
     // console.log(JSON.stringify(design))
     // a=design
   });

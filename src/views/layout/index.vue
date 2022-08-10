@@ -41,7 +41,7 @@ border-radius: 30px 0px 0px 0px;" v-model:show="Dactive" :width="502" placement=
                 <n-space vertical>
                     <div style="height:75px">
                       <p style="position:absolute; margin-top: 17px; margin-left: 113px; z-index: 5;"
-                         @click="openDrawer"><n-image src="svg\主页svg\notification.svg" preview-disabled style=" height: 30px; width: 25px"/></p>
+                         @click="openDrawer"><n-image :src=lingSrc preview-disabled style=" height: 30px; width: 25px"/></p>
                         <transition @mouseenter="MouseOnUser" @mouseleave="MouseLeaveUser"
                             apear-active-class="animate__animated animate__swing"
                             enter-active-class="animate__animated animate__swing">
@@ -111,7 +111,9 @@ import { SelectProps } from 'element-plus/es/components/select-v2/src/defaults';
 import { SelectMixedOption } from 'naive-ui/lib/select/src/interface';
 import userMessage from '../../components/message/index.vue'
 import { useMsgStore } from "../../store/Msg";
+import { ElLoadingService } from 'element-plus';
 const Msg=useMsgStore()
+const lingSrc=ref("svg\\主页svg\\notification.svg")
 Msg.$subscribe(()=>{
     if(Msg.opt=="change"){
         Msg.opt=""
@@ -319,6 +321,55 @@ const MouseOnUser = () => {
     avatar.value = "svg\\主页svg\\Home.svg"
 }
 const openDrawer = () => {
+    axios({
+        url: axios.defaults.baseURL + "/user/read_all_messages",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("response", response)
+        console.log(response.data);
+
+        if (response.data?.success) {
+            let d = response.data?.groups
+            for (let i = 0; i < response.data?.count; i++) {
+                groupOptions.push({
+                    label: d[i].group_name,
+                    key: d[i].group_id,
+                    value: d[i].group_id,
+                    type: null
+
+                })
+
+                if (Group.id != -1 && Group.id != null) {
+
+                    if (Group.id == d[i].group_id) {
+                        groupValue.value = d[i].group_name
+                        console.log("yyyyy")
+                    }
+                }
+
+            }
+            loading.value = false
+            if (Group.id == -1 || Group.id == null) {
+                groupValue.value = d[0].group_name
+                Group.id = d[0].group_id
+            }
+        }
+    })
+    lingSrc.value="svg\\主页svg\\notification.svg"
     Dactive.value = true
     let x: HTMLElement = <HTMLElement>document.body.parentNode;
     if (x != null) {
@@ -419,10 +470,15 @@ const getMsgs=()=>{
         console.log(response.data);
         while(msgs.length!=0)msgs.pop()
         if (response.data?.success) {
+            if(response.data?.count!=0){
+               
+            }
             let d = response.data?.messages
             for (let i = 0; i < response.data?.count; i++) {
                 msgs.push(d[i])
+                if(d[i].status==0)lingSrc.value="svg\\主页svg\\notificationRed.svg"
             }
+
 
           
         }
