@@ -93,6 +93,29 @@ Project.$subscribe((mutation, state)=>{
         getProject_in_bin();
       })
       Project.operation="";
+    }else if(Project.operation=="recover_proj"){
+      axios({
+        url: axios.defaults.baseURL + "/proj/move_proj_to_bin",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          proj_id: Project.proj_id,
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log(response)
+        getProject_in_bin();
+      })
+      Project.operation="";
     }
 })
 

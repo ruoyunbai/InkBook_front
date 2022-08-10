@@ -9,7 +9,7 @@
 
         <div id="group_name">
           <n-icon>
-              <n-image src="svg\project_svg\group_home.svg" />
+              <n-image src="svg\project_svg\home.svg" />
             </n-icon>
           团队管理</div>
       </n-gi>
@@ -50,6 +50,9 @@
     </n-grid>
   </div>
   <div id="group_title">
+    <n-icon>
+      <n-image src="svg\project_svg\list.svg" />
+    </n-icon>
     全部成员
   </div>
   <div id="group_mid">
@@ -264,6 +267,32 @@ Member.$subscribe((mutation, state)=>{
         getMembers();
       })
       Member.operation="";
+    }else if(Member.operation=="quit_manager"){
+      axios({
+        url: axios.defaults.baseURL + "/group/set_member_status",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          group_id: one_group_id,
+          status: 1,
+          user_id: Member.user_id
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("response"+Member.user_id);
+        console.log(response)
+        getMembers();
+      })
+      Member.operation="";
     }
 
 
@@ -457,7 +486,7 @@ const getMembers = (clear: boolean = true) => {
   font-family: Inria Sans;
   font-weight: bold;
   font-size: 30px;
-  line-height: 24px;
+  line-height: 34px;
   letter-spacing: 0px;
   text-align: left;
   position: absolute;
@@ -465,7 +494,7 @@ const getMembers = (clear: boolean = true) => {
 
 #group_title{
   height: 34px;
-  width: 96px;
+  width: 196px;
   margin-left: 90px;
   margin-bottom: 10px;
   color: #000000;
