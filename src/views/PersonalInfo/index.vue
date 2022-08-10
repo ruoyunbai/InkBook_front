@@ -37,7 +37,7 @@
         <div class="body_mid">
           <div class="user_info">
             <div class="info_icon">
-              <n-image class="info_img" src="svg\personal_svg\nickname.svg" />
+              <n-image preview-disabled  class="info_img" src="svg\personal_svg\nickname.svg" />
             </div>
             <div class="info_word">
               <div class="info">昵称：{{nickName}}</div>
@@ -45,7 +45,7 @@
           </div>
           <div class="user_info">
             <div class="info_icon">
-              <n-image class="info_img" src="svg\personal_svg\name.svg" />
+              <n-image preview-disabled  class="info_img" src="svg\personal_svg\name.svg" />
             </div>
             <div class="info_word">
               <div class="info">姓名：{{realName}}</div>
@@ -53,7 +53,7 @@
           </div>
           <div class="user_info">
             <div class="info_icon">
-              <n-image class="info_img" src="svg\personal_svg\email.svg" />
+              <n-image  preview-disabled class="info_img" src="svg\personal_svg\email.svg" />
             </div>
             <div class="info_word">
               <div class="info">邮箱：{{email}}</div>
@@ -61,13 +61,13 @@
           </div>
         </div>
         <div class="body_right">
-          <n-image src="svg\personal_svg\trophy.svg" />
+          <n-image  preview-disabled src="svg\personal_svg\trophy.svg" />
         </div>
       </div>
       <div class="card_img">
-        <n-image src="svg\personal_svg\rocket1.svg" />
-        <n-image src="svg\personal_svg\rocket2.svg" />
-        <n-image src="svg\personal_svg\stars.svg" />
+        <n-image preview-disabled src="svg\personal_svg\rocket1.svg" />
+        <n-image  preview-disabled src="svg\personal_svg\rocket2.svg" />
+        <n-image  preview-disabled src="svg\personal_svg\stars.svg" />
       </div>
     </div>
   </n-layout>
