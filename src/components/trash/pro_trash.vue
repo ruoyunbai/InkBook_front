@@ -80,7 +80,10 @@ import { useRouter } from "vue-router"
 const router = useRouter();
 const Project = useProjectStore();
 
-
+const move_proj_to_bin = () =>{
+  Project.proj_id=props.oneProject.proj_id;
+  Project.operation="delete_proj";
+}
 
 type Props = {
   oneProject?: {
