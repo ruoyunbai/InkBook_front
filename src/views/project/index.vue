@@ -638,7 +638,7 @@ Project.$subscribe((mutation, state)=>{
           proj_id: Project.proj_id,
           proj_info: Project.proj_info,
           proj_name: Project.proj_name,
-          top:2
+          top:+Project.top,
         },
         transformRequest: [
           function (data, headers) {
@@ -648,8 +648,8 @@ Project.$subscribe((mutation, state)=>{
         ],
       }).then(function (response) {
         // 处理成功情况
-        console.log("!!!!!! ");
-        console.log(response);
+        console.log("!!!!!! "+Project.top);
+        console.log("!!!!!! "+ response);
         getProject();
       })
       Project.operation="";
@@ -979,7 +979,7 @@ const project_create = () => {
       group_id: one_group_id,
       proj_info: form.region,
       proj_name: form.name,
-      top: 2
+      top: 1
     },
     transformRequest: [
       function (data, headers) {

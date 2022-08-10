@@ -12,6 +12,7 @@ export const useProjectStore = defineStore("Project",{
             proj_name: "string",
             status: 0,
             user_id: 0,
+            top:1,
             operation:"",
         }
     },
