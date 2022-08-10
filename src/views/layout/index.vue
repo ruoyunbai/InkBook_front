@@ -144,7 +144,7 @@ onUpdated(()=>{
 onBeforeMount(() => {
     let l = localStorage.getItem("Login")
     if (l != "true") {
-        router.push('/logIn')
+        router.push('/homepage')
     }
 })
 onBeforeUnmount(() => {
