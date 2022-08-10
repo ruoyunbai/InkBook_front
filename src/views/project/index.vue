@@ -61,7 +61,7 @@
       </n-gi>
 
       <n-gi span="28">
-        <n-layout class="bg" bordered="false" content-style="padding: 30px 30px 30px 30px;">
+        <n-layout class="bg" bordered="false" content-style="padding: 30px 30px 30px 30px;" style="margin:20px 10px 10px 20px">
           <n-collapse
           :default-expanded-names="['2']">
             <template #arrow>
@@ -75,12 +75,15 @@
             title="&emsp;搜索结果">
               <n-divider></n-divider>
 
+              <div  name="2" style="float: left;width:240px" :key="project.proj_id"  v-for="(project, index) in sprojects">
+                  <Card  :one-project="project"></Card>
+              </div>
               <!--加载项目-->
-              <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
+              <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
                 <n-grid-item name="2" v-for="(project, index) in sprojects">
-                               <Card  :key="project.project_id" :one-project="project"></Card>
+                      <Card  :key="project.project_id" :one-project="project"></Card>
                 </n-grid-item>
-              </n-grid>
+              </n-grid> -->
 
               <template #header-extra>
                 <n-image preview-disabled  src="svg\project_svg\sort.svg" />
@@ -99,7 +102,7 @@
       </n-gi>
 
       <n-gi span="28">
-        <n-layout class="bg" bordered="false" content-style="padding: 30px 30px 30px 30px;">
+        <n-layout class="bg" bordered="false" content-style="padding: 30px 30px 30px 30px;"  style="margin:20px 10px 10px 20px">
           <n-collapse>
             <template #arrow>
               <n-icon>
@@ -107,7 +110,7 @@
                  src="svg\project_svg\folder.svg" />
               </n-icon>
             </template>
-            <n-collapse-item title="&emsp;全部项目">
+            <n-collapse-item title="&emsp;全部项目" >
               <n-divider></n-divider>
               <n-space justify="end" style="margin:0px 10px 10px 20px">
                 <n-button
@@ -200,7 +203,7 @@
       </n-gi>
 
       <n-gi span="28">
-        <n-layout class="bg" bordered="false" content-style="padding: 30px 30px 30px 30px;">
+        <n-layout class="bg" bordered="false" content-style="padding: 30px 30px 30px 30px;" style="margin:20px 10px 10px 20px">
           <n-collapse>
             <template #arrow>
               <n-icon>
@@ -233,7 +236,7 @@
       </n-gi>
 
       <n-gi span="28">
-        <n-layout class="bg" bordered="false" content-style="padding: 30px 30px 30px 30px;">
+        <n-layout class="bg" bordered="false" content-style="padding: 30px 30px 30px 30px;" style="margin:20px 10px 10px 20px">
           <n-collapse>
             <template #arrow>
               <n-icon>

@@ -72,7 +72,7 @@ border-radius: 30px 0px 0px 0px;" v-model:show="Dactive" :width="502" placement=
         </n-layout-sider>
         <n-layout content-style="padding: 10px;
                backgroundColor:rgb(245, 181, 68, 0.1);
-               height:1000px" :native-scrollbar="false">
+               height:2000px" :native-scrollbar="false">
             <!-- <router-view v-slot="{ Component }">
                 <transition enter-active-class="animate__animated animate__fadeIn">
                     <component :is="Component" />
