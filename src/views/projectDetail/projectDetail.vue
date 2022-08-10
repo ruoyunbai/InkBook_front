@@ -31,7 +31,7 @@
           <n-gi style="margin-top: -8px">
             <n-button
               align="center"
-              color="#2772F0"
+              color="#AA25A480"
               class="button"
               @click="searchFile()"
               >搜索文件</n-button
@@ -39,11 +39,11 @@
           </n-gi>
           <n-gi style="margin-top: -8px">
             <n-button
-              color="#2772F0"
+              color="#AA25A480"
               class="button"
-              margin-left="15px"
-              @click="projectEditVisible = true"
-              >编辑项目
+              margin-left="-15px"
+              @click="router.go(-1)"
+              >返回上一页
             </n-button>
           </n-gi>
         </n-grid>
@@ -52,7 +52,16 @@
         content-style="padding: 24px;"
         style="background-color: rgb(245, 181, 68, 0.1)"
       >
-        <div class="fileTitle">项目介绍</div>
+        <div class="fileTitle">
+          项目介绍
+          <span style="margin-left: 30px">
+          <n-button
+            color="#AA25A480"
+            class="button"
+            @click="projectEditVisible = true"
+            >编辑项目信息
+          </n-button></span>
+        </div>
         <div class="intro">
           {{ Detail.proj_info }}
         </div>
@@ -110,6 +119,7 @@
                 >
               </div>
             </div>
+
           </n-gi>
 
           <n-gi>
@@ -117,9 +127,19 @@
               class="section"
               style="background-color: rgb(246, 134, 106, 0.2)"
             >
-              <el-scrollbar max-height="97%">
+              <el-scrollbar max-height="97%" v-show="!searched">
                 <div
                   v-for="(item, idx) in umls"
+                  :key="idx"
+                  class="scrollbar-demo-item"
+                >
+                  <UmlItem :key="item.uml_id" :one-UML="item"></UmlItem>
+                </div>
+              </el-scrollbar>
+
+              <el-scrollbar max-height="97%" v-show="searched">
+                <div
+                  v-for="(item, idx) in sumls"
                   :key="idx"
                   class="scrollbar-demo-item"
                 >
@@ -143,9 +163,19 @@
               class="section"
               style="background-color: rgb(255, 190, 92, 0.2)"
             >
-              <el-scrollbar max-height="97%">
+              <el-scrollbar max-height="97%" v-show="!searched">
                 <div
                   v-for="(item, idx) in documents"
+                  :key="idx"
+                  class="scrollbar-demo-item"
+                >
+                  <DocItem :key="item.document_id" :one-Doc="item"></DocItem>
+                </div>
+              </el-scrollbar>
+
+              <el-scrollbar max-height="97%" v-show="searched">
+                <div
+                  v-for="(item, idx) in sdocuments"
                   :key="idx"
                   class="scrollbar-demo-item"
                 >
@@ -231,7 +261,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="projectEditVisible = false">取消</el-button>
-        <el-button type="primary" @click="projectEditVisible = false"
+        <el-button type="primary" @click="editProject()"
           >确认</el-button
         >
       </span>
@@ -262,8 +292,10 @@ import { usePrototypeStore } from "../../store/prototype";
 import { useUmlStore } from "../../store/Uml";
 import { useDocumentStore } from "../../store/Document";
 
+import { useRouter } from "vue-router"
 import { useRoute } from "vue-router"
 const route = useRoute();
+const router = useRouter();
 
 // import { FileReadOptions } from "fs/promises";
 const User = useUserStore();
@@ -281,7 +313,7 @@ const formLabelWidth = "140px";
 
 const project = reactive({
   name: "项目名称",
-  description: "项目描述",
+  description: "项目介绍内容",
 });
 const file = reactive({
   name: "",
@@ -333,6 +365,8 @@ const getProjectDetail = (clear: boolean = true) => {
     if (response.data?.success) {
       Detail.proj_info = response.data.proj.proj_info;
       Detail.proj_name = response.data.proj.proj_name;
+      project.name = Detail.proj_name;
+      project.description = Detail.proj_info;
     } else {
       console.log("找不到项目" + this_proj_id);
       message.error("项目加载出错");
@@ -795,17 +829,18 @@ const searchFile = () => {
   }).then(function (response) {
     // 处理成功情况
     console.log(response);
+    // console.log("input: "+input.value);
     while (sprototypes.length != 0) sprototypes.pop();
     while (sumls.length != 0) sumls.pop();
     while (sdocuments.length != 0) sdocuments.pop();
     sdocNum = response.data.count_documents;
-    sprotoNum = response.data.count_ppages;
+    sprotoNum = response.data.count_ppage;
     sumlNum = response.data.count_umls;
     if (response.data?.success) {
       for (let i = 0; i < sprotoNum; i++) {
         let tmp1 = reactive({
-          prototype_id: response.data.ppages[i].ppage_id,
-          prototype_name: response.data.ppages[i].ppage_name,
+          prototype_id: response.data.ppage[i].ppage_id,
+          prototype_name: response.data.ppage[i].ppage_name,
         });
         sprototypes.push(tmp1);
       }
@@ -837,6 +872,35 @@ const searchFile = () => {
     }
   });
 };
+
+//修改项目信息
+const editProject=()=>{
+  projectEditVisible.value = false;
+  axios({
+    url: axios.defaults.baseURL + "/proj/update_proj",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": User.token
+    },
+    data: {
+      proj_id: this_proj_id,
+      proj_info: project.description,
+      proj_name: project.name,
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
+    console.log(response)
+    getProjectDetail();
+  })
+}
+
 </script>
 
 <style scoped>
@@ -854,7 +918,7 @@ const searchFile = () => {
 .button {
   border-radius: 10px;
   text-align: center;
-  background-color: (39, 114, 240);
+  background-color: (39, 114, 240, 0.5);
 
   font-family: Inria Sans;
   font-weight: bold;
@@ -863,7 +927,7 @@ const searchFile = () => {
 
 .intro {
   border-radius: 16px;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.7);
   /*width: 1130px;*/
   height: 100px;
   margin-top: 10px;
@@ -878,6 +942,7 @@ const searchFile = () => {
   margin-bottom: 0px;
   line-height: 32px;
   text-align: left;
+  justify-content: center;
   font-family: Inria Sans;
   font-weight: bold;
   font-size: 20px;

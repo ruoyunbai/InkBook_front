@@ -1,7 +1,6 @@
 <template>
   <div class="item">
     <n-grid
-      class="item"
       x-gap="0"
       :cols="11"
       style="padding-top: 5px; vertical-align: middle"
