@@ -240,7 +240,7 @@ const saveDesign = () => {
         transformRequest: [
             function (data, headers) {
                 let data1 = JSON.stringify(data);
-                console.log(data1);
+                
                 return data1;
             },
         ],
@@ -319,7 +319,7 @@ function beforeLeave(event: any) {
         transformRequest: [
             function (data, headers) {
                 let data1 = JSON.stringify(data);
-                console.log(data1);
+                
                 return data1;
             },
         ],
@@ -348,7 +348,7 @@ function beforeLeave(event: any) {
         transformRequest: [
             function (data, headers) {
                 let data1 = JSON.stringify(data);
-                console.log(data1);
+                
                 return data1;
             },
         ],
@@ -386,7 +386,7 @@ onBeforeUnmount(() => {
         transformRequest: [
             function (data, headers) {
                 let data1 = JSON.stringify(data);
-                console.log(data1);
+                
                 return data1;
             },
         ],
@@ -415,7 +415,7 @@ onBeforeUnmount(() => {
         transformRequest: [
             function (data, headers) {
                 let data1 = JSON.stringify(data);
-                console.log(data1);
+                
                 return data1;
             },
         ],
@@ -463,7 +463,7 @@ const getProjs = () => {
         transformRequest: [
             function (data, headers) {
                 let data1 = JSON.stringify(data);
-                console.log(data1);
+                
                 return data1;
             },
         ],
@@ -503,7 +503,7 @@ const getDocs = () => {
         transformRequest: [
             function (data, headers) {
                 let data1 = JSON.stringify(data);
-                console.log(data1);
+                
                 return data1;
             },
         ],
@@ -548,7 +548,7 @@ const enterDoc = () => {
         transformRequest: [
             function (data, headers) {
                 let data1 = JSON.stringify(data);
-                console.log(data1);
+                
                 return data1;
             },
         ],

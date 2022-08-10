@@ -536,7 +536,7 @@ const getProject = (clear: boolean = true) => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        console.log(data1);
+        
         return data1;
       },
     ],
@@ -565,7 +565,7 @@ const getProject = (clear: boolean = true) => {
         transformRequest: [
           function (data, headers) {
             let data1 = JSON.stringify(data);
-            console.log(data1);
+            
             return data1;
           },
         ],
@@ -622,7 +622,7 @@ const project_create = () => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        console.log(data1);
+        
         return data1;
       },
     ],

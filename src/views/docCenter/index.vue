@@ -1,67 +1,55 @@
 <template>
- <div class="center_head">
-    <n-grid x-gap="12" :cols="16">
-      <n-gi span="1">
-      </n-gi>
-      <n-gi span="3">
-        <n-image src="svg\center_svg\title_img.svg" />
-        <span class="title_font">团队文档中心</span>
-      </n-gi>
-      <n-gi span="5">
-      </n-gi>
-      <n-gi span="1">
-        <n-button
-          color="#2772F0"
-          text-color="#FFFFFF"
-          style="width: 130px; height: 46px; border-radius: 16px;"
-        >
-          <n-image src="svg\center_svg\export.svg" />
-          <span class="btn_font">导出文档</span>
-        </n-button>
-      </n-gi>
-      <n-gi span="1">
+    <div class="center_head">
+        <n-grid x-gap="12" :cols="16">
+            <n-gi span="1">
+            </n-gi>
+            <n-gi span="3">
+                <n-image src="svg\center_svg\title_img.svg" />
+                <span class="title_font">团队文档中心</span>
+            </n-gi>
+            <n-gi span="5">
+            </n-gi>
+            <n-gi span="1">
+                <n-button color="#2772F0" text-color="#FFFFFF" style="width: 130px; height: 46px; border-radius: 16px;">
+                    <n-image src="svg\center_svg\export.svg" />
+                    <span class="btn_font">导出文档</span>
+                </n-button>
+            </n-gi>
+            <n-gi span="1">
 
-      </n-gi>
-      <n-gi span="1">
-        <n-button
-            color="#2772F0"
-            text-color="#FFFFFF"
-            style="width: 130px; height: 46px; border-radius: 16px;"
-        >
-          <n-image src="svg\center_svg\more.svg" />
-          <span class="btn_font">更多模板</span>
-        </n-button>
-      </n-gi>
-    </n-grid>
-  </div>
-  <div class="center_mid">
-    <div class="center_edit">
-
+            </n-gi>
+            <n-gi span="1">
+                <n-button color="#2772F0" text-color="#FFFFFF" style="width: 130px; height: 46px; border-radius: 16px;">
+                    <n-image src="svg\center_svg\more.svg" />
+                    <span class="btn_font">更多模板</span>
+                </n-button>
+            </n-gi>
+        </n-grid>
     </div>
-    <div class="center_menu">
-      <n-space vertical :size="12">
-       <div class="custom-tree-container">
-                        <!-- <p>Using render-content</p>
-                        <el-tree :data="dataSource" show-checkbox node-key="id" default-expand-all
-                            :expand-on-click-node="false" :render-content="renderContent" />
-                        <p>Using scoped slot</p> -->
-                        <el-tree 
-                        draggable
-                        :data="dataSource"  node-key="id" default-expand-all
-                            :expand-on-click-node="false">
-                            <template #default="{ node, data }">
-                                <span class="custom-tree-node">
-                                    <span>{{ node.label }}</span>
-                                    <p>{{node.name}}</p>
-                                    <span >
-                                        <a @click="append(data)"> Append </a>
-                                        <a style="margin-left: 8px" @click="remove(node, data)"> Delete </a>
-                                    </span>
+    <div class="center_mid">
+        <div class="center_edit">
+             <router-view></router-view>
+        </div>
+        <div class="center_menu">
+            <n-space vertical :size="12">
+                <div class="custom-tree-container">
+             
+                    <el-tree draggable :data="dataSource" node-key="id" default-expand-all
+                        :expand-on-click-node="false">
+                        <template #default="{ node, data }">
+                            <span class="custom-tree-node">
+                                <span>{{ node.label }}</span>
+                                <span>{{ node.id }}</span>
+                                <!-- <span>{{data}}</span> -->
+                                <span v-if="data.type1 == '10'">
+                                    <a @click="append(data)"> Append </a>
+                                    <a style="margin-left: 8px" @click="remove(node, data)"> Delete </a>
                                 </span>
-                            </template>
-                        </el-tree>
-                    </div>
-        <!-- <n-tree
+                            </span>
+                        </template>
+                    </el-tree>
+                </div>
+                <!-- <n-tree
             :default-expand-all="true"
             :show-irrelevant-nodes="showIrrelevantNodes"
             :pattern="pattern"
@@ -69,18 +57,15 @@
             :render-prefix="renderPrefix"
             block-line
         /> -->
-      </n-space>
+            </n-space>
+        </div>
+        <div class="add_btn">
+            <n-button color="rgba(39, 114, 240, 0.09)" text-color="#2772F0"
+                style="position: absolute; width: 169px; height: 32px; border-radius: 20px">
+                <span class="add_btn_font">+ 设计项目文档区</span>
+            </n-button>
+        </div>
     </div>
-    <div class="add_btn">
-      <n-button
-          color="rgba(39, 114, 240, 0.09)"
-          text-color="#2772F0"
-          style="position: absolute; width: 169px; height: 32px; border-radius: 20px"
-      >
-        <span class="add_btn_font">+ 设计项目文档区</span>
-      </n-button>
-    </div>
-  </div>
 
 
 
@@ -117,18 +102,78 @@ color: #000000;">团队文档中心</div>
 <script setup lang="ts">
 import { reactive, ref, onMounted, onBeforeMount } from 'vue'
 import type Node from 'element-plus/es/components/tree/src/model/node'
+import axios from 'axios'
+import {useUserStore} from  '../../store/User'
+import {useGroupStore} from '../../store/Group'
+
+const User=useUserStore()
+const Group=useGroupStore()
 const showModal = ref(false)
 const createName = ref("")
 interface Tree {
-  id: number
-  label: string
-  type1?: string
-  name?:string
-  children?: Tree[]
+    id: number
+    name: string
+    label: string
+    type1?: string
+    children?: Tree[]|null|undefined
 }
 let id = 1000
+
+onBeforeMount(() => {
+    axios({
+        url: axios.defaults.baseURL + "/doc/get_doc_files",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            group_id:Group.id
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("responseDoc", response.data)
+        if (response.data?.success) {
+               let d=response.data
+               let root=d.file
+                console.log("root",root)
+                let t=createTree(root)
+                console.log(t)
+                dataSource.value.push(t)
+        }
+    })
+})
+const createTree=(src:any)=>{
+    let t:Tree={
+        id:-1,
+        label:"",
+        name:"tre",
+        children:null
+    }
+    t.id=src.file_id
+    t.label=src.file_name
+
+    if(src!=null){
+        t.children=[]
+        if(src.contained_files!=null)
+        for(let i=0;i<src.contained_files?.length;i++){
+            console.log("contained",src.contained_files[i])
+            console.log(createTree(src.contained_files[i]))
+            t.children.push(createTree(src.contained_files[i]))
+            // t.children.push(undefined)
+        }
+    }
+    return t
+}
+
 const append = (data: Tree) => {
-    
+
     const newChild = { id: id++, label: 'testtest', children: [] }
     if (!data.children) {
         data.children = []
@@ -148,68 +193,7 @@ const remove = (node: Node, data: Tree) => {
 
 
 
-const dataSource = ref<Tree[]>([
-    {
-        name:"tree",
-        id: 1,
-        label: 'Level one 1',
-        type1:"10",
-        children: [
-            {
-                name:"tree",
-                type1:"666",
-                id: 4,
-                label: 'Level two 1-1',
-                children: [
-                    {
-                        name:"tree",
-                        id: 9,
-                        label: 'Level three 1-1-1',
-                    },
-                    {
-                        name:"tree",
-                        id: 10,
-                        label: 'Level three 1-1-2',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        id: 2,
-        name:"tree",
-        label: 'Level one 2',
-        children: [
-            {
-                name:"tree",
-                id: 5,
-                label: 'Level two 2-1',
-            },
-            {
-                name:"tree",
-                id: 6,
-                label: 'Level two 2-2',
-            },
-        ],
-    },
-    {
-        name:"tree",
-        id: 3,
-        label: 'Level one 3',
-        children: [
-            {
-                name:"tree",
-                id: 7,
-                label: 'Level two 3-1',
-            },
-            {
-                name:"tree",
-                id: 8,
-                label: 'Level two 3-2',
-            },
-        ],
-    },
-])
+const dataSource = ref<Tree[]>([])
 </script>
 
 <style>
@@ -239,65 +223,64 @@ const dataSource = ref<Tree[]>([
 
 
 <style>
-
-.center_head{
-  margin-top: 50px;
+.center_head {
+    margin-top: 50px;
 }
 
-.title_font{
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 34px;
-  margin-left: 10px;
+.title_font {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 34px;
+    margin-left: 10px;
 }
 
-.btn_font{
-  font-family: 'Inria Sans';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 24px;
-  margin-left: 5px;
+.btn_font {
+    font-family: 'Inria Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    margin-left: 5px;
 }
 
-.center_mid{
-  position: relative;
-  margin-top: 30px;
+.center_mid {
+    position: relative;
+    margin-top: 30px;
 }
 
-.center_edit{
-  position: absolute;
-  margin-left: 5%;
-  width: 60%;
-  background-color: #FFFFFF;
-  height: 800px;
-  border-radius: 24px;
+.center_edit {
+    position: absolute;
+    margin-left: 5%;
+    width: 60%;
+    background-color: #FFFFFF;
+    /* height: 800px; */
+    border-radius: 24px;
 }
 
-.center_menu{
-  position: absolute;
-  margin-left: 70%;
-  width: 25%;
-  background-color: #FFFFFF;
-  height: 780px;
-  border-radius: 24px;
-  padding-top: 20px;
+.center_menu {
+    position: absolute;
+    margin-left: 70%;
+    width: 25%;
+    background-color: #FFFFFF;
+    height: 780px;
+    border-radius: 24px;
+    padding-top: 20px;
 }
 
-.add_btn_font{
-  font-family: 'Inria Sans';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 24px;
+.add_btn_font {
+    font-family: 'Inria Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
 }
 
-.add_btn{
-  position: absolute;
-  z-index: 5;
-  margin-left: 76%;
-  margin-top: 750px;
+.add_btn {
+    position: absolute;
+    z-index: 5;
+    margin-left: 76%;
+    margin-top: 750px;
 }
 </style>

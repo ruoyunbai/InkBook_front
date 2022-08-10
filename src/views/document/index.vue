@@ -29,7 +29,7 @@ color: #000000;">多人文档</div>
                 <n-gi span="15">
                     <n-space vertical>
                         <n-select v-model:value="projvalue" :options="projoptions" remote :loading="projLoading"
-                            placeholder="请选择项目" @update:value="getDocs()" class="choose selectP" />
+                            placeholder="请选择项目" @update:value="selectProj" class="choose selectP" />
                     </n-space>
                 </n-gi>
                 <n-gi></n-gi>
@@ -177,6 +177,10 @@ import { useGroupStore } from '../../store/Group'
 import { messageConfig } from 'element-plus'
 import { useMessage } from 'naive-ui'
 import { useRouter, useRoute } from 'vue-router'
+import projectDetailVue from '../projectDetail/projectDetail.vue'
+import { useProjectStore } from '../../store/Project'
+// import projectVue from '../../components/project.vue'
+const Project=useProjectStore()
 const route = useRoute()
 const router = useRouter()
 const message = useMessage()
@@ -198,7 +202,11 @@ const doc = reactive({
     name: ""
 }
 )
-
+const selectProj=()=>{
+    Project.proj_id=projvalue.value
+    console.log("IDDDD",Project.proj_id)
+    getDocs()
+}
 // let provider = new WebrtcProvider('example-document1', ydoc)
 const createDoc = () => {
     axios({
@@ -210,12 +218,12 @@ const createDoc = () => {
         },
         data: {
             document_name: createName.value,
-            proj_id: 1,
+            proj_id: Project.proj_id,
         },
         transformRequest: [
             function (data, headers) {
                 let data1 = JSON.stringify(data);
-                console.log(data1);
+                
                 return data1;
             },
         ],
@@ -280,7 +288,7 @@ const saveDesign = () => {
         transformRequest: [
             function (data, headers) {
                 let data1 = JSON.stringify(data);
-                console.log(data1);
+                
                 return data1;
             },
         ],
@@ -299,7 +307,12 @@ onMounted(() => {
 
 })
 onBeforeMount(() => {
-    getProjs()
+    if(Project.proj_id==-1)
+        getProjs(true)
+    else{
+        getProjs(false)
+        getDocs()
+    }
     //     axios.post('http://43.138.77.133:81/media/documents/2592b0d7a779ac7c4590c74d707b76a7.md'
     //     ,{},{responseType:'blob'}).then((res)=>{
     //         console.log(res)
@@ -315,12 +328,12 @@ onBeforeMount(() => {
     //     URL.revokeObjectURL(elink.href); // 释放URL 对象
     //     document.body.removeChild(elink);
     // })
-    getDocs()
+    
 })
 
 
 
-const getProjs = () => {
+const getProjs = (ifgetDocs=false) => {
     projLoading.value = true
     let id: Number = Group.id
     if (id == -1) id = 1
@@ -339,7 +352,7 @@ const getProjs = () => {
         transformRequest: [
             function (data, headers) {
                 let data1 = JSON.stringify(data);
-                console.log(data1);
+                
                 return data1;
             },
         ],
@@ -354,11 +367,15 @@ const getProjs = () => {
                     label: response.data?.projs[i]?.proj_name,
                     value: response.data?.projs[i]?.proj_id
                 })
+                
             }
+           if(ifgetDocs==true){
+                // Project.proj_id=response.data?.projs[0]?.proj_id
+                // Project.proj_name=response.data?.projs[0]?.proj_name
+                // getDocs()
+           }
             projLoading.value = false
-
             //   protoLoading.value = false
-
         }
         else {
             message.error("还没有项目")
@@ -375,12 +392,12 @@ const getDocs = (set = false) => {
             "Authorization": User.token
         },
         data: {
-            proj_id: 1
+            proj_id: Project.proj_id
         },
         transformRequest: [
             function (data, headers) {
                 let data1 = JSON.stringify(data);
-                console.log(data1);
+                
                 return data1;
             },
         ],

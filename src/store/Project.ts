@@ -7,7 +7,7 @@ export const useProjectStore = defineStore("Project",{
     state:()=>{
         return {
             group_id: 0,
-            proj_id: 0,
+            proj_id: -1,
             proj_info: "string",
             proj_name: "string",
             status: 0,

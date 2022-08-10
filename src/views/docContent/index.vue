@@ -225,7 +225,7 @@ if (route.params.id != undefined) {
   //       transformRequest: [
   //         function (data, headers) {
   //           let data1 = JSON.stringify(data);
-  //           console.log(data1);
+  //           
   //           return data1;
   //         },
   //       ],
@@ -265,7 +265,7 @@ if (route.params.id != undefined) {
         transformRequest: [
           function (data, headers) {
             let data1 = JSON.stringify(data);
-            console.log(data1);
+            
             return data1;
           },
         ],
@@ -306,7 +306,7 @@ if (route.params.id != undefined) {
       transformRequest: [
         function (data, headers) {
           let data1 = JSON.stringify(data);
-          console.log(data1);
+          
           return data1;
         },
       ],
@@ -335,7 +335,7 @@ if (route.params.id != undefined) {
       transformRequest: [
         function (data, headers) {
           let data1 = JSON.stringify(data);
-          console.log(data1);
+          
           return data1;
         },
       ],
@@ -371,7 +371,7 @@ if (route.params.id != undefined) {
       transformRequest: [
         function (data, headers) {
           let data1 = JSON.stringify(data);
-          console.log(data1);
+          
           return data1;
         },
       ],
@@ -400,7 +400,7 @@ if (route.params.id != undefined) {
       transformRequest: [
         function (data, headers) {
           let data1 = JSON.stringify(data);
-          console.log(data1);
+          
           return data1;
         },
       ],
@@ -443,7 +443,7 @@ const saveDesign = () => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        console.log(data1);
+        
         return data1;
       },
     ],
@@ -500,7 +500,7 @@ const getProjs = () => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        console.log(data1);
+        
         return data1;
       },
     ],
@@ -540,7 +540,7 @@ const getDocs = () => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        console.log(data1);
+        
         return data1;
       },
     ],
@@ -589,7 +589,7 @@ const enterDoc = (clear: boolean = false) => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        console.log(data1);
+        
         return data1;
       },
     ],
