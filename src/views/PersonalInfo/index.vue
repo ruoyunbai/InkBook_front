@@ -27,6 +27,7 @@
             <n-button
                 color="#F5B544"
                 size="large"
+                @click="ha"
                 style="border-radius: 5px 5px 5px 20px; width: 120px;height: 40px;"
             >
               <p class="buttonText3">编辑个人信息</p>
