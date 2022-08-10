@@ -37,7 +37,9 @@
                     <el-tree highlight-current="true" @node-click="enterDoc" draggable :data="dataSource" node-key="id"
                         default-expand-all :expand-on-click-node="false">
                         <template #default="{ node, data }">
-                            <span class="custom-tree-node">
+                            <span class="custom-tree-node" 
+                            @mouseleave="data.show=false"
+                            @mouseenter="data.show=true">
                                 <!-- <n-space> -->
                                     <div>
                                        
@@ -53,7 +55,7 @@
 
                                 <!-- <span>{{ node.id }}</span> -->
                                 <!-- <span>{{data}}</span> -->
-                                <span>
+                                <span v-show="data.show" style="float:right">
                                 <!-- 添加文件夹 -->
                                     <n-image preview-disabled v-if="!data.inputingDir&&!data.inputingDoc&&!data.renaming&&!(data.isProj)&&data.isDir" @click.stop="appendDir(data)"
                                         src="svg\doc\dir+.svg"></n-image>
@@ -167,6 +169,7 @@ interface Tree {
     isProj?:boolean
     isRoot?:boolean
     level:number
+    show:boolean
 }
 let id = 1000
 let doc = {
@@ -232,7 +235,8 @@ const createTree = (src: any,isProj=false,level=0) => {
         name: "tre",
         children: null,
         isDir: false,
-        level:0
+        level:0,
+        show:false
     }
     t.id = src.file_id
     t.label = src.file_name
@@ -436,7 +440,7 @@ const dataSource = ref<Tree[]>([])
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     font-size: 14px;
     padding-right: 8px;
 }

@@ -6,7 +6,8 @@ import { Names } from './store-namespace'
 export const useMsgStore = defineStore( Names.Msg,{
     state:()=>{
         return {
-            opt:""
+            opt:"",
+            Dopt:""
         }
     },
     // getters:{

@@ -1,65 +1,63 @@
 <template>
-<div>
-  <n-modal v-model:show="showModal" class="custom-card" preset="card" :style="bodyStyle" title=" 请输入页面名字" size="huge"
-    :bordered="false">
-    <template #header-extra>
-      取消
-    </template>
-    <n-input v-model:value="createName"></n-input>
-    <template #footer>
-      <n-button @click="createPage">确定</n-button>
-    </template>
-  </n-modal>
-  <n-card :bordered="false">
-    <n-grid :cols="20">
-      <n-gi span="3">
-        <n-space vertical>
-          <n-select v-model:value="value" :options="options" remote :loading="protoLoading" placeholder="请选择项目"
-            @update:value="getPPages(false)" class="choose" />
-        </n-space>
-      </n-gi>
-      <!-- <n-gi></n-gi> -->
-      <n-gi span="3">
-        <n-space vertical>
-          <n-select :loading="pageNotChosed" remote :placeholder=pageHolder :disabled="ProtoNotChosed"
-            v-model:value="pageId" :options="optionsPage" @update:value="getPage" class="choose" />
-        </n-space>
-      </n-gi>
-      <n-gi span="2">
-        <n-space>
-          <n-button type="warning" strong secondary :disabled="ProtoNotChosed" v-on:click="saveDesign"
-            @click="() => { showModal = true }">新建页面</n-button>
-          <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
-        </n-space>
-      </n-gi>
-      <n-gi span="2">
-        <n-space>
-          <n-button type="warning" strong secondary :disabled="nopageChosed" v-on:click="saveDesign">保存设计</n-button>
-          <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
-        </n-space>
-      </n-gi>
-      <n-gi span="2">
-        <n-input-number v-model:value="height" @update:value="changeHeight" placeholder="高" :min="300" :step="20"
-          :max="3000" />
-      </n-gi>
-      <n-gi span="2">
-        <n-input-number v-model:value="width" placeholder="宽" @update:value="changeWidth" :step="20" :min="10"
-          :max="900" />
-      </n-gi>
-    </n-grid>
-  </n-card>
-
-
-  <br>
-
   <div>
-    <EmailEditor 
-    locale='zh-CN'
-    displayMode='web' style="height:300px" :min-height="minHeight" :project-id="projectId" :locale="locale"
-      ref="emailEditor" v-on:load="editorLoaded()" display-mod="web" v-on:ready="editorReady()" />
-  </div>
+    <n-modal v-model:show="showModal" class="custom-card" preset="card" :style="bodyStyle" title=" 请输入页面名字" size="huge"
+      :bordered="false">
+      <template #header-extra>
+        取消
+      </template>
+      <n-input v-model:value="createName"></n-input>
+      <template #footer>
+        <n-button @click="createPage">确定</n-button>
+      </template>
+    </n-modal>
+    <n-card :bordered="false">
+      <n-grid :cols="20">
+        <n-gi span="3">
+          <n-space vertical>
+            <n-select v-model:value="value" :options="options" remote :loading="protoLoading" placeholder="请选择项目"
+              @update:value="getPPages(false)" class="choose" />
+          </n-space>
+        </n-gi>
+        <!-- <n-gi></n-gi> -->
+        <n-gi span="3">
+          <n-space vertical>
+            <n-select :loading="pageNotChosed" remote :placeholder=pageHolder :disabled="ProtoNotChosed"
+              v-model:value="pageId" :options="optionsPage" @update:value="getPage" class="choose" />
+          </n-space>
+        </n-gi>
+        <n-gi span="2">
+          <n-space>
+            <n-button type="warning" strong secondary :disabled="ProtoNotChosed" v-on:click="saveDesign"
+              @click="() => { showModal = true }">新建页面</n-button>
+            <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
+          </n-space>
+        </n-gi>
+        <n-gi span="2">
+          <n-space>
+            <n-button type="warning" strong secondary :disabled="nopageChosed" v-on:click="saveDesign">保存设计</n-button>
+            <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
+          </n-space>
+        </n-gi>
+        <n-gi span="2">
+          <n-input-number v-model:value="height" @update:value="changeHeight" placeholder="高" :min="300" :step="20"
+            :max="3000" />
+        </n-gi>
+        <n-gi span="2">
+          <n-input-number v-model:value="width" placeholder="宽" @update:value="changeWidth" :step="20" :min="10"
+            :max="900" />
+        </n-gi>
+      </n-grid>
+    </n-card>
 
-</div>
+
+    <br>
+
+    <div>
+      <EmailEditor locale='zh-CN' displayMode='web' style="height:300px" :min-height="minHeight" :project-id="projectId"
+        :locale="locale" ref="emailEditor" v-on:load="editorLoaded()" display-mod="web" v-on:ready="editorReady()" />
+    </div>
+
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -71,10 +69,10 @@ import { id } from 'date-fns/locale';
 import axios from 'axios';
 import { SelectOption } from 'naive-ui'
 import { useUserStore } from '../../store/User'
-import {useMessage} from 'naive-ui'
+import { useMessage } from 'naive-ui'
 import { useGroupStore } from '../../store/Group';
-const Group=useGroupStore()
-const message=useMessage()
+const Group = useGroupStore()
+const message = useMessage()
 
 const createName = ref("")
 const User = useUserStore()
@@ -95,7 +93,7 @@ const bodyStyle = {
 // }
 onBeforeMount(() => {
   getProjs()
-  minHeight.value=height.value+"px"
+  minHeight.value = height.value + "px"
 })
 const changeHeight = () => {
   if (height.value != null) {
@@ -135,7 +133,7 @@ const getProjs = () => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        
+
         return data1;
       },
     ],
@@ -160,7 +158,7 @@ const getProjs = () => {
   })
 }
 const value = ref(null)
-const pageId:any = ref(null)
+const pageId: any = ref(null)
 const emailEditor = ref()
 const minHeight = ref('800px')
 watch(minHeight, (newVal, oldVal) => {
@@ -183,6 +181,7 @@ let ppageName = ""
 let ppageData = ""
 const createPage = () => {
   createDesign()
+  nopageChosed.value = false
 }
 const getPage = () => {
   axios({
@@ -210,24 +209,24 @@ const getPage = () => {
     if (response.data?.success) {
       ppageName = response.data?.ppage.ppage_name,
         ppageData = response.data?.ppage.ppage_data
-        let t=JSON.parse(ppageData)
+      let t = JSON.parse(ppageData)
       emailEditor.value.editor.
         loadDesign(t.design);
-        height.value=t.h
-          minHeight.value = height.value + "px"
-          emailEditor.value.editor.setBodyValues({
-    backgroundColor: "#e7e7e7",
-    contentWidth: t.w + "px", // or percent "50%"
-    fontFamily: {
-      label: "Helvetica",
-      value: "'Helvetica Neue', Helvetica, Arial, sans-serif"
-    },
-    preheaderText: "Hello World"
-  });
+      height.value = t.h
+      minHeight.value = height.value + "px"
+      emailEditor.value.editor.setBodyValues({
+        backgroundColor: "#e7e7e7",
+        contentWidth: t.w + "px", // or percent "50%"
+        fontFamily: {
+          label: "Helvetica",
+          value: "'Helvetica Neue', Helvetica, Arial, sans-serif"
+        },
+        preheaderText: "Hello World"
+      });
 
       nopageChosed.value = false
-      
-      
+
+
     }
 
     // console.log(content)
@@ -236,7 +235,7 @@ const getPage = () => {
   }
   )
 }
-const getPPages = (set:boolean=false) => {
+const getPPages = (set: boolean = false) => {
   pageNotChosed.value = true
   axios({
     url: axios.defaults.baseURL + "/ppage/get_proj_ppages",
@@ -259,13 +258,13 @@ const getPPages = (set:boolean=false) => {
     // 处理成功情况
     // console.log("response",response)
     // console.log(response.data);
-     while(optionsPage.value.length!=0){
-        optionsPage.value.pop()
-      }
- ProtoNotChosed.value = false
+    while (optionsPage.value.length != 0) {
+      optionsPage.value.pop()
+    }
+    ProtoNotChosed.value = false
     if (response.data?.success) {
-   
-      while(optionsPage.value.length!=0){
+
+      while (optionsPage.value.length != 0) {
         optionsPage.value.pop()
       }
       for (let i = 0; i < response.data?.count; i++) {
@@ -276,9 +275,9 @@ const getPPages = (set:boolean=false) => {
         }
         optionsPage.value.push(t)
       }
-      
-      if(set){
-        pageId.value=optionsPage.value[0].value
+
+      if (set) {
+        pageId.value = optionsPage.value[0].value
       }
     }
     pageNotChosed.value = false
@@ -298,7 +297,7 @@ const editorLoaded = () => {
     backgroundColor: 'rgb(245, 181, 68, 0.1)'
   })
   //  emailEditor.value.editor.init({
-      
+
   //   });
   emailEditor.value.editor.addEventListener('image:uploaded', function (data: any) {
     console.log("传过来了")
@@ -376,7 +375,7 @@ const upJson = (str: String) => {
     console.log(response.data);
 
     if (response.data?.success) {
-     
+
 
     }
   })
@@ -409,17 +408,17 @@ const createJson = (str: String) => {
     console.log(response.data);
 
     if (response.data?.success) {
-       message.success("创建成功")
-        showModal.value=false
-        let set=true
-        getPPages(set)
+      message.success("创建成功")
+      showModal.value = false
+      let set = true
+      getPPages(set)
 
-        
-        // console.log("OPP",optionsPage.value)
-        // pageId.value=optionsPage.value[cnt-1].value
-        
-         
-    }else{
+
+      // console.log("OPP",optionsPage.value)
+      // pageId.value=optionsPage.value[cnt-1].value
+
+
+    } else {
       message.error(response.data?.message)
     }
   })
@@ -434,7 +433,6 @@ const createDesign = () => {
       design: design
     }
     createJson(JSON.stringify(t))
-
     // console.log(JSON.stringify(design))
     // a=design
   });
