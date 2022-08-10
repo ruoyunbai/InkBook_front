@@ -113,62 +113,33 @@
             <n-collapse-item title="&emsp;全部项目" >
               <n-divider></n-divider>
               <n-space justify="end" style="margin:0px 10px 10px 20px">
-                <n-button
-                    round
-                    strong
-                    secondary
-                    type="info"
-                    @click="show('new')"
-                  >
+                <n-button round strong secondary type="info" @click="show('new')">
                     <template #icon>
                       <n-image preview-disabled src="svg\project_svg\clock.svg">
                       </n-image>
                     </template>
-                  最新创建
-                  </n-button>
-                  <n-button
-                    round
-                    strong
-                    secondary
-                    type="info"
-                    @click="show('old')"
-                  >
+                    最新创建
+                </n-button>
+                <n-button round strong secondary type="info" @click="show('old')">
                     <template #icon>
                       <n-image preview-disabled src="svg\project_svg\clock.svg">
                       </n-image>
                     </template>
                     最早创建
-                  </n-button>
-                  <n-button
-                    round
-                    strong
-                    secondary
-                    type="info"
-                    @click="show('hot')"
-                  >
+                </n-button>
+                <n-button round strong secondary type="info" @click="show('hot')">
                     <template #icon>
-                      <n-image
-                        preview-disabled
-                        src="svg\project_svg\hot.svg"
-                      >
-                      </n-image>
+                      <n-image preview-disabled src="svg\project_svg\hot.svg"></n-image>
                     </template>
                     最多编辑
-                  </n-button>
-                  <n-button
-                    round
-                    strong
-                    secondary
-                    type="info"
-                    @click="show('recent')"
-                  >
+                </n-button>
+                <n-button round strong secondary type="info" @click="show('recent')">
                     <template #icon>
-                      <n-image preview-disabled src="svg\project_svg\recent.svg">
-                      </n-image>
+                      <n-image preview-disabled src="svg\project_svg\recent.svg"></n-image>
                     </template>
                     最近编辑
-                  </n-button>
-                </n-space>
+                </n-button>
+              </n-space>
               <!--加载项目-->
               <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen"> -->
                <!-- <n-space> -->
@@ -210,6 +181,34 @@
             </template>
             <n-collapse-item title="&emsp;我创建的">
               <n-divider></n-divider>
+              <n-space justify="end" style="margin:0px 10px 10px 20px">
+                <n-button round strong secondary type="info" @click="show2('new')">
+                    <template #icon>
+                      <n-image preview-disabled src="svg\project_svg\clock.svg">
+                      </n-image>
+                    </template>
+                    最新创建
+                </n-button>
+                <n-button round strong secondary type="info" @click="show2('old')">
+                    <template #icon>
+                      <n-image preview-disabled src="svg\project_svg\clock.svg">
+                      </n-image>
+                    </template>
+                    最早创建
+                </n-button>
+                <n-button round strong secondary type="info" @click="show2('hot')">
+                    <template #icon>
+                      <n-image preview-disabled src="svg\project_svg\hot.svg"></n-image>
+                    </template>
+                    最多编辑
+                </n-button>
+                <n-button round strong secondary type="info" @click="show('recent')">
+                    <template #icon>
+                      <n-image preview-disabled src="svg\project_svg\recent.svg"></n-image>
+                    </template>
+                    最近编辑
+                </n-button>
+              </n-space>
 
               <div style="float: left;width:240px" :key="project.proj_id"  v-for="(project, index) in creprojects">
                     <Card :one-project="project"></Card>
@@ -381,6 +380,72 @@ const show = (order1: string,clear: boolean = true) => {
               });
               console.log("  projectid" + temp.proj_id);
               projects.push(temp);
+            }
+          console.log(projects);
+          // User.Name=modelRef.value.name,
+          // User.Id=response.data.data.user_id,
+        } else {
+        }
+        console.log(response.data);
+      });
+};
+
+//项目排序
+const show2 = (order1: string,clear: boolean = true) => {
+  // getPosts();
+  if (order1 == "new") {
+    sort_flag=1;
+    desc_flag = true;
+  }
+  if (order1 == "hot") {
+    sort_flag=3;
+    desc_flag = true;
+  }
+  if (order1 == "recent") {
+    sort_flag=2;
+    desc_flag = true;
+  }
+  if (order1 == "old") {
+    sort_flag=1;
+    desc_flag = false;
+  }
+  axios({
+        url: axios.defaults.baseURL + "/proj/get_proj_create",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          group_id: one_group_id,
+          is_desc: desc_flag,
+          order_by: sort_flag
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        if (response.data?.success) {
+          count = response.data?.count;
+          console.log(response.data);
+          let i = 0;
+          if (clear) while (creprojects.length != 0) creprojects.pop();
+          if (response.data != null)
+            for (i = 0; i < count; i++) {
+              let temp = reactive({
+                group_id: response.data.projs[i].group_id,
+                proj_id: response.data.projs[i].proj_id,
+                proj_info: response.data.projs[i].proj_info,
+                proj_name: response.data.projs[i].proj_name,
+                status: response.data.projs[i].status,
+                user_id: response.data.projs[i].user_id,
+              });
+              console.log("  projectid" + temp.proj_id);
+              creprojects.push(temp);
             }
           console.log(projects);
           // User.Name=modelRef.value.name,
@@ -692,8 +757,6 @@ const getCreProject = (clear: boolean = true) => {
     console.log(response.data);
   });
 }
-
-
 
 
 //创建项目
