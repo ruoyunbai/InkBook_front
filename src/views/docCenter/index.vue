@@ -55,7 +55,7 @@
 
                                 <!-- <span>{{ node.id }}</span> -->
                                 <!-- <span>{{data}}</span> -->
-                                <span v-show="data.show" style="float:right">
+                                <span v-show="data.show" style=" position: absolute;right: 0px;">
                                 <!-- 添加文件夹 -->
                                     <n-image preview-disabled v-if="!data.inputingDir&&!data.inputingDoc&&!data.renaming&&!(data.isProj)&&data.isDir" @click.stop="appendDir(data)"
                                         src="svg\doc\dir+.svg"></n-image>
