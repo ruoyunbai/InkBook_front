@@ -94,7 +94,7 @@ import type { UploadProps } from 'element-plus'
 import Main from "../../components/block/main/index.vue";
 import axios from 'axios'
 import { useUserStore } from "../../store/User";
-const User=useUserStore()
+const User=useUserStore();
 
 const isSelf=ref(true)
 let t2 =  localStorage.getItem("user_ID");
@@ -131,6 +131,7 @@ const modify_info = ()=>{
       },
     ],
   }).then(function (response) {
+    User.Name=newName.value;
     console.log(":!!!"+newReal.value);
     console.log(":!!!"+newMail.value);
     console.log(":!!!"+newSex.value);
