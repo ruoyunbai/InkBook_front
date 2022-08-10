@@ -9,7 +9,7 @@
 
         <div id="group_name">
           <n-icon>
-              <n-image src="svg\project_svg\home.svg" />
+              <n-image preview-disabled  src="svg\project_svg\home.svg" />
             </n-icon>
           团队管理</div>
       </n-gi>
@@ -21,24 +21,24 @@
           </template>
         </tk-select>
       </n-gi>
-      <n-gi span="4">
+      <n-gi span="3">
 
       </n-gi>
       <!-- v-model:value="" -->
-      <n-gi span="5">
+      <n-gi span="4">
         <n-input ref="inputInstRef" placeholder="输入成员昵称" clearable round size="large" style="margin-left: 19px" v-model:value="val">
           <template #prefix>
-            <n-image src="svg\members_svg\search.svg"></n-image>
+            <n-image preview-disabled  src="svg\members_svg\search.svg"></n-image>
           </template>
         </n-input>
       </n-gi>
       <n-gi span="1">
       </n-gi>
-      <n-gi span="3">
+      <n-gi span="2">
         <el-button round color="#2772F0" size="large" @click="dialogEditVisible = true">
           <template #icon>
             <n-icon>
-              <n-image src="svg\project_svg\white_plus.svg" />
+              <n-image preview-disabled src="svg\project_svg\white_plus.svg" />
             </n-icon>
           </template>
           <div class="commonText">
@@ -46,12 +46,23 @@
           </div>
         </el-button>
       </n-gi>
-
+      <n-gi span="2">
+        <el-button round color="#2772F0" size="large" @click="toCreGroup()">
+          <template #icon>
+            <n-icon>
+              <n-image preview-disabled src="svg\project_svg\white_plus.svg" />
+            </n-icon>
+          </template>
+          <div class="commonText">
+            新建团队
+          </div>
+        </el-button>
+      </n-gi>
     </n-grid>
   </div>
   <div id="group_title">
     <n-icon>
-      <n-image src="svg\project_svg\list.svg" />
+      <n-image  preview-disabled src="svg\project_svg\list.svg" />
     </n-icon>
     全部成员
   </div>
@@ -180,6 +191,15 @@ onBeforeMount(() => {
   console.log("1");
   
 });
+
+const toCreGroup = () =>{
+  router.push({
+          name:"NewGroup",
+          // params:{
+          //   proj_id:props.oneProject.proj_id,
+          // }
+          })
+}
 
 const invite_member = () =>{
   axios({

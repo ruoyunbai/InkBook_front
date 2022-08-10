@@ -3,8 +3,18 @@
     <div class="user" style="background:#EDF5ED;margin:15px 25px 15px 15px" >
         <n-space vertical>
             <n-space justify="end">
-                <n-image style="margin:15px 0px 10px 0px" height="25" preview-disabled @click="proj_top()" src="svg\project_svg\top.svg"/>
-                <n-image style="margin:15px 10px 10px 0px" height="25" preview-disabled @click="proj_copy()" src="svg\project_svg\copy.svg"/>
+              <n-popover trigger="hover">
+                <template #trigger>
+                  <n-image style="margin:15px 0px 10px 0px" height="25" preview-disabled @click="proj_top()" src="svg\project_svg\top.svg"/>
+                </template>
+                <span>置顶该项目</span>
+              </n-popover>
+              <n-popover trigger="hover">
+                <template #trigger>
+                  <n-image style="margin:15px 10px 10px 0px" height="25" preview-disabled @click="proj_copy()" src="svg\project_svg\copy.svg"/>
+                </template>
+                <span>复制该项目</span>
+              </n-popover>                
             </n-space>
             <p class="name"  style="margin:0px 10px 10px 30px">{{props.oneProject.proj_name}}</p>
             <p class="state" style="margin:0px 10px 10px 30px">{{props.oneProject.proj_info}}</p>

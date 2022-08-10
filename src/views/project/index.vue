@@ -96,8 +96,23 @@
       </n-gi>
 
     </n-grid>
-    <n-grid :key="2" v-show="!searched" x-gap="5" :cols="30">
 
+  <!-- <n-collapse default-expanded-names="1" accordion>
+    <n-collapse-item title="" name="1">
+          
+    </n-collapse-item>
+
+    <n-collapse-item title="" name="2">
+        
+    </n-collapse-item>
+
+    <n-collapse-item title="" name="3">
+        
+    </n-collapse-item>
+
+  </n-collapse> -->
+
+    <n-grid :key="2" v-show="!searched" x-gap="5" :cols="30">
       <n-gi span="1">
       </n-gi>
 
@@ -140,6 +155,10 @@
                     最近编辑
                 </n-button>
               </n-space>
+              <div v-show="no_proj" class="headTitle2" style="margin:10px 10px 10px 10px">
+                <div>&ensp;</div>
+                现在还没有项目哦~
+              </div>
               <!--加载项目-->
               <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen"> -->
                <!-- <n-space> -->
@@ -209,7 +228,10 @@
                     最近编辑
                 </n-button>
               </n-space>
-
+              <div v-show="no_creproj" class="headTitle2" style="margin:10px 10px 10px 10px">
+                <div>&ensp;</div>
+                现在还没有项目哦~
+              </div>
               <div style="float: left;width:240px" :key="project.proj_id"  v-for="(project, index) in creprojects">
                     <Card :one-project="project"></Card>
               </div>
@@ -274,7 +296,10 @@
                     最近编辑
                 </n-button>
               </n-space>
-
+              <div v-show="no_joinproj" class="headTitle2" style="margin:10px 10px 10px 10px">
+                <div>&ensp;</div>
+                现在还没有项目哦~
+              </div>
               <div style="float: left;width:240px" :key="project.proj_id"  v-for="(project, index) in invprojects">
                     <Card :one-project="project"></Card>
               </div>
@@ -670,6 +695,7 @@ axios({
       "Authorization": User.token
     },
     data: {
+      group_id:Group.id,
       proj_name:input.value
     },
     transformRequest: [
@@ -718,7 +744,9 @@ const projects: any[] = reactive([]);
 const sprojects: any[] = reactive([]);
 const creprojects: any[] = reactive([]);
 const invprojects: any[] = reactive([]);
-
+const no_proj = ref<Boolean>(false);
+const no_creproj = ref<Boolean>(false);
+const no_joinproj = ref<Boolean>(false);
 //获取项目
 const getProject = (clear: boolean = true) => {
   //   section.value=parseInt(localStorage.getItem("section")+"")
@@ -768,25 +796,36 @@ const getProject = (clear: boolean = true) => {
           },
         ],
       }).then(function (response) {
+         count = response.data?.count;
+        if(count==0){
+              no_proj.value = true;
+              console.log("! no_proj.value"+ no_proj.value);
+          }else{
+            no_proj.value = false;
+          }
         // 处理成功情况
         if (response.data?.success) {
-          count = response.data?.count;
+         
           console.log(response.data);
           let i = 0;
           if (clear) while (projects.length != 0) projects.pop();
-          if (response.data != null)
-            for (i = 0; i < count; i++) {
-              let temp = reactive({
-                group_id: response.data.projs[i].group_id,
-                proj_id: response.data.projs[i].proj_id,
-                proj_info: response.data.projs[i].proj_info,
-                proj_name: response.data.projs[i].proj_name,
-                status: response.data.projs[i].status,
-                user_id: response.data.projs[i].user_id,
-              });
-              console.log("  projectid" + temp.proj_id);
-              projects.push(temp);
-            }
+          if (response.data != null){
+            
+              no_proj.value = false;
+              for (i = 0; i < count; i++) {
+                let temp = reactive({
+                  group_id: response.data.projs[i].group_id,
+                  proj_id: response.data.projs[i].proj_id,
+                  proj_info: response.data.projs[i].proj_info,
+                  proj_name: response.data.projs[i].proj_name,
+                  status: response.data.projs[i].status,
+                  user_id: response.data.projs[i].user_id,
+                });
+                console.log("  projectid" + temp.proj_id);
+                projects.push(temp);
+              }
+            
+          }
           console.log(projects);
           // User.Name=modelRef.value.name,
           // User.Id=response.data.data.user_id,
@@ -851,8 +890,14 @@ const getCreProject = (clear: boolean = true) => {
         ],
       }).then(function (response) {
         // 处理成功情况
+        count = response.data?.count;
+          if(count==0){
+              no_creproj.value = true;
+              console.log("! !!no_proj.value"+ no_creproj.value);
+          }else{
+            no_creproj.value = false;
+          }
         if (response.data?.success) {
-          count = response.data?.count;
           console.log(response.data);
           let i = 0;
           if (clear) while (projects.length != 0) projects.pop();
@@ -935,8 +980,14 @@ const getInvProject = (clear: boolean = true) => {
         ],
       }).then(function (response) {
         // 处理成功情况
+         count = response.data?.count;
+        if(count==0){
+            no_joinproj.value = true;
+            console.log("! no_proj.value"+ no_proj.value);
+        }else{
+          no_joinproj.value = false;
+        }
         if (response.data?.success) {
-          count = response.data?.count;
           console.log(response.data);
           let i = 0;
           if (clear) while (projects.length != 0) projects.pop();
@@ -1025,6 +1076,15 @@ const project_create = () => {
   vertical-align: middle;
   font-family: nunito-sans, sans-serif;
   font-size: 24px;
+  font-weight: bold;
+}
+
+.headTitle2 {
+  margin: auto;
+  color: #0000007b;
+  vertical-align: middle;
+  font-family: nunito-sans, sans-serif;
+  font-size: 14px;
   font-weight: bold;
 }
 
