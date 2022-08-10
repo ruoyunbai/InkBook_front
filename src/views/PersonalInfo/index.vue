@@ -1,7 +1,7 @@
 <template>
   <!-- <Header></Header> -->
   <n-layout style="background-color: #FFF8E8"
-    >
+  >
     <div class="card">
 
       <div class="card_title">
@@ -23,6 +23,14 @@
                 v-show="isSelf"
             >
               <p class="buttonText3">退出登录</p>
+            </n-button>
+            <n-button
+                color="#F5B544"
+                size="large"
+                style="border-radius: 5px 5px 5px 20px; width: 120px;height: 40px;"
+                @click="handleClick()"
+            >
+              <p class="buttonText3">编辑个人信息</p>
             </n-button>
           </n-space>
         </div>

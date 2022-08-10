@@ -89,7 +89,7 @@ const routes: Array<RouteRecordRaw> = [
                         title: "首页",
                         transition: "animate__bounceIn"
                     },
-                    
+
                 },{
                     name: 'docContent0',
                     path: "content",
@@ -145,7 +145,16 @@ const routes: Array<RouteRecordRaw> = [
                     title:"新建团队",
                     transition:"animate__bounceIn"
                 }
-            }
+            },
+            {
+                name: 'ChangeProfile',
+                path: "/changeProfile",
+                component: () => import('../views/PersonalInfo/changeProfile.vue'),
+                meta: {
+                    title: "首页",
+                    transition: "animate__bounceIn"
+                }
+            },
         ]
     },
     {
@@ -158,15 +167,7 @@ const routes: Array<RouteRecordRaw> = [
         }
     },
 
-    {
-        name: 'ChangeProfile',
-        path: "/changeProfile",
-        component: () => import('../views/PersonalInfo/changeProfile.vue'),
-        meta: {
-            title: "首页",
-            transition: "animate__bounceIn"
-        }
-    },
+
     {
         name: 'ChangePassword',
         path: "/changePassword",
