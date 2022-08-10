@@ -679,7 +679,6 @@ const getCreProject = (clear: boolean = true) => {
             }
           console.log(creprojects);
           getProject();
-          getCreProject();
           // User.Name=modelRef.value.name,
           // User.Id=response.data.data.user_id,
         } else {
