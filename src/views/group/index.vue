@@ -11,7 +11,7 @@
           <n-icon>
               <n-image src="svg\project_svg\group_home.svg" />
             </n-icon>
-          团队名称</div>
+          团队管理</div>
       </n-gi>
       <n-gi span="1">
         <tk-select selected="请选择">
@@ -53,14 +53,39 @@
     全部成员
   </div>
   <div id="group_mid">
-    <div id="panel_title">
+    <!-- <div id="panel_title">
       <div class="title_font first">昵称</div>
       <div class="title_font forth"></div>
       <div class="title_font second">邮箱</div>
       <div class="title_font third"></div>
       <div class="title_font forth">身份</div>
       <div class="title_font fifth"></div>
-    </div>
+    </div> -->
+     <div style="margin:1px 10px 0px 10px">&ensp;</div>
+      <n-grid x-gap="0" :cols="80">
+        <n-gi span="7">
+        </n-gi>
+        <n-gi span="1">
+        </n-gi>
+        <n-gi span="12">
+          <div class="name2" style="margin:10px 10px 10px 30px">
+          昵称
+          </div>
+        </n-gi>
+        <n-gi span="28">
+          <div class="name2" style="margin:10px 10px 10px 30px">&ensp;邮箱</div>
+        </n-gi>
+        <n-gi span="16">
+          <div class="name2" style="margin:10px 10px 10px 30px">身份</div>
+        </n-gi>
+        <n-gi span="16">
+          <div class="name2" style="margin:10px 10px 10px 30px">
+           操作
+          </div>
+        </n-gi>
+      </n-grid>
+    <n-image lenth="120%" src="svg\project_svg\Title(2).svg"/>
+    <div> </div>
     <div v-for="(member, index) in members">
       <Bar :key="member.member_id" :oneMember="member"></Bar>
     </div >
@@ -410,7 +435,14 @@ const getMembers = (clear: boolean = true) => {
 </script>
 
 <style>
-
+.name{
+    font-size: 16px;
+    font-weight: bold;
+}
+.name2{
+    font-size: 20px;
+    font-weight: bold;
+}
 #group_up_blank{
   height: 30px;
 }

@@ -6,38 +6,64 @@
           <n-gi span="4" style="display: flex">
             <n-image width="32" src="svg\\主页svg\\Icons\\Setting - 5.svg" />
             <span style="margin-left: 15px; padding-top: -10px">{{
-                form.name
+              Detail.proj_name
             }}</span>
           </n-gi>
           <n-gi> </n-gi>
           <n-gi span="2" style="margin-top: -1px">
             <span>
-              <n-input ref="inputInstRef" round clearable placeholder="搜索文件">
+              <n-input
+                ref="inputInstRef"
+                round
+                clearable
+                placeholder="搜索文件"
+                v-model:value="input"
+              >
                 <template #prefix>
-                  <n-image width="24" src="svg\\主页svg\\projectDetail\\⭐️ Icons L.svg" />
+                  <n-image
+                    width="24"
+                    src="svg\\主页svg\\projectDetail\\⭐️ Icons L.svg"
+                  />
                 </template>
               </n-input>
             </span>
           </n-gi>
           <n-gi style="margin-top: -8px">
-            <n-button align="center" color="#2772F0" class="button" @click="searchFile">搜索文件</n-button>
+            <n-button
+              align="center"
+              color="#2772F0"
+              class="button"
+              @click="searchFile()"
+              >搜索文件</n-button
+            >
           </n-gi>
           <n-gi style="margin-top: -8px">
-            <n-button color="#2772F0" class="button" margin-left="15px" @click="projectEditVisible = true">编辑项目
+            <n-button
+              color="#2772F0"
+              class="button"
+              margin-left="15px"
+              @click="projectEditVisible = true"
+              >编辑项目
             </n-button>
           </n-gi>
         </n-grid>
       </n-layout-header>
-      <n-layout-content content-style="padding: 24px;" style="background-color: rgb(245, 181, 68, 0.1)">
+      <n-layout-content
+        content-style="padding: 24px;"
+        style="background-color: rgb(245, 181, 68, 0.1)"
+      >
         <div class="fileTitle">项目介绍</div>
         <div class="intro">
-          {{ form.description }}
+          {{ project.description }}
         </div>
       </n-layout-content>
-      <n-layout-content content-style="padding: 24px;" style="background-color: rgb(245, 181, 68, 0.1)">
+      <n-layout-content
+        content-style="padding: 24px;"
+        style="background-color: rgb(245, 181, 68, 0.1)"
+      >
         <n-grid x-gap="50" :cols="3" class="fileTitle">
           <n-gi>
-            <div>设计原型</div>
+            <div>原型页面</div>
           </n-gi>
           <n-gi>
             <div>UML图</div>
@@ -50,102 +76,77 @@
           <n-gi>
             <div class="section">
               <el-scrollbar max-height="97%">
-                <div v-for="(item, idx) in countProto" :key="idx" class="scrollbar-demo-item">
-                  <n-grid class="item" x-gap="0" :cols="11" style="padding-top: 5px; vertical-align: middle">
-                    <n-gi span="1">
-                      <n-image width="26.5" height="23.5" src="svg\\主页svg\\projectDetail\\ItemIcon.svg" />
-                    </n-gi>
-                    <n-gi span="8">
-                      <router-link to="/prototype" style="text-decoration: none; color: black">
-                        <div display="inline">{{ protoList[idx] }}</div>
-                      </router-link>
-                    </n-gi>
-                    <n-gi span="1">
-                      <el-icon @click="dialogEditVisible = true">
-                        <!--@click="dialogEditVisible = true"-->
-                        <Edit />
-                      </el-icon>
-                    </n-gi>
-                    <n-gi span="1">
-                      <el-icon @click="delProto(idx)">
-                        <Delete />
-                      </el-icon>
-                      <!---->
-                    </n-gi>
-                  </n-grid>
+                <div
+                  v-for="(item, idx) in prototypes"
+                  :key="idx"
+                  class="scrollbar-demo-item"
+                >
+                  <protoItem
+                    :key="item.prototype_id"
+                    :oneProto="item"
+                  ></protoItem>
                 </div>
               </el-scrollbar>
 
               <div class="btnspace">
-                <n-button color="#4B9F47" class="button" @click="addProto">新建原型</n-button>
+                <n-button
+                  color="#4B9F47"
+                  class="button"
+                  @click="protoNewVisible = true"
+                  >新建页面</n-button
+                >
               </div>
             </div>
           </n-gi>
 
           <n-gi>
-            <div class="section" style="background-color: rgb(246, 134, 106, 0.2)">
+            <div
+              class="section"
+              style="background-color: rgb(246, 134, 106, 0.2)"
+            >
               <el-scrollbar max-height="97%">
-                <div v-for="(item, idx) in countUML" :key="idx" class="scrollbar-demo-item">
-                  <n-grid class="item" x-gap="0" :cols="11" style="padding-top: 5px; vertical-align: middle">
-                    <n-gi span="1">
-                      <n-image width="26.5" height="23.5" src="svg\\主页svg\\projectDetail\\ItemIcon.svg" />
-                    </n-gi>
-                    <n-gi span="8">
-                      <div display="inline">{{ umlList[idx] }}</div>
-                    </n-gi>
-                    <n-gi span="1">
-                      <el-icon @click="dialogEditVisible = true">
-                        <Edit />
-                      </el-icon>
-                    </n-gi>
-                    <n-gi span="1">
-                      <el-icon @click="delUML(idx)">
-                        <Delete />
-                      </el-icon>
-                      <!---->
-                    </n-gi>
-                  </n-grid>
+                <div
+                  v-for="(item, idx) in umls"
+                  :key="idx"
+                  class="scrollbar-demo-item"
+                >
+                  <UmlItem :key="item.uml_id" :oneUML="item"></UmlItem>
                 </div>
               </el-scrollbar>
 
               <div class="btnspace">
-                <n-button color="#F6866A" class="button" @click="addUML">新建图文件</n-button>
+                <n-button
+                  color="#F6866A"
+                  class="button"
+                  @click="umlNewVisible = true"
+                  >新建图文件</n-button
+                >
               </div>
             </div>
           </n-gi>
 
           <n-gi>
-            <div class="section" style="background-color: rgb(255, 190, 92, 0.2)">
+            <div
+              class="section"
+              style="background-color: rgb(255, 190, 92, 0.2)"
+            >
               <el-scrollbar max-height="97%">
-                <div v-for="(item, idx) in countFile" :key="idx" class="scrollbar-demo-item">
-                  <n-grid class="item" x-gap="0" :cols="11" style="padding-top: 5px; vertical-align: middle">
-                    <n-gi span="1">
-                      <n-image width="26.5" height="23.5" src="svg\\主页svg\\projectDetail\\ItemIcon.svg" />
-                    </n-gi>
-                    <n-gi span="8">
-                      <router-link to="/document" style="text-decoration: none; color: black">
-                        <div display="inline">{{ fileList[idx] }}</div>
-                      </router-link>
-                    </n-gi>
-                    <n-gi span="1">
-                      <el-icon @click="dialogEditVisible = true">
-                        <Edit />
-                      </el-icon>
-                    </n-gi>
-                    <n-gi span="1">
-                      <el-icon @click="delFile(idx)">
-                        <Delete />
-                      </el-icon>
-                      <!---->
-                    </n-gi>
-                  </n-grid>
+                <div
+                  v-for="(item, idx) in documents"
+                  :key="idx"
+                  class="scrollbar-demo-item"
+                >
+                  <DocItem :key="item.document_id" :oneDoc="item"></DocItem>
                 </div>
               </el-scrollbar>
 
               <div class="btnspace">
-                <n-button 
-    
-                color="#F5B544" class="button" @click="addFile">新建文档</n-button>
+                <n-button
+                  color="#F5B544"
+                  class="button"
+                  @click="docNewVisible = true"
+                  >新建文档</n-button
+                >
               </div>
             </div>
           </n-gi>
@@ -155,48 +156,83 @@
     </n-layout>
   </n-space>
 
-  <!--文件名修改框-->
-  <el-dialog v-model="dialogEditVisible" title="重命名文件" draggable>
-    <el-form :model="form">
-      <el-form-item label="新的文件名称" :label-width="formLabelWidth">
-        <el-input v-model="project.name" autocomplete="off" />
+  <!--原型页面新建对话框-->
+  <el-dialog v-model="protoNewVisible" title="新建原型页面" draggable>
+    <el-form :model="file">
+      <el-form-item label="请输入页面名称" :label-width="formLabelWidth">
+        <el-input v-model="file.name" autocomplete="off" />
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogEditVisible = false">取消</el-button>
-        <el-button type="primary" @click="editProto(project.name)">确认</el-button>
+        <el-button @click="protoNewVisible = false">取消</el-button>
+        <el-button type="primary" @click="addProto">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
+
+  <!--UML图新建对话框-->
+  <el-dialog v-model="umlNewVisible" title="新建UML图" draggable>
+    <el-form :model="file">
+      <el-form-item label="请输入UML图名称" :label-width="formLabelWidth">
+        <el-input v-model="file.name" autocomplete="off" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="umlNewVisible = false">取消</el-button>
+        <el-button type="primary" @click="addUML">确认</el-button>
+      </span>
+    </template>
+  </el-dialog>
+
+  <!--文档新建对话框-->
+  <el-dialog v-model="docNewVisible" title="新建文档" draggable>
+    <el-form :model="file">
+      <el-form-item label="请输入文档名称" :label-width="formLabelWidth">
+        <el-input v-model="file.name" autocomplete="off" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="docNewVisible = false">取消</el-button>
+        <el-button type="primary" @click="addDoc">确认</el-button>
       </span>
     </template>
   </el-dialog>
 
   <!--项目信息修改框-->
   <el-dialog v-model="projectEditVisible" title="修改项目信息">
-    <el-form :model="form">
+    <el-form :model="project">
       <el-form-item label="项目名称" :label-width="formLabelWidth">
-        <el-input v-model="form.name" autocomplete="off" placeholder="请输入项目名称" />
+        <el-input
+          v-model="project.name"
+          autocomplete="off"
+          placeholder="请输入项目名称"
+        />
       </el-form-item>
       <el-form-item label="项目描述" :label-width="formLabelWidth">
-        <el-input v-model="form.description" placeholder="请输入项目描述" />
+        <el-input v-model="project.description" placeholder="请输入项目描述" />
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="projectEditVisible = false">取消</el-button>
-        <el-button type="primary" @click="projectEditVisible = false">确认</el-button>
+        <el-button type="primary" @click="projectEditVisible = false"
+          >确认</el-button
+        >
       </span>
     </template>
   </el-dialog>
 </template>
 
-
-
-<script setup lang="ts">
-/*import FileItem from "./fileName.vue";
-import UmlItem from "./UMLName.vue";
-import ProtoItem from "./protoName.vue";*/
-import { onMounted, reactive, Ref, ref, toRefs } from "vue";
+<script lang="ts" setup>
+import DocItem from "./document.vue";
+import UmlItem from "./uml.vue";
+import ProtoItem from "./prototype.vue";
+import { onBeforeMount, onMounted, reactive, Ref, ref, toRefs } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { useMessage } from "naive-ui";
 import {
   Check,
   Delete,
@@ -206,132 +242,67 @@ import {
   Star,
 } from "@element-plus/icons-vue";
 import axios from "axios"; //axios请求地址
-// import { useProjectStore } from "../../store/Project";
-// import { useDetailStore } from "../../store/ProjectDetail";
-import { useMessage } from "naive-ui";
 //USER全局变量
-import { useUserStore } from "../../store/User"
+import { useUserStore } from "../../store/User";
+import { useDetailStore } from "../../store/ProjectDetail";
+import { usePrototypeStore } from "../../store/prototype";
+import { useUmlStore } from "../../store/Uml";
+import { useDocumentStore } from "../../store/Document";
+
+import { useRoute } from "vue-router"
+const route = useRoute();
+
 // import { FileReadOptions } from "fs/promises";
-const User = useUserStore()
-const dialogEditVisible = ref(false);
+const User = useUserStore();
+const Detail = useDetailStore();
+const Proto = usePrototypeStore();
+const Uml = useUmlStore();
+const Doc = useDocumentStore();
+const message = useMessage();
+
+const protoNewVisible = ref(false);
+const umlNewVisible = ref(false);
+const docNewVisible = ref(false);
 const projectEditVisible = ref(false);
 const formLabelWidth = "140px";
 
-const form = reactive({
-  name: "项目1",
-  description: "blabla",
-});
 const project = reactive({
-  name: ""
-})
-const searchFile = () => {
-  // ElMessage({
-  //   message: "searching",
-  //   type: "warning"
-  // })
-
-  /*console.log(goods_data.selected_data.introduce)
-  let search_res: FileReadOptions[] = []  // 接受查询文件结果
-    if(goods_data.selected_data.title || goods_data.selected_data.introduce){
-      if(goods_data.selected_data.title){
-        search_res = goods_data.goods_list.filter((value) => {
-          return value.title.indexOf(goods_data.selected_data.title) !== -1
-        })
-      }
-      else {
-        if(goods_data.selected_data.introduce){
-          search_res = goods_data.goods_list.filter((value) => {
-            return value.introduce.indexOf(goods_data.selected_data.introduce) !== -1
-          })
-        }
-      }
-    }
-    else {
-      search_res = goods_data.goods_list
-    }
-    goods_data.goods_list = search_res
-    goods_data.selected_data.data_count = goods_data.goods_list.length*/
-}
-
-onMounted(() => {
-  // getProjectDetail();
+  name: "项目名称",
+  description: "项目描述",
 });
-let info: any = reactive([])
-/*const getProjectDetail = (clear: boolean = true) => {
-  axios
-    .post("/file/get_proj_by_id", {
-    })
-    .then(function (response) {
-      // 处理成功情况
-      if (response.data?.success) {
-        console.log(response.data.data);
-        if (response.data.data != null){
-          let temp = reactive({
-            group_id:response.data.group_id,
-            proj_id: response.data.proj_id,
-            proj_info: response.data.proj_info,
-            proj_name: response.data.proj_name,
-            status: response.data.status,
-            user_id: response.data.user_id,
-          });
-          info = temp;
-          
-        console.log(info);
-        // User.Name=modelRef.value.name,
-        // User.Id=response.data.data.user_id,
-      } else {
+const file = reactive({
+  name: "",
+});
 
-      }
-      console.log(response.data);
-    };
-});*/
+const prototypes: any = reactive([]);
+const umls: any = reactive([]);
+const documents: any = reactive([]);
 
+let protoNum: number = 0;
+let umlNum: number = 0;
+let docNum: number = 0;
 
-//const protoList=ref([])
-const countProto = ref(0);
-const countUML = ref(0);
-const countFile = ref(0);
+//获取信息，加载项目、页面、uml和文档
+onBeforeMount(() => {
+  // getProjectDetail();
+  // getPrototype();
+  // getUml();
+  // getDocument();
+  console.log("get project info");
+});
 
-let protoList: Array<String> = ["新建设计原型"];
-let umlList: Array<String> = ["新建UML图"];
-let fileList: Array<String> = ["新建文档"];
-let cntP: number = 1;
-let cntU: number = 1;
-let cntF: number = 1;
-
-const addProto = () => {
-  let str: String = "新建设计原型" + cntP.toString();
-  protoList.push(str);
-  cntP++;
-  countProto.value++;
-  handleProtoAdd()
-};
-const addUML = () => {
-  let str: String = "新建UML图" + cntU.toString();
-  umlList.push(str);
-  cntU++;
-  countUML.value++;
-};
-const addFile = () => {
-  let str: String = "新建文档" + cntF.toString();
-  fileList.push(str);
-  cntF++;
-  countFile.value++;
-  handleFileAdd()
-};
-const handleFileAdd=()=>{
+let this_proj_id: number = 0;
+this_proj_id = Number(route.params.proj_id);
+const getProjectDetail = (clear: boolean = true) => {
   axios({
-    url: axios.defaults.baseURL + "/doc/create_document",
+    url: axios.defaults.baseURL + "/proj/get_proj_by_id",
     method: "post",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": User.token
+      Authorization: User.token,
     },
     data: {
-     
-  document_name: "string",
-  proj_id: 0
-
+      proj_id: this_proj_id, // 传递的this_proj_id 如何获取？
     },
     transformRequest: [
       function (data, headers) {
@@ -341,30 +312,182 @@ const handleFileAdd=()=>{
       },
     ],
   }).then(function (response) {
-    // 处理成功情况
+    console.log("response", response);
     console.log(response.data);
 
+    // 处理成功情况
     if (response.data?.success) {
-      message.success("创建文件成功");
-      // getProjectDetail();
+      Detail.proj_info = response.data.proj.proj_info;
+      Detail.proj_name = response.data.proj.proj_name;
     } else {
-      message.error(response.data.message);
+      console.log("找不到项目" + this_proj_id);
+      message.error("项目加载出错");
     }
-    console.log(response.data);
   });
-}
-const handleProtoAdd = () => {
+};
+
+const getPrototype = () => {
+  axios({
+    url: axios.defaults.baseURL + "/ppage/get_proj_ppages",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: User.token,
+    },
+    data: {
+      proj_id: this_proj_id, // 传递的this_proj_id 如何获取？
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    console.log("response", response);
+    console.log(response.data);
+
+    // 处理成功情况
+    if (response.data?.success) {
+      protoNum = response.data.count;
+      let i = 0;
+      for (i = 0; i < protoNum; i++) {
+        let tmp = reactive({
+          prototype_id: response.data.ppages[i].ppage_id,
+          prototype_name: response.data.ppages[i].ppage_name,
+          // prototype_url: response.data.prototypes[i].prototype_url,
+          // proj_id: response.data.prototypes[i].proj_id,
+          // status:  response.data.prototypes[i].status,
+        });
+        console.log("ppageID" + tmp.prototype_id + " " + tmp.prototype_name);
+        prototypes.push(tmp);
+      }
+    } else {
+      console.log("prototypes loading error");
+      message.error("设计原型加载出错");
+    }
+  });
+};
+
+const getUml = () => {
+  axios({
+    url: axios.defaults.baseURL + "/uml/get_proj_umls",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: User.token,
+    },
+    data: {
+      proj_id: this_proj_id, // 传递的this_proj_id 如何获取？
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    console.log("response", response);
+    console.log(response.data);
+
+    // 处理成功情况
+    if (response.data?.success) {
+      umlNum = response.data.count;
+      let i = 0;
+      for (i = 0; i < umlNum; i++) {
+        let tmp = reactive({
+          uml_id: response.data.umls[i].uml_id,
+          uml_name: response.data.umls[i].uml_name,
+          uml_url: response.data.umls[i].uml_url,
+          proj_id: response.data.umls[i].proj_id,
+          status: response.data.umls[i].status,
+        });
+        console.log("UML ID" + tmp.uml_id + " " + tmp.uml_name);
+        umls.push(tmp);
+      }
+    } else {
+      console.log("umls loading error");
+      message.error("UML加载出错");
+    }
+  });
+};
+
+const getDocument = () => {
+  axios({
+    url: axios.defaults.baseURL + "/doc/get_proj_documents",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: User.token,
+    },
+    data: {
+      proj_id: this_proj_id, // 传递的this_proj_id 如何获取？
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    console.log("response", response);
+    console.log(response.data);
+
+    // 处理成功情况
+    if (response.data?.success) {
+      docNum = response.data.count;
+      let i = 0;
+      for (i = 0; i < docNum; i++) {
+        let tmp = reactive({
+          count: response.data.documents[i].count,
+          document_id: response.data.documents[i].document_id,
+          document_name: response.data.documents[i].document_name,
+          document_url: response.data.documents[i].document_url,
+          proj_id: response.data.documents[i].proj_id,
+          status: response.data.documents[i].status,
+        });
+        console.log("document_id" + tmp.document_id + " " + tmp.document_name);
+        documents.push(tmp);
+      }
+    } else {
+      console.log("documents loading error");
+      message.error("文档加载出错");
+    }
+  });
+};
+
+// 添加文件，handle里用axios, add中控制弹窗、刷新
+const addProto = () => {
+  handleProtoAdd(file.name);
+  getPrototype();
+  protoNewVisible.value = false;
+};
+const addUML = () => {
+  handleUmlAdd(file.name);
+  getUml();
+  umlNewVisible.value = false;
+};
+const addDoc = () => {
+  handleDocAdd(file.name);
+  getDocument();
+  docNewVisible.value = false;
+};
+
+const handleProtoAdd = (page_name: String) => {
   axios({
     url: axios.defaults.baseURL + "/ppage/create_ppage",
     method: "post",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": User.token
+      Authorization: User.token,
     },
     data: {
-      ppage_data: "string",
-      ppage_name: "string",
-      proj_id: 0
+      ppage_data: "",
+      ppage_name: page_name,
+      proj_id: this_proj_id,
     },
     transformRequest: [
       function (data, headers) {
@@ -379,179 +502,312 @@ const handleProtoAdd = () => {
 
     if (response.data?.success) {
       message.success("创建成功");
-      // getProjectDetail();
     } else {
       message.error(response.data.message);
     }
     console.log(response.data);
   });
-}
+};
 
-const msg = ref("");
-const editProto = (name: String) => {
-  dialogEditVisible.value = false;
-  ElMessage({
-    type: 'success',
-    message: project.name,
-  })
-  if (name !== "") {
-    // ElMessage({
-    //         type: 'success',
-    //         message: name,
-    //     })
-    let idx = protoList.findIndex((x) => x === name);
-    ElMessage({
-      type: 'success',
-      message: idx.toString(),
-    })
-    protoList[idx] = project.name;
-    project.name = "";
-  }
-}
+const handleUmlAdd = (uml_str: String) => {
+  axios({
+    url: axios.defaults.baseURL + "/uml/create_uml",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: User.token,
+    },
+    data: {
+      uml_name: uml_str,
+      proj_id: this_proj_id,
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
+    console.log(response.data);
 
+    if (response.data?.success) {
+      message.success("创建成功");
+    } else {
+      message.error(response.data.message);
+    }
+    console.log(response.data);
+  });
+};
 
-const message = useMessage();
-const protoCreate = () => {
-  axios
-    .post("/file/create_document", {
-      proj_id: 0,//怎么获得项目id？
-      proto_name: form.name
-    })
-    .then(function (response) {
+const handleDocAdd = (doc_name: String) => {
+  axios({
+    url: axios.defaults.baseURL + "/doc/create_document",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: User.token,
+    },
+    data: {
+      document_name: doc_name,
+      proj_id: this_proj_id,
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
+    console.log(response.data);
+
+    if (response.data?.success) {
+      message.success("创建文件成功");
+    } else {
+      message.error(response.data.message);
+    }
+    console.log(response.data);
+  });
+};
+
+// 修改、删除
+Proto.$subscribe((mutation, state) => {
+  if (Proto.operation == "") return;
+  else if (Proto.operation == "edit") {
+    axios({
+      url: axios.defaults.baseURL + "/ppage/update_ppage",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: User.token,
+      },
+      data: {
+        ppage_id: Proto.ppage_id,
+        ppage_data: "",
+        ppage_name: Proto.ppage_name,
+      },
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
       // 处理成功情况
-      console.log(response.data);
+      console.log(response);
+      getPrototype();
+      message.success("重命名成功");
+    });
+    Proto.operation = "";
+  } else if (Proto.operation == "delete") {
+    axios({
+      url: axios.defaults.baseURL + "/ppage/move_ppage_to_bin",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: User.token,
+      },
+      data: {
+        ppage_id: Proto.proj_id,
+      },
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log(response);
+      getPrototype();
+      message.success("成功移入回收站");
+    });
+    Proto.operation = "";
+  }
+});
 
-      if (response.data?.success) {
-        message.success("创建成功");
-        // getProjectDetail();
-        dialogEditVisible.value = false;
+Uml.$subscribe((mutation, state) => {
+  if (Uml.operation == "") return;
+  else if (Uml.operation == "edit") {
+    axios({
+      url: axios.defaults.baseURL + "/uml/update_uml",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: User.token,
+      },
+      data: {
+        uml_id: Uml.uml_id,
+        uml_name: Uml.uml_name,
+      },
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log(response);
+      getUml();
+      message.success("重命名成功");
+    });
+    Uml.operation = "";
+  } else if (Uml.operation == "delete") {
+    axios({
+      url: axios.defaults.baseURL + "/uml/move_uml_to_bin",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: User.token,
+      },
+      data: {
+        uml_id: Uml.proj_id,
+      },
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log(response);
+      getUml();
+      message.success("成功移入回收站");
+    });
+    Uml.operation = "";
+  }
+});
 
-        // setTimeout(() => {
-        //   footRef.value.style.width = post.value?.offsetWidth + "px";
-        // }, 200);
-      } else {
-        message.error(response.data.message);
+Doc.$subscribe((mutation, state) => {
+  if (Doc.operation == "") return;
+  else if (Doc.operation == "edit") {
+    axios({
+      url: axios.defaults.baseURL + "/uml/update_uml",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: User.token,
+      },
+      data: {
+        document_id: Doc.document_id,
+        document_name: Doc.document_name,
+      },
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log(response);
+      getDocument();
+      message.success("重命名成功");
+    });
+    Doc.operation = "";
+  } else if (Doc.operation == "delete") {
+    axios({
+      url: axios.defaults.baseURL + "/uml/move_uml_to_bin",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: User.token,
+      },
+      data: {
+        document_id: Doc.document_id,
+      },
+      transformRequest: [
+        function (data, headers) {
+          let data1 = JSON.stringify(data);
+          return data1;
+        },
+      ],
+    }).then(function (response) {
+      // 处理成功情况
+      console.log(response);
+      getDocument();
+      message.success("成功移入回收站");
+    });
+    Doc.operation = "";
+  }
+});
+
+// 搜索
+const searched = ref(false);
+const input=ref("");
+
+let sprotoNum: number = 0;
+let sumlNum: number = 0;
+let sdocNum: number = 0;
+
+const sprototypes: any = reactive([]);
+const sumls: any = reactive([]);
+const sdocuments: any = reactive([]);
+
+const searchFile = () => {
+  axios({
+    url: axios.defaults.baseURL + "/file/get_files_by_name",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: User.token,
+    },
+    data: {
+      name: input.value,
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
+    console.log(response);
+    sdocNum = response.data.count_documents;
+    sprotoNum = response.data.count_ppages;
+    sumlNum = response.data.count_umls;
+    if (response.data?.success) {
+      for (let i = 0; i < sprotoNum; i++) {
+        let tmp1 = reactive({
+          prototype_id: response.data.ppages[i].ppage_id,
+          prototype_name: response.data.ppages[i].ppage_name,
+        });
+        sprototypes.push(tmp1);
       }
-      console.log(response.data);
-    });
-};
-
-const delProto = (idx: number) => {
-  ElMessageBox.confirm(
-    '确定删除这个文件？',
-    //idx.toString(),
-    'Confirm',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
+      for (let i = 0; i < sumlNum; i++) {
+        let tmp2 = reactive({
+          uml_id: response.data.umls[i].uml_id,
+          uml_name: response.data.umls[i].uml_name,
+          uml_url: response.data.umls[i].uml_url,
+          proj_id: response.data.umls[i].proj_id,
+          status: response.data.umls[i].status,
+        });
+        sumls.push(tmp2);
+      }
+      for (let i = 0; i < sdocNum; i++) {
+        let tmp3 = reactive({
+          count: response.data.documents[i].count,
+          document_id: response.data.documents[i].document_id,
+          document_name: response.data.documents[i].document_name,
+          document_url: response.data.documents[i].document_url,
+          proj_id: response.data.documents[i].proj_id,
+          status: response.data.documents[i].status,
+        });
+        sdocuments.push(tmp3);
+      }
+      searched.value = true;
+    } else {
+      message.error(response.data?.message);
+      searched.value = false;
     }
-  )
-    .then(() => {
-      handleProtoDelete(idx);
-      let str: String = protoList[idx];
-      protoList.splice(idx, 1);
-      countProto.value--;
-      ElMessage({
-        type: 'success',
-        message: '删除成功 ' + str,
-      })
-    })
-    .catch(() => {
-      // catch error
-    });
+  });
 };
-const delUML = (idx: number) => {
-  ElMessageBox.confirm(
-    '确定删除这个文件？',
-    //idx.toString(),
-    'Confirm',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
-  )
-    .then(() => {
-      handleUMLDelete(idx);
-      let str: String = umlList[idx];
-      umlList.splice(idx, 1);
-      countUML.value--;
-      ElMessage({
-        type: 'success',
-        message: '成功删除文件 ' + str,
-      })
-    })
-    .catch(() => {
-      // catch error
-    });
-};
-const delFile = (idx: number) => {
-  ElMessageBox.confirm(
-    '确定删除这个文件？',
-    //idx.toString(),
-    'Confirm',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
-  )
-    .then(() => {
-      handleFileDelete(idx);
-      let str: String = fileList[idx];
-      fileList.splice(idx, 1);
-      countFile.value--;
-      ElMessage({
-        type: 'success',
-        message: '成功删除文件 ' + str,
-      })
-    })
-    .catch(() => {
-      // catch error
-    });
-};
-
-const handleProtoDelete = (id: number) => {
-  //接口调用
-  axios
-    .post("/file/move_prototype_to_bin", {
-      data: {
-        prototype_name: [id],
-      },
-    })
-    .then(() => {
-      //ElMessage.success("删除成功");
-      //getShowList();
-    });
-};
-const handleUMLDelete = (id: number) => {
-  //接口调用
-  axios
-    .post("/file/move_uml_to_bin", {
-      data: {
-        uml_name: [id],
-      },
-    })
-    .then(() => {
-      //ElMessage.success("删除成功");
-      //getShowList();
-    });
-};
-const handleFileDelete = (id: number) => {
-  //接口调用
-  axios
-    .post("/file/move_document_to_bin", {
-      data: {
-        document_name: [id],
-      },
-    })
-    .then(() => {
-      //ElMessage.success("删除成功");
-      //getShowList();
-    });
-};
-
 </script>
 
 <style scoped>
@@ -604,7 +860,7 @@ const handleFileDelete = (id: number) => {
   flex-direction: column;
   /**/
 
-  border-radius: 16px;
+  border-radius: 10px;
   background-color: rgb(75, 159, 71, 0.2);
   padding-bottom: 10px;
   padding-top: 20px;
@@ -648,4 +904,4 @@ const handleFileDelete = (id: number) => {
   background: url("svg\\主页svg\\projectDetail\\trash.svg") no-repeat;
   border-style: hidden;
 }
-</style >
+</style > 

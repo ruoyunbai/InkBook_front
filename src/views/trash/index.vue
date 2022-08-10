@@ -1,67 +1,187 @@
 <template>
   <div class="trash_head">
     <n-image src="svg\trash_svg\shape.svg" class="title_img"/>
-    <div class="title_font">已删除内容(4)</div>
+    <div class="title_font">已删除内容</div>
   </div>
   <div class="trash_body">
 <!--    项目-->
-    <div class="one_trash project">
-      <div class="wrap">
-        <div class="tip_first">项目名称</div>
-        <div class="tip_second">项目描述</div>
-        <div class="tip_btn">
-          <n-button style=" width: 200px;height: 40px; border-radius: 12px; border: 1px solid #cdcdcd"
-                    color="transparent" text-color="#2772F0">
-            <n-image src="svg\trash_svg\recover.svg" />
-            <span class="btn_font">恢复</span>
-          </n-button>
-        </div>
-      </div>
+    <div style="float: left;width:240px" :key="project.proj_id"  v-for="(project, index) in projects">
+        <ProTrash :oneProject="project"></ProTrash>
     </div>
 <!--    文档-->
-    <div class="one_trash project">
-      <div class="wrap">
-        <div class="tip_first">文档名称</div>
-        <div class="tip_btn">
-          <n-button style=" width: 200px;height: 40px; border-radius: 12px; border: 1px solid #cdcdcd"
-                    color="transparent" text-color="#2772F0">
-            <n-image src="svg\trash_svg\recover.svg" />
-            <span class="btn_font">恢复</span>
-          </n-button>
-        </div>
-      </div>
-    </div>
+    <!-- <FileTrash></FileTrash> -->
 <!--    设计原型-->
-    <div class="one_trash project">
-      <div class="wrap">
-        <div class="tip_first">设计原型名称</div>
-        <div class="tip_btn">
-          <n-button style=" width: 200px;height: 40px; border-radius: 12px; border: 1px solid #cdcdcd"
-                    color="transparent" text-color="#2772F0">
-            <n-image src="svg\trash_svg\recover.svg" />
-            <span class="btn_font">恢复</span>
-          </n-button>
-        </div>
-      </div>
-    </div>
+    <!-- <DesignTrash></DesignTrash> -->
 <!--    uml-->
-    <div class="one_trash project">
-      <div class="wrap">
-        <div class="tip_first">UML图名称</div>
-        <div class="tip_btn">
-          <n-button style=" width: 200px;height: 40px; border-radius: 12px; border: 1px solid #cdcdcd"
-                    color="transparent" text-color="#2772F0">
-            <n-image src="svg\trash_svg\recover.svg" />
-            <span class="btn_font">恢复</span>
-          </n-button>
-        </div>
-      </div>
-    </div>
+    <!-- <UmlTrash></UmlTrash> -->
   </div>
 
 </template>
 
-<script >
+<script setup lang="ts">
+
+import {
+  onUpdated,
+  toRaw,
+  reactive,
+  onBeforeMount,
+  ref,
+  onMounted,
+  StyleValue,
+  Ref,
+  getCurrentInstance,
+  h,
+} from "vue";
+import { useDialog, NInput } from "naive-ui";
+// import Vditor from 'vditor'
+import ProTrash from '../../components/trash/pro_trash.vue';
+import FileTrash from '../../components/trash/file_trash.vue';
+import DesignTrash from '../../components/trash/design_trash.vue';
+import UmlTrash from '../../components/trash/uml_trash.vue';
+import axios from "axios";
+import { useProjectStore } from "../../store/Project";
+import { useUserStore } from "../../store/User";
+import { InputInst, useMessage } from "naive-ui";
+
+let text1: Ref<string> = ref("");
+const searched=ref(false)
+const Project = useProjectStore();
+const User = useUserStore();
+const message = useMessage();
+const input=ref("")
+//对话框
+const dialogCreateVisible = ref(false)
+const formLabelWidth = '140px'
+const form = reactive({
+  name: '',
+  region: '',
+})
+
+//获取项目
+let count: number = 0;
+let one_group_id: number;
+const projects: any[] = reactive([]);
+const sprojects: any[] = reactive([]);
+
+onBeforeMount(() => {
+  getProject_in_bin();
+  console.log("1!!!");
+});
+
+Project.$subscribe((mutation, state)=>{
+    if(Project.operation=="")return;
+    else if(Project.operation=="delete_proj"){
+      axios({
+        url: axios.defaults.baseURL + "/bin/delete_proj",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          proj_id: Project.proj_id,
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log(response)
+        getProject_in_bin();
+      })
+      Project.operation="";
+    }
+})
+
+//获取项目
+const getProject_in_bin = (clear: boolean = true) => {
+  
+  //   section.value=parseInt(localStorage.getItem("section")+"")
+  axios({
+    url: axios.defaults.baseURL + "/group/get_groups",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": User.token
+    },
+    data: {
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
+    if (response.data?.success) {
+      count = response.data?.count;
+      console.log(response.data);
+      let i = 0;
+      if (clear) while (projects.length != 0) projects.pop();
+      if (response.data != null)
+      one_group_id = response.data.groups[0].group_id;
+      console.log("one_group_id" + one_group_id);
+      axios({
+        url: axios.defaults.baseURL + "/bin/get_projs_in_bin",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          group_id: one_group_id,
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("!!!获取项目成功");
+        if (response.data?.success) {
+          count = response.data?.count;
+          console.log(response.data);
+          let i = 0;
+          if (clear) while (projects.length != 0) projects.pop();
+          if (response.data != null)
+            for (i = 0; i < count; i++) {
+              let temp = reactive({
+                group_id: response.data.projs[i].group_id,
+                proj_id: response.data.projs[i].proj_id,
+                proj_info: response.data.projs[i].proj_info,
+                proj_name: response.data.projs[i].proj_name,
+                status: response.data.projs[i].status,
+                user_id: response.data.projs[i].user_id,
+              });
+              console.log("  projectid" + temp.proj_id);
+              projects.push(temp);
+            }
+          console.log(projects);
+          // User.Name=modelRef.value.name,
+          // User.Id=response.data.data.user_id,
+        } else {
+        }
+        console.log(response.data);
+      });
+      // User.Name=modelRef.value.name,
+      // User.Id=response.data.data.user_id,
+    } else {
+    }
+    console.log(response.data);
+  });
+
+}
+
+
+
 </script>
 
 <style>

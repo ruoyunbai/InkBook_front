@@ -2,20 +2,21 @@ import { defineStore } from 'pinia'
 
 import { Names } from './store-namespace'
 
- 
-export const useDetailStore = defineStore("Detail",{
-    state:()=>{
+
+export const useUmlStore = defineStore("UML", {
+    state: () => {
         return {
             proj_id: 0,
-            proj_info: "string",
-            proj_name: "string",
             status: 0,
-            user_id: 0,
-            operation:"",
+            uml_id: 0,
+            uml_name: "string",
+            uml_url: "string",
+
+            operation: "",
         }
     },
     // getters:{
- 
+
     // },
     // //可以操作异步 和 同步提交state
     // actions:{
@@ -35,5 +36,5 @@ export const useDetailStore = defineStore("Detail",{
     //     // }
     //     // ]
     //   },
- 
+
 })

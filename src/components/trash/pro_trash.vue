@@ -1,9 +1,8 @@
 <template>
-  <div class="parent" style="background:#FFFFFF">
-    <div class="user" style="background:#EDF5ED;margin:15px 25px 15px 15px" >
+  <div class="user" style="background:#EDF5ED;margin:15px 25px 15px 15px" >
         <n-space vertical>
             <n-space justify="end">
-                <n-image style="margin:15px 15px 10px 10px" height="25" preview-disabled @click="proj_copy()" src="svg\project_svg\copy.svg"/>
+                <div>&ensp;</div>
             </n-space>
             <p class="name"  style="margin:0px 10px 10px 30px">{{props.oneProject.proj_name}}</p>
             <p class="state" style="margin:0px 10px 10px 30px">{{props.oneProject.proj_info}}</p>
@@ -13,30 +12,15 @@
                 size="large"
                 color="#DADADA"
                 ghost
-                @click="routerToPersonalInfo"
+                @click="move_out()"
             >
                 <template #icon>
                     <n-image preview-disabled src="svg\project_svg\toDetail.svg">
                     </n-image>
                   </template>
                 <!-- <router-link to="/projectDetail" style="text-decoration: none"> -->
-                    <p class="buttonText2" @click="toDetail()">进入项目</p>    
+                    <p class="buttonText2" @click="toDetail()">恢复项目</p>    
                 <!-- </router-link> -->
-            </n-button>
-
-            <n-button
-                round
-                size="large"
-                color="#DADADA"
-                ghost
-                style="margin:5px 10px 5px 10px"
-                @click="dialogEditVisible = true"
-            >
-                <template #icon>
-                    <n-image preview-disabled src="svg\project_svg\edit.svg">
-                    </n-image>
-                  </template>
-                <p class="buttonText2">编辑信息</p>
             </n-button>
 
             <n-button
@@ -54,29 +38,22 @@
                 <p class="buttonText2"
                 >删除项目</p>
             </n-button>
-
-            <el-dialog v-model="dialogEditVisible" title="修改项目信息">
-                <el-form :model="form">
-                <el-form-item label="项目名称" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" autocomplete="off" placeholder="请输入项目名称"/>
-                </el-form-item>
-                <el-form-item label="项目描述" :label-width="formLabelWidth">
-                    <el-input v-model="form.region" placeholder="请输入项目描述"/>
-                </el-form-item>
-                </el-form>
-                <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="dialogEditVisible = false">取消</el-button>
-                    <el-button type="primary" @click="project_update()"
-                    >确定</el-button
-                    >
-                </span>
-                </template>
-            </el-dialog>
-           
         </n-space>
     </div>
-  </div>
+
+  <!-- <div class="one_trash project">
+    <div class="wrap">
+      <div class="tip_first">{{props.oneProject.proj_name}}</div>
+      <div class="tip_second">{{props.oneProject.proj_info}}</div>
+      <div class="tip_btn">
+        <n-button style=" width: 200px;height: 40px; border-radius: 12px; border: 1px solid #cdcdcd"
+                  color="transparent" text-color="#2772F0">
+          <n-image src="svg\trash_svg\recover.svg" />
+          <span class="btn_font">恢复</span>
+        </n-button>
+      </div>
+    </div>
+  </div> -->
 </template>
 
 <script lang="ts" setup>
@@ -95,66 +72,17 @@ import {
 import { useDialog, NInput } from "naive-ui";
 // import Vditor from 'vditor'
 import axios from "axios";
-import { useProjectStore } from "../store/Project";
-import { useUserStore } from "../store/User";
+import { useProjectStore } from "../../store/Project";
+import { useUserStore } from "../../store/User";
 import { InputInst, useMessage } from "naive-ui";
 import { useRouter } from "vue-router"
 
 const router = useRouter();
-
 const Project = useProjectStore();
 
-const routerToPersonalInfo=()=>{
-    console.log("route")
-}
-const dialogEditVisible = ref(false)
-const formLabelWidth = '140px'
-
-const form = reactive({
-  name: '项目1',
-  region: '项目描述',
-})
-
-// type projectDetail ={
-//   proj_id:number,
-//   proj_name:String,
-//   proj_state:String
-// }
-
-
-
-onBeforeMount(()=>{
-    form.region=props.oneProject.proj_info
-    form.name=props.oneProject.proj_name
-})
-
-//修改项目
-const project_update = () => {
-    Project.proj_info=form.region;
-    Project.proj_name=form.name;
-    Project.proj_id=props.oneProject.proj_id;
-    Project.operation="changeInfo";
-    dialogEditVisible.value = false;
-}
-
 const move_proj_to_bin = () =>{
-    Project.proj_id=props.oneProject.proj_id;
-    Project.operation="move_to_bin";
-    dialogEditVisible.value = false;
-}
-
-const proj_copy= () =>{
-    Project.proj_id=props.oneProject.proj_id;
-    Project.operation="proj_copy";
-}
-
-const toDetail = () =>{
-  router.push({
-    name:"projectDetail",
-    params:{
-      proj_id:props.oneProject.proj_id,
-    }
-  })
+  Project.proj_id=props.oneProject.proj_id;
+  Project.operation="delete_proj";
 }
 
 type Props = {
@@ -202,7 +130,94 @@ const props: any = withDefaults(defineProps<Props>(), {
 </script>
 
 <style>
-    .parent{
+
+.btn_font{
+  font-family: 'Inria Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  margin-left: 5px;
+}
+
+.trash_head{
+  margin-top: 100px;
+  margin-left: 100px;
+  height: 40px;
+  position: relative;
+}
+
+.title_img{
+  margin-top: 5px;
+  position: absolute;
+}
+
+.title_font{
+  position: absolute;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 28px;
+  margin-left: 50px;
+}
+
+.trash_body{
+  width: 94%;
+  height: 600px;
+  max-height: 600px;
+  margin-left: 3%;
+  margin-top: 50px;
+  padding-top: 30px;
+  background-color: #FFFFFF;
+  border-radius: 24px;
+  overflow-y: scroll;
+}
+
+.one_trash{
+  width: 21%;
+  height: 300px;
+  margin-left: 40px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background: rgba(75,159,71, 0.1);
+  mix-blend-mode: normal;
+  border-radius: 24px;
+  float: left;
+}
+
+.wrap{
+  position: relative;
+}
+
+.tip_first{
+  position: absolute;
+  font-family: 'Inria Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  margin-left: 28px;
+  margin-top: 63px;
+}
+
+.tip_second{
+  position: absolute;
+  font-family: 'Inria Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  margin-top: 120px;
+  margin-left: 28px;
+}
+
+.tip_btn{
+  margin-top: 220px;
+  margin-left: 20px;
+  position: absolute;
+}
+
+  .parent{
       border-radius: 16px;
     }
      .user {
@@ -252,4 +267,5 @@ const props: any = withDefaults(defineProps<Props>(), {
     .dialog-footer button:first-child {
     margin-right: 10px;
     }
+
 </style>

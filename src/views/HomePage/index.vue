@@ -17,16 +17,21 @@
         </el-col>
       </el-row>
     </div>
-    <div
-      style="
-        position: absolute;
-        margin-top: 70px;
-        width: 100%;
-        text-align: center;
-      "
+    <transition-group
+      enter-active-class="animated backInLeft"
+      appear-active-class="animated backInLeft"
     >
-      <n-image preview-disabled src="svg\\homePage\\top.svg" />
-    </div>
+      <div
+        style="
+          position: absolute;
+          margin-top: 70px;
+          width: 100%;
+          text-align: center;
+        "
+      >
+        <n-image preview-disabled src="svg\\homePage\\top.svg" />
+      </div>
+    </transition-group>
 
     <div class="background">
       <div style="position: absolute; left: 0; top: 2350px">
@@ -140,7 +145,14 @@
       style="margin: auto"
       src="svg\\homePage\\whiteStar.svg"
     />
+    <transition-group
+      name="posts"
+      tag="p"
+      enter-active-class="animate__animated animate__backInLeft"
+      appear-active-class="animate__animated animate__backInLeft"
+    >
     在线设计 协同设计 实时文档 交互原型
+    </transition-group>
     <n-image preview-disabled
       width="40"
       height="40"
