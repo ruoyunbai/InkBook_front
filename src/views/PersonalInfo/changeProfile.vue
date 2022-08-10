@@ -323,26 +323,26 @@ const Email: any = ref("")
 const Level: any = ref("")
 onMounted(() => {
     let t2 = localStorage.getItem("user_ID");
-  axios({
+    axios({
         url: axios.defaults.baseURL + "/user/info",
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
            "Authorization":User.token
-        },
-        data: {
+    },
+    data: {
           user_id:1,
-        },
-        transformRequest: [
-          function (data, headers) {
-            let data1 = JSON.stringify(data);
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
             
-            return data1;
-          },
-        ],
-      }).then(function (response) {
+        return data1;
+      },
+    ],
+  }).then(function (response) {
       console.log("response",response);
-      if (response.data?.success) {
+    if (response.data?.success) {
         console.log(response.data)
         let poster=response.data.poster
         Name.value = poster.Username;
@@ -354,13 +354,13 @@ onMounted(() => {
 
 
 
-      } else {
+    } else {
         message.error("查询失败...");
-      }
+    }
       isSelf.value = true;
 
 
-    });
+  });
       console.log("yes")
 })
 const modelRef = ref<ModelType>({
