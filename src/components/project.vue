@@ -151,6 +151,8 @@ const proj_copy= () =>{
 
 const proj_top= () =>{
     Project.proj_id=props.oneProject.proj_id;
+    Project.proj_name=props.oneProject.proj_name;
+    Project.proj_info=props.oneProject.proj_info;
     Project.top=2;
     Project.operation="proj_top";
 }
