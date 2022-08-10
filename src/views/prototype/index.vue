@@ -15,13 +15,12 @@
       <template #header-extra>
         取消
       </template>
-       <el-link v-if="linkOpen"
-       :href="'https://inkbook.mina.moe/#/share/?pro='+url" target="_blank"
-       type="success">https://inkbook.mina.moe/#/share/?pro={{url}}</el-link>
-  
+      <el-link v-if="linkOpen" :href="'https://inkbook.mina.moe/#/share/?pro=' + url" target="_blank" type="success">
+        https://inkbook.mina.moe/#/share/?pro={{ url }}</el-link>
+
       <template #footer>
         <n-button v-if="!linkOpen" @click="share">打开分享</n-button>
-         <n-button v-if="linkOpen" @click="unshare">关闭分享</n-button>
+        <n-button v-if="linkOpen" @click="unshare">关闭分享</n-button>
       </template>
     </n-modal>
     <n-card :bordered="false">
@@ -40,11 +39,15 @@
           </n-space>
         </n-gi>
         <n-gi span="2">
-          <n-space>
-            <n-button type="warning" strong secondary :disabled="ProtoNotChosed" v-on:click="saveDesign"
-              @click="() => { showModal = true }">新建页面</n-button>
-            <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
-          </n-space>
+
+          <n-button type="warning" strong secondary :disabled="ProtoNotChosed" v-on:click="saveDesign"
+            @click="() => { showModal = true }">新建页面</n-button>
+          <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
+
+        </n-gi>
+        <n-gi span="2">
+          <n-select placeholder="导入模板" :consistent-menu-width="false" v-model:value="modelValue" :options="optionsModels" @update:value="loadModel"
+            class="choose" />
         </n-gi>
         <n-gi span="2">
           <n-space>
@@ -62,10 +65,14 @@
         </n-gi>
         <n-gi></n-gi>
         <n-gi span="2">
-            <n-space>
-            <n-button type="warning" strong secondary :disabled="nopageChosed" v-on:click="openShare=true">分享页面</n-button>
+          <n-space>
+            <n-button type="warning" strong secondary :disabled="nopageChosed" v-on:click="openShare = true">分享页面
+            </n-button>
             <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
           </n-space>
+        </n-gi>
+        <n-gi>
+
         </n-gi>
       </n-grid>
     </n-card>
@@ -94,7 +101,7 @@ import { useMessage } from 'naive-ui'
 import { useGroupStore } from '../../store/Group';
 const Group = useGroupStore()
 const message = useMessage()
-const openShare=ref(false)
+const openShare = ref(false)
 const createName = ref("")
 const User = useUserStore()
 const height = ref(800)
@@ -103,9 +110,9 @@ const ProtoNotChosed = ref(true)
 const protoLoading = ref(true)
 const nopageChosed = ref(true)
 const pageNotChosed = ref(false)
-const pageHolder = ref("选择原型后可选择页面")
+const pageHolder = ref("选择页面")
 const showModal = ref(false)
-const url=ref("")
+const url = ref("")
 const bodyStyle = {
   width: '600px'
 }
@@ -134,11 +141,66 @@ const changeWidth = () => {
     preheaderText: "Hello World"
   });
 }
-const linkOpen=ref(false)
+const linkOpen = ref(false)
 // import * as Automerge from 'automerge'
 const options = ref<SelectOption[]>([])
 const optionsPage = ref<SelectOption[]>([])
+const modelValue = ref()
+const optionsModels: SelectOption[] = [
+  {
+    label: "学术成果分享平台内容页",
+    value: "scholor_detail",
+  },
+  {
+    label: "学术成果分享平台首页",
+    value: "scholor_index",
+  },
+  {
+    label: "商城内容页",
+    value: "shop_detail",
+  },
+  {
+    label: "商城首页",
+    value: "shop_index",
+  },
+  {
+    label: "商城检索页",
+    value: "shop_search",
+  }
+]
+const loadModel = () => {
+  let modelName = modelValue.value
+  modelValue.value=null
+  axios({
+    url: 'http://127.0.0.1:3000/json/' + modelName + '.json',
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  }).then(function (response) {
+    // 处理成功情况
+    let t = response.data
+    console.log("response", response)
 
+    emailEditor.value.editor.
+      loadDesign(t.design);
+    height.value = t.h
+    minHeight.value = height.value + "px"
+    emailEditor.value.editor.setBodyValues({
+      backgroundColor: "#e7e7e7",
+      contentWidth: t.w + "px", // or percent "50%"
+      fontFamily: {
+        label: "Helvetica",
+        value: "'Helvetica Neue', Helvetica, Arial, sans-serif"
+      },
+      preheaderText: "Hello World"
+    });
+
+
+
+  }
+  )
+}
 const getProjs = () => {
   axios({
     url: axios.defaults.baseURL + "/proj/get_proj_all",
@@ -195,7 +257,7 @@ const projectId = ref(0) // replace with your project id
 //         enabled: false,
 //       })
 
-const share=()=>{
+const share = () => {
   axios({
     url: axios.defaults.baseURL + "/ppage/gen_shared_ppage_token",
     method: "post",
@@ -218,8 +280,8 @@ const share=()=>{
     // console.log(response.data);
 
     if (response.data?.success) {
-      url.value=response.data?.token
-      linkOpen.value=true
+      url.value = response.data?.token
+      linkOpen.value = true
       message.success("已生成分享链接")
     }
 
@@ -229,7 +291,7 @@ const share=()=>{
   }
   )
 }
-const unshare=()=>{
+const unshare = () => {
   axios({
     url: axios.defaults.baseURL + "/ppage/close_shared_ppage",
     method: "post",
@@ -252,7 +314,7 @@ const unshare=()=>{
     // console.log(response.data);
 
     if (response.data?.success) {
-      linkOpen.value=false
+      linkOpen.value = false
       message.success(response?.data.message)
     }
 
