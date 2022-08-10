@@ -106,12 +106,13 @@ const move_proto_to_bin = () => {
 
 const toProto = () =>{
   router.push({
-    path:props.oneProto.prototype_url,
-    query:{
-      prototype_id:props.oneProto.prototype_id,
+    name:"prototype",
+    params:{
+      ppage_id:props.oneProto.prototype_id,
     }
   })
 }
+
 
 type Props = {
   oneProto?: {
