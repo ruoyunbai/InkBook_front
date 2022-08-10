@@ -72,6 +72,8 @@ import axios from 'axios';
 import { SelectOption } from 'naive-ui'
 import { useUserStore } from '../../store/User'
 import {useMessage} from 'naive-ui'
+import { useGroupStore } from '../../store/Group';
+const Group=useGroupStore()
 const message=useMessage()
 
 const createName = ref("")
@@ -126,7 +128,7 @@ const getProjs = () => {
       "Authorization": User.token
     },
     data: {
-      group_id: 1,
+      group_id: Group.id,
       is_desc: true,
       order_by: 0
     },

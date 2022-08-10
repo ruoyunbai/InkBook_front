@@ -48,29 +48,32 @@
                                     style="padding:0;margin:0"></n-image>
                                     </div>
                                     
-                                <span style="padding:0;margin:0;position:relative;"> {{ node.label }}</span>
-                                <n-input @blur="" v-if="data.renaming" size="small"></n-input>
+                                <span v-if="!data.renaming" style="padding:0;margin:0;position:relative;"> {{ node.label }}</span>
+                                <n-input @blur="endRename(data)" v-model:value="newName" v-if="data.renaming" size="small"></n-input>
 
                                 <!-- <span>{{ node.id }}</span> -->
                                 <!-- <span>{{data}}</span> -->
                                 <span>
                                 <!-- 添加文件夹 -->
-                                    <n-image preview-disabled v-if="!data.inputingDir&&!(data.isProj)&&data.isDir" @click="appendDir(data)"
+                                    <n-image preview-disabled v-if="!data.inputingDir&&!data.inputingDoc&&!data.renaming&&!(data.isProj)&&data.isDir" @click.stop="appendDir(data)"
                                         src="svg\doc\dir+.svg"></n-image>
                                     <n-input v-model:value="newDirName"  @blur="endAddDir(data)" v-if="data.inputingDir" size="small"></n-input>
                                
                                <!-- 添加文件 -->
-                                    <n-image preview-disabled v-if="data.isDir && !data.inputingDoc" @click="appendDoc(data)"
+                                    <n-image preview-disabled v-if="data.isDir && !data.inputingDir&&!data.inputingDoc&&!data.renaming" @click.stop="appendDoc(data)"
                                         src="svg\doc\doc+.svg"></n-image>
-                                    <n-input @blur="" v-if="data.inputingDoc" size="small"></n-input>
+                                    <n-input v-model:value="newDocName"  @blur="endAddDoc(data)" v-if="data.inputingDoc" size="small"></n-input>
                                
                                <!-- rename -->
-                                    <n-image preview-disabled v-if="!(data.isProj&&data.isDir&&(data.level==1||data.level==2))&&!data.isRoot" @click="appendDoc(data)"
-                                        src="svg\doc\rename.svg"></n-image>
+                                    <n-image 
+                                    preview-disabled v-if="!(data.isProj&&data.isDir&&(data.level==1||data.level==2))&&!data.isRoot&&!data.inputingDir&&!data.inputingDoc&&!data.renaming" 
+                                    @click.stop="()=>{data.renaming=true}"
+                                        src="svg\doc\rename.svg">
+                                    </n-image>
 
                                 <!-- delete -->
-                                    <n-image preview-disabled  @click="remove(node, data)"
-                                    v-if="!(data.isProj&&data.isDir&&(data.level==1||data.level==2))&&!data.isRoot"
+                                    <n-image preview-disabled  @click.stop="remove(node, data)"
+                                    v-if="!(data.isProj&&data.isDir&&(data.level==1||data.level==2))&&!data.isRoot&&!data.inputingDir&&!data.inputingDoc&&!data.renaming"
                                     width="20"
                                         src="svg\group_svg\trash.svg"></n-image>
 
@@ -139,6 +142,8 @@ import { useUserStore } from '../../store/User'
 import { useGroupStore } from '../../store/Group'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
+import {useMessage} from 'naive-ui'
+const message=useMessage()
 const route = useRoute()
 const router = useRouter()
 
@@ -147,6 +152,8 @@ const Group = useGroupStore()
 const showModal = ref(false)
 const createName = ref("")
 const newDirName=ref("")
+const newDocName=ref("")
+
 interface Tree {
     id: number
     name?: string
@@ -166,6 +173,7 @@ let doc = {
     id: -1,
     name: ""
 }
+
 const enterDoc = (tar: { isDir: any; id: number; label: string }, node: any, event: any) => {
     console.log(tar, node, event)
     if (tar.isDir) return
@@ -254,46 +262,168 @@ const createTree = (src: any,isProj=false,level=0) => {
     }
     return t
 }
+const newName=ref("")
+const endRename=(data:Tree)=>{
+    data.label=newName.value
+    data.renaming=false
+    console.log("data",data)
+     axios({
+        url: axios.defaults.baseURL + "/doc/update_document",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            document_name:newName.value,
+            document_id:data.id,
+            
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("addDIR",response)
+        if (response.data?.success) {
+            // newChild.id=
+            if(data.children!=null)
+            dataSource.value = [...dataSource.value]
+            message.success(response.data?.message)
 
-const appendDoc = (data: Tree) => {
-
-    const newChild = { id: id++, label: 'new', children: [], isDir: false }
+        }
+    })
+}
+const endAddDoc=(data:Tree)=>{
+    data.inputingDoc=false
+    const newChild = { 
+        inputingDir:false,inputingDoc:false,renaming:false,
+        isProj:data.isProj,
+        level:data.level+1,
+        isRoot:false,
+        id:-1, label: newDocName.value, children: [], isDir: false }
     if (!data.children) {
         data.children = []
     }
-    data.children.push(newChild)
+     axios({
+        url: axios.defaults.baseURL + "/doc/create_doc_file",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            file_name:newDocName.value,
+            dir_id:data.id,
+            is_dir:0
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+            newDocName.value=""
+        console.log("addDIR",response)
+        if (response.data?.success) {
+            // newChild.id=
+            // newChild.id=response.data?.
+            if(data.children!=null)
+            data.children.push(newChild)
+            dataSource.value = [...dataSource.value]
+            message.success(response.data?.message)
 
-    dataSource.value = [...dataSource.value]
+        }
+    })
+}
+const appendDoc = (data: Tree) => {
+    data.inputingDoc=true
 }
 
 const endAddDir=(data:Tree)=>{
+    
     data.inputingDir=false
         const newChild = { 
         inputingDir:false,inputingDoc:false,renaming:false,
         isProj:data.isProj,
         level:data.level+1,
         isRoot:false,
-        id: id++, label: newDirName.value, children: [], isDir: true }
-
+        id:-1, label: newDirName.value, children: [], isDir: true }
     if (!data.children) {
         data.children = []
     }
-    newDirName.value=""
-    data.children.push(newChild)
-    dataSource.value = [...dataSource.value]
+     axios({
+        url: axios.defaults.baseURL + "/doc/create_doc_file",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            file_name:newDirName.value,
+            dir_id:data.id,
+            is_dir:1
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("addDIR",response)
+        if (response.data?.success) {
+            // newChild.id=
+             newDirName.value=""
+            if(data.children!=null)
+            data.children.push(newChild)
+            dataSource.value = [...dataSource.value]
+            message.success(response.data?.message)
+        }
+    })
+   
 }
 const appendDir = (data: Tree) => {
     data.inputingDir = true
-    
 }
 
 const remove = (node: Node, data: Tree) => {
-    console.log(data)
+    console.log("data",data,"node",node)
     const parent = node.parent
     const children: Tree[] = parent.data.children || parent.data
     const index = children.findIndex((d) => d.id === data.id)
     children.splice(index, 1)
     dataSource.value = [...dataSource.value]
+     axios({
+        url: axios.defaults.baseURL + "/doc/move_document_to_bin",
+        method: "post",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": User.token
+        },
+        data: {
+            document_id:data.id,         
+        },
+        transformRequest: [
+            function (data, headers) {
+                let data1 = JSON.stringify(data);
+                return data1;
+            },
+        ],
+    }).then(function (response) {
+        // 处理成功情况
+        console.log("addDIR",response)
+        if (response.data?.success) {
+    
+            message.success(response.data?.message)
+        }
+    })
 }
 
 
