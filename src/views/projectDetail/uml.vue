@@ -13,7 +13,7 @@
         />
       </n-gi>
       <n-gi span="8">
-        <div display="inline">{{ props.oneUML.uml_name }}</div>
+        <div display="inline" @click="toUML()">{{ props.oneUML.uml_name }}</div>
       </n-gi>
       <n-gi span="1">
         <el-icon @click="dialogEditVisible = true">
@@ -101,11 +101,11 @@ const move_uml_to_bin = () => {
   // dialogEditVisible.value = false;
 };
 
-const toUMl = () =>{
+const toUML = () =>{
   router.push({
-    path:props.oneUML.uml_url,
-    query:{
-      uml_id:props.oneUML.uml_id,
+    name:"graph",
+    params:{
+      uml_id: props.oneUML.uml_id,
     }
   })
 }

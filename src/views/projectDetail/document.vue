@@ -13,9 +13,9 @@
         />
       </n-gi>
       <n-gi span="8">
-        <router-link to="/document" style="text-decoration: none; color: black">
-          <div display="inline">{{ props.oneDoc.document_name }}</div>
-        </router-link>
+        <!-- <router-link to="/document" style="text-decoration: none; color: black"> -->
+        <div display="inline" @click="toDoc()">{{ props.oneDoc.document_name }}</div>
+        <!-- </router-link> -->
       </n-gi>
       <n-gi span="1">
         <el-icon @click="dialogEditVisible = true">
@@ -104,9 +104,9 @@ const move_doc_to_bin = () => {
 
 const toDoc = () =>{
   router.push({
-    path:props.oneDoc.document_url,
-    query:{
-      proj_id:props.oneDoc.document_id,
+    name:"document",
+    params:{
+      doc_id:props.oneDoc.document_id,
     }
   })
 }
