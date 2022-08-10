@@ -3,11 +3,11 @@
         <n-grid x-gap="12" :cols="16">
             <n-gi span="1">
             </n-gi>
-            <n-gi span="3">
+            <n-gi span="5">
                 <n-image src="svg\center_svg\title_img.svg" />
                 <span class="title_font">团队文档中心</span>
             </n-gi>
-            <n-gi span="5">
+            <n-gi span="3">
             </n-gi>
             <n-gi span="1">
                 <n-button color="#2772F0" text-color="#FFFFFF" style="width: 130px; height: 46px; border-radius: 16px;">
@@ -38,7 +38,7 @@
                         default-expand-all :expand-on-click-node="false">
                         <template #default="{ node, data }">
                             <span class="custom-tree-node" 
-                            @mouseleave="data.show=false"
+                            @mouseleave="data.show=(data.inputingDoc||data.inputingDir||data.renaming)?true:false"
                             @mouseenter="data.show=true">
                                 <!-- <n-space> -->
                                     <div>
@@ -51,7 +51,7 @@
                                     </div>
 
                                 <span v-if="!data.renaming" style="padding:0;margin:0;position:relative;"> {{ node.label }}</span>
-                                <n-input @blur="endRename(data)" v-model:value="newName" v-if="data.renaming" size="small"></n-input>
+                                <n-input @keyup.enter="endRename(data)" v-model:value="newName" v-if="data.renaming" size="small"></n-input>
 
                                 <!-- <span>{{ node.id }}</span> -->
                                 <!-- <span>{{data}}</span> -->
@@ -59,12 +59,12 @@
                                 <!-- 添加文件夹 -->
                                     <n-image preview-disabled v-if="!data.inputingDir&&!data.inputingDoc&&!data.renaming&&!(data.isProj)&&data.isDir" @click.stop="appendDir(data)"
                                         src="svg\doc\dir+.svg" style="width: 18px; height: 18px; margin-left: 2px"></n-image>
-                                    <n-input v-model:value="newDirName"  @blur="endAddDir(data)" v-if="data.inputingDir" size="small"></n-input>
+                                    <n-input v-model:value="newDirName"   @keyup.enter="endAddDir(data)" v-if="data.inputingDir" size="small"></n-input>
 
                                <!-- 添加文件 -->
                                     <n-image preview-disabled v-if="data.isDir && !data.inputingDir&&!data.inputingDoc&&!data.renaming" @click.stop="appendDoc(data)"
                                         src="svg\doc\doc+.svg" style="width: 18px; height: 18px; margin-left: 2px"></n-image>
-                                    <n-input v-model:value="newDocName"  @blur="endAddDoc(data)" v-if="data.inputingDoc" size="small"></n-input>
+                                    <n-input v-model:value="newDocName"  @keyup.enter="endAddDoc(data)" v-if="data.inputingDoc" size="small"></n-input>
 
                                <!-- rename -->
                                     <n-image
@@ -198,6 +198,9 @@ const enterDoc = (tar: { isDir: any; id: number; label: string }, node: any, eve
 
 }
 onBeforeMount(() => {
+    getTree()
+})
+const getTree=()=>{
     axios({
         url: axios.defaults.baseURL + "/doc/get_doc_files",
         method: "post",
@@ -216,6 +219,7 @@ onBeforeMount(() => {
         ],
     }).then(function (response) {
         // 处理成功情况
+        while(dataSource.value.length!=0)dataSource.value.pop()
         console.log("responseDoc", response.data)
         if (response.data?.success) {
             let d = response.data
@@ -227,7 +231,7 @@ onBeforeMount(() => {
             dataSource.value.push(t)
         }
     })
-})
+}
 const createTree = (src: any,isProj=false,level=0) => {
     let t: Tree = {
         id: -1,
@@ -308,6 +312,7 @@ const endAddDoc=(data:Tree)=>{
         isProj:data.isProj,
         level:data.level+1,
         isRoot:false,
+        show:false,
         id:-1, label: newDocName.value, children: [], isDir: false }
     if (!data.children) {
         data.children = []
@@ -341,7 +346,7 @@ const endAddDoc=(data:Tree)=>{
             data.children.push(newChild)
             dataSource.value = [...dataSource.value]
             message.success(response.data?.message)
-
+    getTree()
         }
     })
 }
@@ -357,6 +362,7 @@ const endAddDir=(data:Tree)=>{
         isProj:data.isProj,
         level:data.level+1,
         isRoot:false,
+        show:false,
         id:-1, label: newDirName.value, children: [], isDir: true }
     if (!data.children) {
         data.children = []
@@ -389,6 +395,7 @@ const endAddDir=(data:Tree)=>{
             data.children.push(newChild)
             dataSource.value = [...dataSource.value]
             message.success(response.data?.message)
+            getTree()
         }
     })
 
@@ -501,7 +508,7 @@ const dataSource = ref<Tree[]>([])
 .center_menu {
     position: absolute;
     margin-left: 70%;
-    width: 25%;
+    width: 30%;
     background-color: #FFFFFF;
     height: 780px;
     border-radius: 24px;

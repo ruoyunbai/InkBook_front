@@ -1,6 +1,6 @@
 <template>
 <div ref="root">
-<n-modal v-model:show="showModal" class="custom-card" preset="card" :style="bodyStyle" title=" 请输入页面名字" size="huge"
+<n-modal v-model:show="showModal" class="custom-card" preset="card"  title=" 请输入页面名字" size="huge"
     :bordered="false">
     <template #header-extra>
       取消
