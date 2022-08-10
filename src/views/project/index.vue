@@ -202,7 +202,7 @@
                     </template>
                     最多编辑
                 </n-button>
-                <n-button round strong secondary type="info" @click="show('recent')">
+                <n-button round strong secondary type="info" @click="show2('recent')">
                     <template #icon>
                       <n-image preview-disabled src="svg\project_svg\recent.svg"></n-image>
                     </template>
@@ -246,11 +246,38 @@
             <n-collapse-item title="&emsp;我参与的">
               <n-divider></n-divider>
 
-              <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
-                <n-grid-item>
-                  <Card></Card>
-                </n-grid-item>
-              </n-grid>
+              <n-space justify="end" style="margin:0px 10px 10px 20px">
+                <n-button round strong secondary type="info" @click="show3('new')">
+                    <template #icon>
+                      <n-image preview-disabled src="svg\project_svg\clock.svg">
+                      </n-image>
+                    </template>
+                    最新创建
+                </n-button>
+                <n-button round strong secondary type="info" @click="show3('old')">
+                    <template #icon>
+                      <n-image preview-disabled src="svg\project_svg\clock.svg">
+                      </n-image>
+                    </template>
+                    最早创建
+                </n-button>
+                <n-button round strong secondary type="info" @click="show3('hot')">
+                    <template #icon>
+                      <n-image preview-disabled src="svg\project_svg\hot.svg"></n-image>
+                    </template>
+                    最多编辑
+                </n-button>
+                <n-button round strong secondary type="info" @click="show3('recent')">
+                    <template #icon>
+                      <n-image preview-disabled src="svg\project_svg\recent.svg"></n-image>
+                    </template>
+                    最近编辑
+                </n-button>
+              </n-space>
+
+              <div style="float: left;width:240px" :key="project.proj_id"  v-for="(project, index) in invprojects">
+                    <Card :one-project="project"></Card>
+              </div>
 
               <template #header-extra>
                 <n-image preview-disabled  src="svg\project_svg\sort.svg" />
@@ -390,7 +417,7 @@ const show = (order1: string,clear: boolean = true) => {
       });
 };
 
-//项目排序
+//我创建的项目排序
 const show2 = (order1: string,clear: boolean = true) => {
   // getPosts();
   if (order1 == "new") {
@@ -583,6 +610,7 @@ axios({
 onBeforeMount(() => {
   getProject();
   getCreProject();
+  getInvProject();
   console.log("1");
 });
 
@@ -591,6 +619,7 @@ let one_group_id: number;
 const projects: any[] = reactive([]);
 const sprojects: any[] = reactive([]);
 const creprojects: any[] = reactive([]);
+const invprojects: any[] = reactive([]);
 
 //获取项目
 const getProject = (clear: boolean = true) => {
@@ -743,6 +772,90 @@ const getCreProject = (clear: boolean = true) => {
               creprojects.push(temp);
             }
           console.log(creprojects);
+          getProject();
+          // User.Name=modelRef.value.name,
+          // User.Id=response.data.data.user_id,
+        } else {
+        }
+        console.log(response.data);
+      });
+      // User.Name=modelRef.value.name,
+      // User.Id=response.data.data.user_id,
+    } else {
+    }
+    console.log(response.data);
+  });
+}
+
+
+//获取我参与的项目
+const getInvProject = (clear: boolean = true) => {
+  axios({
+    url: axios.defaults.baseURL + "/group/get_groups",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": User.token
+    },
+    data: {
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
+    if (response.data?.success) {
+      count = response.data?.count;
+      console.log(response.data);
+      let i = 0;
+      if (clear) while (invprojects.length != 0) invprojects.pop();
+      if (response.data != null)
+      one_group_id = response.data.groups[0].group_id;
+      console.log("one_group_id" + one_group_id);
+      axios({
+        url: axios.defaults.baseURL + "/proj/get_proj_join",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          group_id: one_group_id,
+          is_desc: true,
+          order_by: 1
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        if (response.data?.success) {
+          count = response.data?.count;
+          console.log(response.data);
+          let i = 0;
+          if (clear) while (projects.length != 0) projects.pop();
+          if (response.data != null)
+            for (i = 0; i < count; i++) {
+              let temp = reactive({
+                group_id: response.data.projs[i].group_id,
+                proj_id: response.data.projs[i].proj_id,
+                proj_info: response.data.projs[i].proj_info,
+                proj_name: response.data.projs[i].proj_name,
+                status: response.data.projs[i].status,
+                user_id: response.data.projs[i].user_id,
+              });
+              console.log("  projectid" + temp.proj_id);
+              invprojects.push(temp);
+            }
+          console.log(invprojects);
           getProject();
           // User.Name=modelRef.value.name,
           // User.Id=response.data.data.user_id,
