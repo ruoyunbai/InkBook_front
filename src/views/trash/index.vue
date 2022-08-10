@@ -5,13 +5,15 @@
   </div>
   <div class="trash_body">
 <!--    项目-->
-    <ProTrash></ProTrash>
+    <div style="float: left;width:240px" :key="project.proj_id"  v-for="(project, index) in projects">
+        <ProTrash :oneProject="project"></ProTrash>
+    </div>
 <!--    文档-->
-    <FileTrash></FileTrash>
+    <!-- <FileTrash></FileTrash> -->
 <!--    设计原型-->
-    <DesignTrash></DesignTrash>
+    <!-- <DesignTrash></DesignTrash> -->
 <!--    uml-->
-    <UmlTrash></UmlTrash>
+    <!-- <UmlTrash></UmlTrash> -->
   </div>
 
 </template>
@@ -54,6 +56,103 @@ const form = reactive({
   name: '',
   region: '',
 })
+
+//获取项目
+let count: number = 0;
+let one_group_id: number;
+const projects: any[] = reactive([]);
+const sprojects: any[] = reactive([]);
+
+onBeforeMount(() => {
+  getProject_in_bin();
+  console.log("1!!!");
+});
+
+//获取项目
+const getProject_in_bin = (clear: boolean = true) => {
+  
+  //   section.value=parseInt(localStorage.getItem("section")+"")
+  axios({
+    url: axios.defaults.baseURL + "/group/get_groups",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": User.token
+    },
+    data: {
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
+    if (response.data?.success) {
+      count = response.data?.count;
+      console.log(response.data);
+      let i = 0;
+      if (clear) while (projects.length != 0) projects.pop();
+      if (response.data != null)
+      one_group_id = response.data.groups[0].group_id;
+      console.log("one_group_id" + one_group_id);
+      axios({
+        url: axios.defaults.baseURL + "/bin/get_projs_in_bin",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          group_id: one_group_id,
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("!!!获取项目成功");
+        if (response.data?.success) {
+          count = response.data?.count;
+          console.log(response.data);
+          let i = 0;
+          if (clear) while (projects.length != 0) projects.pop();
+          if (response.data != null)
+            for (i = 0; i < count; i++) {
+              let temp = reactive({
+                group_id: response.data.projs[i].group_id,
+                proj_id: response.data.projs[i].proj_id,
+                proj_info: response.data.projs[i].proj_info,
+                proj_name: response.data.projs[i].proj_name,
+                status: response.data.projs[i].status,
+                user_id: response.data.projs[i].user_id,
+              });
+              console.log("  projectid" + temp.proj_id);
+              projects.push(temp);
+            }
+          console.log(projects);
+          // User.Name=modelRef.value.name,
+          // User.Id=response.data.data.user_id,
+        } else {
+        }
+        console.log(response.data);
+      });
+      // User.Name=modelRef.value.name,
+      // User.Id=response.data.data.user_id,
+    } else {
+    }
+    console.log(response.data);
+  });
+
+}
+
+
 
 </script>
 
