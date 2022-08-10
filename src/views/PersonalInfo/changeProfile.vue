@@ -13,7 +13,7 @@
         <div class="body_left">
           <n-space vertical align="center">
             <n-avatar :size="90" :src="Ava" style="border-radius: 10px"></n-avatar>
-            <span class="NAME">{{ Name }}</span>
+            <span class="NAME">{{ User.Name }}</span>
 <!--            <n-button-->
 <!--                color="#F5B544"-->
 <!--                size="large"-->
@@ -23,7 +23,21 @@
 <!--            >-->
 <!--              <p class="buttonText3">退出登录</p>-->
 <!--            </n-button>-->
-            <n-button type="info" round size="medium" color="#F5B544"
+  <el-upload ref="upload"
+            action="https://inkbook.mina.moe/api/v1/user/upload_avatar"
+            :data="{
+                    'user_id': t2,
+            }"
+            :headers="{
+              Authorization: User.token
+            }"
+            name='avatar'
+            :show-file-list="true"
+            :on-success="
+            changeAvatar
+            "
+        >
+              <n-button type="info" round size="medium" color="#F5B544"
                       style="border-radius: 5px 5px 5px 20px; width: 120px;height: 40px;"  >
                 <n-icon size="22" color="white">
                     <svg
@@ -32,14 +46,17 @@
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M20.3091 3.56791C19.084 2.4214 17.0977 2.42139 15.8726 3.56791L8.72849 10.2538C8.34207 10.6154 8.06794 11.0685 7.9354 11.5647L7.06539 14.8215C6.97977 15.142 7.08012 15.4811 7.32975 15.7147C7.57939 15.9483 7.94169 16.0422 8.28419 15.9621L11.7642 15.1479C12.2944 15.0238 12.7786 14.7673 13.165 14.4057L20.3091 7.7198C21.5342 6.57329 21.5342 4.71442 20.3091 3.56791ZM17.294 4.89808C17.7341 4.4862 18.4477 4.4862 18.8878 4.89808C19.3279 5.30996 19.3279 5.97775 18.8878 6.38963L11.7436 13.0755C11.6148 13.196 11.4534 13.2816 11.2767 13.3229L9.42173 13.7569L9.88548 12.0209C9.92965 11.8555 10.021 11.7045 10.1498 11.5839L17.294 4.89808Z" fill="white"/>
                     </svg>
                 </n-icon>
-                <span class="buttonText3">&nbsp;上传图片</span>
+                <span class="buttonText3">&nbsp;上传头像</span>
             </n-button>
+                        
+        </el-upload>
+            
           </n-space>
         </div>
         <div class="body_mid">
           <n-from
             label-width="100px"
-            :size="small"
+            size="small"
             label-placement="left"
             require-mark-placement="right-hanging"
           >
@@ -107,7 +124,10 @@ const newName= ref("")
 const newReal= ref("")
 const newSex= ref("")
 const newMail= ref("")
-
+const changeAvatar=(res:any)=>{
+              // console.log(res)
+              User.avatar='https://inkbook.mina.moe/media/avatar/'+res.avatar_url
+      }
 const modify_info = ()=>{
 
     axios({

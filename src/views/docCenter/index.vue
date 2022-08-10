@@ -9,21 +9,43 @@
             </n-gi>
             <n-gi span="3">
             </n-gi>
-            <n-gi span="1">
-                <n-button color="#2772F0" text-color="#FFFFFF" style="width: 130px; height: 46px; border-radius: 16px;">
+            <n-gi span="2">
+                <!-- <n-button color="#2772F0" text-color="#FFFFFF" style="width: 130px; height: 46px; border-radius: 16px;">
                     <n-image src="svg\center_svg\export.svg" />
                     <span class="btn_font">导出文档</span>
-                </n-button>
+                </n-button> -->
+                 <n-space vertical>
+                            <!-- :loading="outputing" -->
+                        <n-select v-model:value="outMethod" :options="outOptions" 
+                                placeholder="导出文档" @update:value="output" class="choose selectP" />
+                </n-space>
             </n-gi>
-            <n-gi span="1">
+          
+            <n-gi span="2">
+                <!-- <n-button 
+                @click=""
+                color="#2772F0" text-color="#FFFFFF" style="width: 130px; height: 46px; border-radius: 16px;">
+                    <template #icon>
+                        <n-image src="svg\center_svg\more.svg" />
+                    </template>
+                    
+                    <span  class="btn_font">更多模板</span>
+                   
+                </n-button> -->
+                 
+                    <n-select v-model:value="modelValue" :options="modelOptions"  
+                                placeholder="更多模板" @update:value="importModel" class="choose selectP" />
 
             </n-gi>
-            <n-gi span="1">
-                <n-button color="#2772F0" text-color="#FFFFFF" style="width: 130px; height: 46px; border-radius: 16px;">
-                    <n-image src="svg\center_svg\more.svg" />
-                    <span class="btn_font">更多模板</span>
-                </n-button>
-            </n-gi>
+            <n-gi>
+             
+                </n-gi>
+                <n-gi span="1">
+                </n-gi>
+
+                    <n-gi span="2">
+                       
+                        </n-gi>
         </n-grid>
     </div>
     <div class="center_mid">
@@ -145,6 +167,9 @@ import { useGroupStore } from '../../store/Group'
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import {useMessage} from 'naive-ui'
+import {SelectOption} from 'naive-ui'
+import { useMsgStore } from '../../store/Msg'
+const Msg=useMsgStore()
 const message=useMessage()
 const route = useRoute()
 const router = useRouter()
@@ -155,7 +180,46 @@ const showModal = ref(false)
 const createName = ref("")
 const newDirName=ref("")
 const newDocName=ref("")
+const outMethod=ref()
+const modelValue=ref(null)
+const outOptions = ref<SelectOption[]>([])
+const modelOptions:SelectOption[]=[
+    {
+        label:"会议纪要",
+        value:"会议纪要"
+    },
+    {
+        label:"项目规划",
+        value:"项目规划"
+    },
+    {
+        label:"需求文档",
+        value:"需求文档"
+    },
+]
+outOptions.value.push({
+    label:"word",
+    value:1
+})
+outOptions.value.push({
+    label:"pdf",
+    value:2
+})
+const output=()=>{
 
+    console.log(outMethod.value)
+    if(Number(outMethod.value)==1){
+        Msg.Dopt="word"
+        // console.log("yes")
+    }else{
+        Msg.Dopt="pdf"
+    }
+    outMethod.value="导出文档"
+}
+const importModel=()=>{
+    Msg.DMname=String(modelValue.value)
+    Msg.Dopt="load"
+}
 interface Tree {
     id: number
     name?: string

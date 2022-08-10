@@ -165,6 +165,7 @@ const defaultExpandedKeys = [2]
 const message = useMessage()
 const User = useUserStore()
 const avatar = ref("svg\\主页svg\\Avatar.svg")
+avatar.value=User.avatar
 const menuOptions: MenuOption[] = reactive([
     {
         label: () =>
@@ -345,7 +346,7 @@ const MouseOnUser = () => {
 }
 
 User.$subscribe((mutation, state)=>{ 
-    User.Name=User.Name
+    console.log("User改名了！",User.Name)
 })
 
 
@@ -392,7 +393,7 @@ const afterDClocsed = () => {
 }
 const MouseLeaveUser = () => {
     isOnUser.value = false;
-    avatar.value = "svg\\主页svg\\Avatar.svg"
+    avatar.value = User.avatar
 }
 const handleUpdateGroup = (value: string, option: SelectOption) => {
     Group.id = Number(option.key)

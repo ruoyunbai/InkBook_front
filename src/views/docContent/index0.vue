@@ -208,7 +208,7 @@ Msg.$subscribe(()=>{
 })
 const loadModel=(name:string)=>{
   axios({
-    url: 'http://127.0.0.1:3000/json/'+name+'.json',
+    url: 'https://inkbook.mina.moe/json/'+name+'.json',
     method: "get",
     headers: {
       "Content-Type": "application/json",

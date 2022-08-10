@@ -1,6 +1,7 @@
 <template>
 <div ref="root">
-<n-modal v-model:show="showModal" class="custom-card" preset="card"  title=" 请输入页面名字" size="huge"
+    <!--
+    <n-modal v-model:show="showModal" class="custom-card" preset="card"  title=" 请输入页面名字" size="huge"
     :bordered="false">
     <template #header-extra>
       取消
@@ -18,7 +19,7 @@
             @update:value="getPPages(false)" class="choose" />
         </n-space>
       </n-gi>
-      <!-- <n-gi></n-gi> -->
+     
       <n-gi span="3">
         <n-space vertical>
           <n-select :loading="pageNotChosed" remote :placeholder=pageHolder :disabled="ProtoNotChosed"
@@ -29,13 +30,13 @@
         <n-space>
           <n-button type="warning" strong secondary :disabled="ProtoNotChosed" v-on:click="saveDesign"
             @click="() => { showModal = true }">新建页面</n-button>
-          <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
+         
         </n-space>
       </n-gi>
       <n-gi span="2">
         <n-space>
           <n-button type="warning" strong secondary :disabled="nopageChosed" v-on:click="saveDesign">保存设计</n-button>
-          <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
+        
         </n-space>
       </n-gi>
       <n-gi span="2">
@@ -49,7 +50,7 @@
     </n-grid>
   </n-card>
 
-
+-->
   <br>
     <iframe
     ref="ifr"

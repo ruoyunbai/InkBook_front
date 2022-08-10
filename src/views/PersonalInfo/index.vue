@@ -13,14 +13,14 @@
       <div class="card_body">
         <div class="body_left">
           <n-space vertical align="center">
-            <n-avatar :size="90" :src="Ava" style="border-radius: 10px"></n-avatar>
-            <span class="NAME">{{ Name }}</span>
+            <n-avatar :size="90" :src="User.avatar" style="border-radius: 10px"></n-avatar>
+            <span class="NAME">{{ User.Name }}</span>
             <n-button
                 color="#F5B544"
                 size="large"
-                @click="UserExit"
+              
                 style="border-radius: 5px 5px 5px 20px; width: 120px;height: 40px;"
-                v-show="isSelf"
+             
             >
               <p class="buttonText3">退出登录</p>
             </n-button>
@@ -32,6 +32,7 @@
             >
               <p class="buttonText3">编辑个人信息</p>
             </n-button>
+           
           </n-space>
         </div>
         <div class="body_mid">
