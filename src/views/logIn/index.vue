@@ -84,8 +84,10 @@ import { ref, onMounted, computed, onUnmounted,onBeforeMount,onBeforeUnmount } f
 import { useRouter } from 'vue-router'
 import axios from 'axios';
 
-import { useUserStore } from '../../store/User'
-const User = useUserStore()
+import { useUserStore } from '../../store/User';
+import { useGroupStore } from '../../store/Group';
+const User = useUserStore();
+const Group = useGroupStore();
 
 
 interface ModelType {
@@ -158,7 +160,7 @@ const rules: FormRules = {
 const handlePasswordInput = () => {
 
 }
-
+let count: number = 0;
 const router = useRouter();
 const message = useMessage()
 const handleValidateButtonClick = (e: MouseEvent) => {
@@ -194,7 +196,46 @@ const handleValidateButtonClick = (e: MouseEvent) => {
           User.Name= modelRef.value.name
           User.Id=response.data.user.user_id
           localStorage.setItem("Login","true")
-          router.push('/')
+          
+          axios({
+            url: axios.defaults.baseURL + "/group/get_groups",
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": User.token
+            },
+            data: {
+            },
+            transformRequest: [
+              function (data, headers) {
+                let data1 = JSON.stringify(data);
+                return data1;
+              },
+            ],
+          }).then(function (response) {
+            // 处理成功情况
+            if (response.data?.success) {
+              count = response.data?.count;
+              console.log(response.data);
+              let i = 0;
+              if (response.data != null){
+                if(response.data.count==0){
+                  router.push({
+                  name:"NewGroup",
+                  // params:{
+                  //   proj_id:props.oneProject.proj_id,
+                  // }
+                  })
+                }
+                else{
+                    router.push('/');
+                }
+              }
+            } else {
+            }
+            console.log(response.data);
+          });
+
           // axios({
           //   url: axios.defaults.baseURL + "/info",
           //   method: "post",
