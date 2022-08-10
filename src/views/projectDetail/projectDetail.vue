@@ -58,7 +58,7 @@
           <n-button
             color="#AA25A480"
             class="button"
-            @click="projectEditVisible"
+            @click="projectEditVisible = true"
             >编辑项目信息
           </n-button></span>
         </div>
@@ -261,7 +261,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="projectEditVisible = false">取消</el-button>
-        <el-button type="primary" @click="projectEditVisible = false"
+        <el-button type="primary" @click="editProject()"
           >确认</el-button
         >
       </span>
@@ -313,7 +313,7 @@ const formLabelWidth = "140px";
 
 const project = reactive({
   name: "项目名称",
-  description: "项目描述",
+  description: "项目介绍内容",
 });
 const file = reactive({
   name: "",
@@ -365,6 +365,8 @@ const getProjectDetail = (clear: boolean = true) => {
     if (response.data?.success) {
       Detail.proj_info = response.data.proj.proj_info;
       Detail.proj_name = response.data.proj.proj_name;
+      project.name = Detail.proj_name;
+      project.description = Detail.proj_info;
     } else {
       console.log("找不到项目" + this_proj_id);
       message.error("项目加载出错");
@@ -870,6 +872,35 @@ const searchFile = () => {
     }
   });
 };
+
+//修改项目信息
+const editProject=()=>{
+  projectEditVisible.value = false;
+  axios({
+    url: axios.defaults.baseURL + "/proj/update_proj",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": User.token
+    },
+    data: {
+      proj_id: this_proj_id,
+      proj_info: project.description,
+      proj_name: project.name,
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
+    console.log(response)
+    getProjectDetail();
+  })
+}
+
 </script>
 
 <style scoped>
