@@ -648,6 +648,8 @@ Project.$subscribe((mutation, state)=>{
         ],
       }).then(function (response) {
         // 处理成功情况
+        console.log("!!!!!"+Project.proj_info)
+        console.log("!!!!!"+Project.proj_name)
         console.log("!!!!!! "+Project.top);
         console.log("!!!!!! "+ response);
         getProject();
