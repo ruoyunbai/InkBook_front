@@ -81,7 +81,7 @@ border-radius: 30px 0px 0px 0px;" v-model:show="Dactive" :width="502" placement=
             <!-- <transition>
                 <router-view enter-active-class="animate__animated animate__fadeIn"></router-view>
             </transition> -->
-            <router-view v-slot="{ Component }">
+            <router-view @myevent="init" v-slot="{ Component }">
                 <transition enter-active-class="animate__animated animate__bounceInLeft">
                     <component :is="Component" />
                 </transition>
@@ -102,7 +102,7 @@ import Content from './Content/index.vue'
 import axios from 'axios';
 import { useUserStore } from '../../store/User'
 import { onMounted, reactive } from '@vue/runtime-core';
-import { defineComponent, h, ref, onBeforeMount, onBeforeUnmount } from 'vue'
+import { defineComponent, h, ref, onBeforeMount, onBeforeUnmount,onUpdated } from 'vue'
 import { NIcon, NImage, SelectOption, useMessage } from 'naive-ui'
 import type { MenuOption } from 'naive-ui'
 import { RouterLink } from 'vue-router'
@@ -112,6 +112,7 @@ import { SelectMixedOption } from 'naive-ui/lib/select/src/interface';
 import userMessage from '../../components/message/index.vue'
 import { useMsgStore } from "../../store/Msg";
 import { ElLoadingService } from 'element-plus';
+import { getgroups } from 'process';
 const Msg=useMsgStore()
 const lingSrc=ref("svg\\主页svg\\notification.svg")
 const toPerson=() => { router.push({
@@ -120,11 +121,25 @@ const toPerson=() => { router.push({
                                         user_id:User.Id
                                     }
     })}
+
 Msg.$subscribe(()=>{
     if(Msg.opt=="change"){
         Msg.opt=""
         getMsgs()
     }
+    if(Msg.Iopt=="refresh"){
+        console.log("IOPT change")
+        
+        
+    }
+})
+const init=()=>{
+    console.log("initing")
+    getGroups()
+    getMsgs()
+}
+onUpdated(()=>{
+    init()
 })
 onBeforeMount(() => {
     let l = localStorage.getItem("Login")
@@ -349,30 +364,9 @@ const openDrawer = () => {
         console.log(response.data);
 
         if (response.data?.success) {
-            let d = response.data?.groups
-            for (let i = 0; i < response.data?.count; i++) {
-                groupOptions.push({
-                    label: d[i].group_name,
-                    key: d[i].group_id,
-                    value: d[i].group_id,
-                    type: null
-
-                })
-
-                if (Group.id != -1 && Group.id != null) {
-
-                    if (Group.id == d[i].group_id) {
-                        groupValue.value = d[i].group_name
-                        console.log("yyyyy")
-                    }
-                }
-
-            }
-            loading.value = false
-            if (Group.id == -1 || Group.id == null) {
-                groupValue.value = d[0].group_name
-                Group.id = d[0].group_id
-            }
+            
+    
+         
         }
     })
     lingSrc.value="svg\\主页svg\\notification.svg"
@@ -400,8 +394,13 @@ const handleUpdateGroup = (value: string, option: SelectOption) => {
     console.log("value", option)
 
 }
+
 onBeforeMount(() => {
 
+    getGroups()
+  getMsgs()
+})
+const getGroups=()=>{
     axios({
         url: axios.defaults.baseURL + "/group/get_groups",
         method: "post",
@@ -421,12 +420,11 @@ onBeforeMount(() => {
         ],
     }).then(function (response) {
         // 处理成功情况
-        console.log("response", response)
+        console.log("getGroups", response)
         console.log(response.data);
-
+        while(groupOptions.length!=0)groupOptions.pop()
         if (response.data?.success) {
             if(response.data?.count==0){
-
             }else{
             let d = response.data?.groups
             for (let i = 0; i < response.data?.count; i++) {
@@ -447,6 +445,7 @@ onBeforeMount(() => {
                 }
 
             }
+            console.log("stopLoading")
             loading.value = false
             if (Group.id == -1 || Group.id == null) {
                 groupValue.value = d[0].group_name
@@ -455,8 +454,7 @@ onBeforeMount(() => {
             }
         }
     })
-  getMsgs()
-})
+}
 const getMsgs=()=>{
        axios({
         url: axios.defaults.baseURL + "/user/get_messages",
@@ -481,14 +479,13 @@ const getMsgs=()=>{
         while(msgs.length!=0)msgs.pop()
         if (response.data?.success) {
             if(response.data?.count!=0){
-               
-            }
+            while(msgs.length!=0)msgs.pop()
             let d = response.data?.messages
             for (let i = 0; i < response.data?.count; i++) {
                 msgs.push(d[i])
                 if(d[i].status==0)lingSrc.value="svg\\主页svg\\notificationRed.svg"
             }
-
+            }
 
           
         }

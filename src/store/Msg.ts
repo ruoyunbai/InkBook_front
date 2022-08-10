@@ -7,7 +7,8 @@ export const useMsgStore = defineStore( Names.Msg,{
     state:()=>{
         return {
             opt:"",
-            Dopt:""
+            Dopt:"",
+            Iopt:""
         }
     },
     // getters:{

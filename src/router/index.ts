@@ -8,6 +8,15 @@ declare module 'vue-router' {
 }
 const routes: Array<RouteRecordRaw> = [
     {
+        name:'share',
+        path:"/share",
+        component:()=>import('../views/prototype/share.vue'),
+        meta:{
+            title:"新建团队",
+            transition:"animate__bounceIn"
+        }
+    },
+    {
         name: 'Index',
         path: "/",
         component: Index,
@@ -165,6 +174,7 @@ const routes: Array<RouteRecordRaw> = [
                     transition:"animate__bounceIn"
                 }
             },
+           
             {
                 name: 'ChangeProfile',
                 path: "/changeProfile",

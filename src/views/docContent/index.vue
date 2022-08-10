@@ -179,12 +179,12 @@ Msg.$subscribe(()=>{
   if(Msg.Dopt=="word"){
     console.log("word")
     Msg.Dopt=""
-    // let html=outHTML()
-    // console.log(html)
+    let html=outHTML()
+    console.log(html)
     // const blob = new Blob([html], { type: 'application/msword;charset=utf-8' })
     // FileSaver.saveAs(blob, "my" + '.doc')
     // toImage()
-    printOut()
+    // printOut()
       //   let converted = htmlDocx.asBlob(html);
       // FileSaver.saveAs(converted, '文件名.docx');
   }
@@ -253,9 +253,9 @@ const printOut=()=> {
       });
     }
 
-// const outHTML=()=>{
-//  return editor.value.getHTML()
-// }
+const outHTML=()=>{
+ return editor.value.getHTML()
+}
 // const toImage= ()=> {
 //             // 手动创建一个 canvas 标签
 //             const canvas = document.createElement("canvas")

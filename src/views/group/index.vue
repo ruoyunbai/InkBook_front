@@ -156,8 +156,10 @@ import { useMemberStore } from "../../store/Member";
 import { useUserStore } from "../../store/User";
 import { useGroupStore } from '../../store/Group'
 import { useDialog,InputInst, useMessage } from "naive-ui";
-import { useRouter } from "vue-router"
-
+import { useRouter,useRoute } from "vue-router"
+import { useMsgStore } from "../../store/Msg";
+const route=useRoute()
+const Msg=useMsgStore()
 const router = useRouter();
 const Group = useGroupStore();
 const Member = useMemberStore();
@@ -173,8 +175,10 @@ const form = reactive({
 })
 
 onBeforeMount(() => {
+  if(Number(route.params.refreshIndex)==1)Msg.Iopt="refresh"
   getMembers();
   console.log("1");
+  
 });
 
 const invite_member = () =>{

@@ -1,9 +1,9 @@
 <template>
-  <div class="new_body">
+  <div class="new_body" >
     <div class="new_head">
       <div class="new_title">
         <n-image src="svg\group_svg\home.svg" />
-        <span class="title_font">开始创建您的团队</span>
+        <span class="title_font" >开始创建您的团队</span>
       </div>
       <div class="new_form">
         <n-form
@@ -62,6 +62,7 @@ import {
   StyleValue,
   Ref,
   getCurrentInstance,
+  defineEmits,
   h,
 } from "vue";
 import { useDialog, NInput } from "naive-ui";
@@ -71,7 +72,9 @@ import { useProjectStore } from "../../store/Project";
 import { useUserStore } from "../../store/User";
 import { InputInst, useMessage } from "naive-ui";
 import { useRouter } from "vue-router"
-
+import { useMsgStore } from "../../store/Msg";
+const emits = defineEmits(['myevent'])
+const Msg=useMsgStore()
 const router = useRouter();
 const User = useUserStore();
 const message = useMessage();
@@ -84,6 +87,7 @@ const model = reactive({
 
 const create_group = () =>{
   console.log("111111");
+  emits("myevent")
   axios({
         url: axios.defaults.baseURL + "/group/create_group",
         method: "post",
@@ -105,10 +109,13 @@ const create_group = () =>{
         // 处理成功情况
         console.log(response);
         let selected_group_id = response.data.group.group_id;
+       emits("myevent")
+        Msg.Iopt="refresh"
         router.push({
           name:"group",
           params:{
             proj_id:selected_group_id,
+            refreshIndex:1
           }
           })
       })

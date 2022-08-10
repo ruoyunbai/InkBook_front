@@ -1,80 +1,33 @@
 <template>
-  <div>
-    <n-modal v-model:show="showModal" class="custom-card" preset="card" :style="bodyStyle" title=" 请输入页面名字" size="huge"
+ <n-modal v-model:show="showModal" class="custom-card" 
+:style="bodyStyle" title=" 分享已关闭"
+  size="huge"
+    :mask-closable="false"
       :bordered="false">
-      <template #header-extra>
-        取消
-      </template>
-      <n-input v-model:value="createName"></n-input>
+      <n-card
+      style="width: 600px"
+      title="分享已关闭"
+      :bordered="false"
+      size="huge"
+      role="dialog"
+      aria-modal="true"
+    >
+   
+          <n-text type="error">请联系创作者打开分享链接</n-text>
+
       <template #footer>
-        <n-button @click="createPage">确定</n-button>
+        <div>  </div>
       </template>
-    </n-modal>
-    <n-modal v-model:show="openShare" class="custom-card" preset="card" :style="bodyStyle" title="分享" size="huge"
-      :bordered="false">
-      <template #header-extra>
-        取消
-      </template>
-       <el-link v-if="linkOpen"
-       :href="'https://inkbook.mina.moe/#/share/?pro='+url" target="_blank"
-       type="success">https://inkbook.mina.moe/#/share/?pro={{url}}</el-link>
-  
-      <template #footer>
-        <n-button v-if="!linkOpen" @click="share">打开分享</n-button>
-         <n-button v-if="linkOpen" @click="unshare">关闭分享</n-button>
-      </template>
-    </n-modal>
-    <n-card :bordered="false">
-      <n-grid :cols="20">
-        <n-gi span="3">
-          <n-space vertical>
-            <n-select v-model:value="value" :options="options" remote :loading="protoLoading" placeholder="请选择项目"
-              @update:value="getPPages(false)" class="choose" />
-          </n-space>
-        </n-gi>
-        <!-- <n-gi></n-gi> -->
-        <n-gi span="3">
-          <n-space vertical>
-            <n-select :loading="pageNotChosed" remote :placeholder=pageHolder :disabled="ProtoNotChosed"
-              v-model:value="pageId" :options="optionsPage" @update:value="getPage" class="choose" />
-          </n-space>
-        </n-gi>
-        <n-gi span="2">
-          <n-space>
-            <n-button type="warning" strong secondary :disabled="ProtoNotChosed" v-on:click="saveDesign"
-              @click="() => { showModal = true }">新建页面</n-button>
-            <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
-          </n-space>
-        </n-gi>
-        <n-gi span="2">
-          <n-space>
-            <n-button type="warning" strong secondary :disabled="nopageChosed" v-on:click="saveDesign">保存设计</n-button>
-            <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
-          </n-space>
-        </n-gi>
-        <n-gi span="2">
-          <n-input-number v-model:value="height" @update:value="changeHeight" placeholder="高" :min="300" :step="20"
-            :max="3000" />
-        </n-gi>
-        <n-gi span="2">
-          <n-input-number v-model:value="width" placeholder="宽" @update:value="changeWidth" :step="20" :min="10"
-            :max="900" />
-        </n-gi>
-        <n-gi></n-gi>
-        <n-gi span="2">
-            <n-space>
-            <n-button type="warning" strong secondary :disabled="nopageChosed" v-on:click="openShare=true">分享页面</n-button>
-            <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
-          </n-space>
-        </n-gi>
-      </n-grid>
     </n-card>
-
-
-    <br>
-
+      
+      
+    </n-modal>
+  <div>
+    <div class="mask"></div>
     <div>
-      <EmailEditor locale='zh-CN' displayMode='web' style="height:300px" :min-height="minHeight" :project-id="projectId"
+      <EmailEditor 
+      :tabs="tabs" 
+      locale='zh-CN' displayMode='web' style="height:300px" :min-height="minHeight" :project-id="projectId"
         :locale="locale" ref="emailEditor" v-on:load="editorLoaded()" display-mod="web" v-on:ready="editorReady()" />
     </div>
 
@@ -92,9 +45,11 @@ import { SelectOption } from 'naive-ui'
 import { useUserStore } from '../../store/User'
 import { useMessage } from 'naive-ui'
 import { useGroupStore } from '../../store/Group';
+import { useRoute } from 'vue-router';
+const route=useRoute()
 const Group = useGroupStore()
 const message = useMessage()
-const openShare=ref(false)
+const openShare = ref(false)
 const createName = ref("")
 const User = useUserStore()
 const height = ref(800)
@@ -105,7 +60,7 @@ const nopageChosed = ref(true)
 const pageNotChosed = ref(false)
 const pageHolder = ref("选择原型后可选择页面")
 const showModal = ref(false)
-const url=ref("")
+const url = ref("")
 const bodyStyle = {
   width: '600px'
 }
@@ -113,8 +68,16 @@ const bodyStyle = {
 //   content: 'soft',
 //   footer: 'soft'
 // }
-onBeforeMount(() => {
-  getProjs()
+const tabs={
+        content: {
+          enabled: false,
+        },
+        blocks: {
+          enabled: false,
+        }
+      }
+onBeforeMount(() => { 
+  getPage()
   minHeight.value = height.value + "px"
 })
 const changeHeight = () => {
@@ -134,7 +97,7 @@ const changeWidth = () => {
     preheaderText: "Hello World"
   });
 }
-const linkOpen=ref(false)
+
 // import * as Automerge from 'automerge'
 const options = ref<SelectOption[]>([])
 const optionsPage = ref<SelectOption[]>([])
@@ -195,7 +158,7 @@ const projectId = ref(0) // replace with your project id
 //         enabled: false,
 //       })
 
-const share=()=>{
+const share = () => {
   axios({
     url: axios.defaults.baseURL + "/ppage/gen_shared_ppage_token",
     method: "post",
@@ -218,41 +181,6 @@ const share=()=>{
     // console.log(response.data);
 
     if (response.data?.success) {
-      url.value=response.data?.token
-      linkOpen.value=true
-      message.success("已生成分享链接")
-    }
-
-    // console.log(content)
-    // console.log("JSON",eval('('+content+')'))
-    // console.log("JSON",JSON.parse(content))
-  }
-  )
-}
-const unshare=()=>{
-  axios({
-    url: axios.defaults.baseURL + "/ppage/close_shared_ppage",
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": User.token
-    },
-    data: {
-      ppage_id: pageId.value
-    },
-    transformRequest: [
-      function (data, headers) {
-        let data1 = JSON.stringify(data);
-        return data1;
-      },
-    ],
-  }).then(function (response) {
-    // 处理成功情况
-    console.log("response", response)
-    // console.log(response.data);
-
-    if (response.data?.success) {
-      linkOpen.value=false
       message.success(response?.data.message)
     }
 
@@ -263,7 +191,7 @@ const unshare=()=>{
   )
 }
 onMounted(() => {
-  // getPPage()
+  
 })
 let ppageName = ""
 let ppageData = ""
@@ -272,15 +200,17 @@ const createPage = () => {
   nopageChosed.value = false
 }
 const getPage = () => {
+  let token=route.query.pro
+  console.log(token)
   axios({
-    url: axios.defaults.baseURL + "/ppage/get_ppage_by_id",
+    url: axios.defaults.baseURL + "/get_shared_ppage",
     method: "post",
     headers: {
       "Content-Type": "application/json",
       "Authorization": User.token
     },
     data: {
-      ppage_id: pageId.value
+      token: token
     },
     transformRequest: [
       function (data, headers) {
@@ -293,10 +223,9 @@ const getPage = () => {
     // 处理成功情况
     console.log("response", response)
     // console.log(response.data);
-
     if (response.data?.success) {
       ppageName = response.data?.ppage.ppage_name,
-        ppageData = response.data?.ppage.ppage_data
+      ppageData = response.data?.ppage.ppage_data
       let t = JSON.parse(ppageData)
       emailEditor.value.editor.
         loadDesign(t.design);
@@ -312,14 +241,12 @@ const getPage = () => {
         preheaderText: "Hello World"
       });
 
-      nopageChosed.value = false
 
-
+    }else{
+      showModal.value=true
     }
 
-    // console.log(content)
-    // console.log("JSON",eval('('+content+')'))
-    // console.log("JSON",JSON.parse(content))
+   
   }
   )
 }
@@ -425,7 +352,11 @@ const editorLoaded = () => {
 // called when the editor has finished loading
 const editorReady = () => {
   console.log('editorReady');
+//   setInterval(()=>{
+// emailEditor.value.editor.showPreview("desktop");
 
+//   },10)
+emailEditor.value.editor.showPreview("desktop");
   emailEditor.value.editor.setBodyValues({
     backgroundColor: "#e7e7e7",
     contentWidth: width.value + "px", // or percent "50%"
@@ -575,6 +506,14 @@ const exportHtml = () => {
 </script>
 
 <style scoped lang="less">
+.mask{
+  background-color: rgb(255,255,255);
+  position: absolute;
+  right: 20px;
+  top:20px;
+  width: 100px;
+  height: 50px;
+}
 .choose {
   border-width: 0px;
 
