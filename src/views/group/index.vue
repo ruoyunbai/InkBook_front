@@ -264,6 +264,32 @@ Member.$subscribe((mutation, state)=>{
         getMembers();
       })
       Member.operation="";
+    }else if(Member.operation=="quit_manager"){
+      axios({
+        url: axios.defaults.baseURL + "/group/set_member_status",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          group_id: one_group_id,
+          status: 1,
+          user_id: Member.user_id
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("response"+Member.user_id);
+        console.log(response)
+        getMembers();
+      })
+      Member.operation="";
     }
 
 

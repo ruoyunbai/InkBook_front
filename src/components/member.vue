@@ -21,6 +21,7 @@
           <div class="name" style="margin:10px 10px 10px 30px">
             <n-image style="margin:5px 15px 5px 10px" height="20" preview-disabled @click="set_status()" src="svg\project_svg\set_status.svg" v-show="props.oneMember.status==1"/>
             <n-image style="margin:5px 15px 5px 10px" height="20" preview-disabled @click="remove_member()" src="svg\project_svg\dele_mem.svg"  v-show="props.oneMember.status==1"/>
+            <n-image style="margin:5px 15px 5px 10px" height="20" preview-disabled @click="quit_manager()" src="svg\project_svg\quit_manager.svg" v-show="props.oneMember.status==2"/>
           </div>
         </n-gi>
       </n-grid>
@@ -66,6 +67,11 @@ onBeforeMount(() => {
 const set_status = () =>{
     Member.user_id=props.oneMember.user_id;
     Member.operation="set_status";
+}
+
+const quit_manager = () =>{
+    Member.user_id=props.oneMember.user_id;
+    Member.operation="quit_manager";
 }
 
 const remove_member = () =>{
