@@ -181,9 +181,7 @@
             >
 
               <div style="float: left;width:240px" :key="project.proj_id"  v-for="(project, index) in projects">
-                               <Card   :oneProject="project"></Card>
-                              
-        
+                    <Card :oneProject="project"></Card>
               </div>
                 <!-- </n-space> -->
                 </transition-group>
@@ -213,11 +211,14 @@
             <n-collapse-item title="&emsp;我创建的">
               <n-divider></n-divider>
 
-              <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
+              <div style="float: left;width:240px" :key="project.proj_id"  v-for="(project, index) in creprojects">
+                    <Card :one-project="project"></Card>
+              </div>
+              <!-- <n-grid x-gap="20px" y-gap="20px" cols="2 s:3 m:4 l:5 xl:6 2xl:7" responsive="screen">
                 <n-grid-item>
                   <Card></Card>
                 </n-grid-item>
-              </n-grid>
+              </n-grid> -->
 
               <template #header-extra>
                 <n-image preview-disabled  src="svg\project_svg\sort.svg" />
@@ -516,6 +517,7 @@ axios({
 
 onBeforeMount(() => {
   getProject();
+  getCreProject();
   console.log("1");
 });
 
@@ -523,9 +525,10 @@ let count: number = 0;
 let one_group_id: number;
 const projects: any[] = reactive([]);
 const sprojects: any[] = reactive([]);
+const creprojects: any[] = reactive([]);
+
 //获取项目
 const getProject = (clear: boolean = true) => {
-  
   //   section.value=parseInt(localStorage.getItem("section")+"")
   axios({
     url: axios.defaults.baseURL + "/group/get_groups",
@@ -605,8 +608,94 @@ const getProject = (clear: boolean = true) => {
     }
     console.log(response.data);
   });
-
 }
+
+//获取我创建的项目
+const getCreProject = (clear: boolean = true) => {
+  axios({
+    url: axios.defaults.baseURL + "/group/get_groups",
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": User.token
+    },
+    data: {
+    },
+    transformRequest: [
+      function (data, headers) {
+        let data1 = JSON.stringify(data);
+        console.log(data1);
+        return data1;
+      },
+    ],
+  }).then(function (response) {
+    // 处理成功情况
+    if (response.data?.success) {
+      count = response.data?.count;
+      console.log(response.data);
+      let i = 0;
+      if (clear) while (projects.length != 0) projects.pop();
+      if (response.data != null)
+      one_group_id = response.data.groups[0].group_id;
+      console.log("one_group_id" + one_group_id);
+      axios({
+        url: axios.defaults.baseURL + "/proj/get_proj_create",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          group_id: one_group_id,
+          is_desc: true,
+          order_by: 1
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            console.log(data1);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        if (response.data?.success) {
+          count = response.data?.count;
+          console.log(response.data);
+          let i = 0;
+          if (clear) while (projects.length != 0) projects.pop();
+          if (response.data != null)
+            for (i = 0; i < count; i++) {
+              let temp = reactive({
+                group_id: response.data.projs[i].group_id,
+                proj_id: response.data.projs[i].proj_id,
+                proj_info: response.data.projs[i].proj_info,
+                proj_name: response.data.projs[i].proj_name,
+                status: response.data.projs[i].status,
+                user_id: response.data.projs[i].user_id,
+              });
+              console.log("  projectid" + temp.proj_id);
+              creprojects.push(temp);
+            }
+          console.log(creprojects);
+          getProject();
+          // User.Name=modelRef.value.name,
+          // User.Id=response.data.data.user_id,
+        } else {
+        }
+        console.log(response.data);
+      });
+      // User.Name=modelRef.value.name,
+      // User.Id=response.data.data.user_id,
+    } else {
+    }
+    console.log(response.data);
+  });
+}
+
+
+
+
 //创建项目
 const project_create = () => {
   axios({
