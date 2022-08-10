@@ -150,6 +150,9 @@ onBeforeMount(() => {
 onBeforeUnmount(() => {
     // User.Login=true
 })
+
+
+    
 const msgs:any=reactive([])
 const Dactive = ref(false)
 const Group = useGroupStore()
@@ -335,12 +338,17 @@ let last = -1
 let cnt0 = 0
 const group = ref(null)
 const groupValue = ref("")
-
 const groupOptions: SelectMixedOption[] = reactive([])
 const MouseOnUser = () => {
     isOnUser.value = true;
     avatar.value = "svg\\主页svg\\Home.svg"
 }
+
+User.$subscribe((mutation, state)=>{ 
+    User.Name=User.Name
+})
+
+
 const openDrawer = () => {
     axios({
         url: axios.defaults.baseURL + "/user/read_all_messages",

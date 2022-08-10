@@ -4,7 +4,7 @@
       <n-layout-header class="projectTitle">
         <n-grid x-gap="12" :cols="9">
           <n-gi span="4" style="display: flex">
-            <n-image width="32" src="svg\\主页svg\\Icons\\Setting - 5.svg" />
+            <n-image width="32" src="svg\projectDetail\Setting - 5.svg" />
             <span style="margin-left: 15px; padding-top: -10px">{{
               Detail.proj_name
             }}</span>
@@ -22,7 +22,7 @@
                 <template #prefix>
                   <n-image
                     width="24"
-                    src="svg\\主页svg\\projectDetail\\⭐️ Icons L.svg"
+                    src="svg\projectDetail\⭐️ Icons L.svg"
                   />
                 </template>
               </n-input>

@@ -1,88 +1,24 @@
 <template>
-  <div class="header">
-    <n-image
-      width="40"
-      style="margin-top: 10px"
-      src="svg\trash_svg\shape.svg"
-    />
-    <span class="title">已删除内容</span>
+  <div class="trash_head">
+    <n-image src="svg\trash_svg\shape.svg" class="title_img" />
+    <div class="title_font">已删除内容</div>
   </div>
-  <div class="fileTitle" style="margin-left: 40px">项目</div>
-  <div class="proj_body">
-    <div v-show="projTipShow" class="tip">暂无已删除项目</div>
-    <div :key="project.proj_id" v-for="(project, index) in projects">
+  <div class="trash_body">
+    <!--    项目-->
+    <div
+      style="float: left; width: 240px"
+      :key="project.proj_id"
+      v-for="(project, index) in projects"
+    >
       <ProTrash :oneProject="project"></ProTrash>
     </div>
+    <!-- 文档-->
+    <FileTrash></FileTrash>
+    <!-- 设计原型 -->
+    <DesignTrash></DesignTrash>
+    <!-- uml -->
+    <UmlTrash></UmlTrash>
   </div>
-
-  <n-layout-content
-    content-style="padding: 24px;"
-    style="background-color: rgb(255, 255, 255, 0)"
-  >
-    <n-grid x-gap="50" :cols="3" class="fileTitle">
-      <n-gi>
-        <div>原型页面</div>
-      </n-gi>
-      <n-gi>
-        <div>UML图</div>
-      </n-gi>
-      <n-gi>
-        <div>文档</div>
-      </n-gi>
-    </n-grid>
-    <n-grid x-gap="50" :cols="3" style="margin-top: 10px">
-      <n-gi>
-        <div class="section">
-          <el-scrollbar max-height="97%">
-            <div v-show="protoTipShow" class="tip">暂无已删除原型页面</div>
-            <div
-              v-for="(proto, idx) in protos"
-              :key="idx"
-              class="scrollbar-demo-item"
-            >
-              <ProtoTrash :one-proto="proto"></ProtoTrash>
-            </div>
-          </el-scrollbar>
-        </div>
-      </n-gi>
-
-      <n-gi>
-        <div class="section" style="background-color: rgb(246, 134, 106, 0.2)">
-          <el-scrollbar max-height="97%">
-            <div v-show="umlTipShow" class="tip">暂无已删除UML图</div>
-            <div
-              v-for="(item, idx) in umls"
-              :key="idx"
-              class="scrollbar-demo-item"
-            >
-              <UmlTrash :one-UML="item"></UmlTrash>
-            </div>
-          </el-scrollbar>
-        </div>
-      </n-gi>
-
-      <n-gi>
-        <div class="section" style="background-color: rgb(255, 190, 92, 0.2)">
-          <el-scrollbar max-height="97%">
-            <div v-show="docTipShow" class="tip">暂无已删除文档</div>
-            <div
-              v-for="(item, idx) in documents"
-              :key="idx"
-              class="scrollbar-demo-item"
-            >
-              <DocTrash :one-Doc="item"></DocTrash>
-            </div>
-          </el-scrollbar>
-        </div>
-      </n-gi>
-    </n-grid>
-  </n-layout-content>
-  <!-- 文档-->
-  <!-- <FileTrash></FileTrash> -->
-  <!-- 设计原型 -->
-  <!-- <DesignTrash></DesignTrash> -->
-  <!-- uml -->
-  <!-- <UmlTrash></UmlTrash> -->
 </template>
 
 <script setup lang="ts">
@@ -101,8 +37,8 @@ import {
 import { useDialog, NInput } from "naive-ui";
 // import Vditor from 'vditor'
 import ProTrash from "../../components/trash/pro_trash.vue";
-import DocTrash from "../../components/trash/doc_trash.vue";
-import ProtoTrash from "../../components/trash/proto_trash.vue";
+import FileTrash from "../../components/trash/file_trash.vue";
+import DesignTrash from "../../components/trash/design_trash.vue";
 import UmlTrash from "../../components/trash/uml_trash.vue";
 import axios from "axios";
 import { useProjectStore } from "../../store/Project";
@@ -113,6 +49,7 @@ import { useUmlStore } from "../../store/Uml";
 import { useDocumentStore } from "../../store/Document";
 import { useMessage } from "naive-ui";
 
+
 const Project = useProjectStore();
 const User = useUserStore();
 const Group = useGroupStore();
@@ -121,12 +58,8 @@ const Uml = useUmlStore();
 const Doc = useDocumentStore();
 const message = useMessage();
 const input = ref("");
-
 //对话框
-const projTipShow = ref(true);
-const docTipShow = ref(true);
-const umlTipShow = ref(true);
-const protoTipShow = ref(true);
+const dialogCreateVisible = ref(false);
 const formLabelWidth = "140px";
 const form = reactive({
   name: "",
@@ -139,7 +72,7 @@ onBeforeMount(() => {
   console.log("1!!!");
 });
 
-// 彻底删除与恢复
+// 彻底删除
 Project.$subscribe((mutation, state) => {
   if (Project.operation == "") return;
   else if (Project.operation == "delete_proj") {
@@ -218,7 +151,7 @@ Proto.$subscribe((mutation, state) => {
     Proto.operation = "";
   } else if (Proto.operation == "recover") {
     axios({
-      url: axios.defaults.baseURL + "/bin/move_ppage_from_bin",
+      url: axios.defaults.baseURL + "/bin/move_PPage_from_bin",
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -378,11 +311,6 @@ const getProject_in_bin = (clear: boolean = true) => {
     console.log("!!!获取项目成功");
     if (response.data?.success) {
       count = response.data?.count;
-      if (count) {
-        projTipShow.value = false;
-      } else {
-        projTipShow.value = true;
-      }
       console.log(response.data);
       let i = 0;
       if (clear) while (projects.length != 0) projects.pop();
@@ -435,21 +363,6 @@ const getFiles_in_bin = (clear: boolean = true) => {
     cntD = response.data.count_documents;
     cntP = response.data.count_ppages;
     cntU = response.data.count_umls;
-    if (cntD) {
-      docTipShow.value = false;
-    } else {
-      docTipShow.value = true;
-    }
-    if (cntP) {
-      protoTipShow.value = false;
-    } else {
-      protoTipShow.value = true;
-    }
-    if (cntU) {
-      umlTipShow.value = false;
-    } else {
-      umlTipShow.value = true;
-    }
     if (response.data?.success) {
       for (let i = 0; i < cntP; i++) {
         let tmp1 = reactive({
@@ -485,69 +398,89 @@ const getFiles_in_bin = (clear: boolean = true) => {
 </script>
 
 <style scoped>
-.header {
-  display: flex;
-  height: 75px;
-  width: 100%;
-  margin-left: 30px;
-  align-content: center;
-  margin-bottom: 10px;
+.btn_font {
+  font-family: "Inria Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  margin-left: 5px;
 }
-.title {
-  margin-left: 20px;
+
+.trash_head {
+  margin-top: 100px;
+  margin-left: 100px;
+  height: 40px;
+  position: relative;
+}
+
+.title_img {
+  margin-top: 5px;
+  position: absolute;
+}
+
+.title_font {
+  position: absolute;
   font-family: "Roboto";
-  font-weight: bold;
-  font-size: 32px;
-  vertical-align: middle;
-  padding-top: 15px;
-}
-.proj_body {
-  background-color: rgb(255, 255, 255);
-  height:300px;
-  max-height: 300px;
-  padding: 10px;
-  margin-top: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
-
-  overflow-y: scroll;
-  border-radius: 16px;
-}
-
-.fileTitle {
-  margin-left: 22px;
-  margin-bottom: 0px;
-  line-height: 32px;
-  text-align: left;
-  justify-content: center;
-  font-family: Inria Sans;
-  font-weight: bold;
+  font-style: normal;
+  font-weight: 700;
   font-size: 28px;
+  margin-left: 50px;
 }
 
-.section {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  /**/
-
-  border-radius: 10px;
-  background-color: rgb(75, 159, 71, 0.2);
-  padding-bottom: 10px;
-  padding-top: 20px;
-  padding-left: 30px;
-  padding-right: 30px;
-  align-items: center;
-
-  /*width: 330.7px;*/
-  height: 550px;
-
-  font-family: Inria Sans;
-  font-weight: bold;
-  font-size: 16px;
+.trash_body {
+  width: 94%;
+  height: 600px;
+  max-height: 600px;
+  margin-left: 3%;
+  margin-top: 50px;
+  padding-top: 30px;
+  background-color: #ffffff;
+  border-radius: 24px;
+  overflow-y: scroll;
 }
 
-.tip {
-  color: rgba(0, 0, 0, 0.5);
+.one_trash {
+  width: 21%;
+  height: 300px;
+  margin-left: 40px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background: rgba(75, 159, 71, 0.1);
+  mix-blend-mode: normal;
+  border-radius: 24px;
+  float: left;
+}
+
+.wrap {
+  position: relative;
+}
+
+.tip_first {
+  position: absolute;
+  font-family: "Inria Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  margin-left: 28px;
+  margin-top: 63px;
+}
+
+.tip_second {
+  position: absolute;
+  font-family: "Inria Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  margin-top: 120px;
+  margin-left: 28px;
+}
+
+.tip_btn {
+  margin-top: 220px;
+  margin-left: 20px;
+  position: absolute;
 }
 </style>

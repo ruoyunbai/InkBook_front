@@ -6,7 +6,8 @@
       style="padding-top: 5px; vertical-align: middle"
     >
       <n-gi span="1">
-        <n-image preview-disabled
+        <n-image
+          preview-disabled
           width="26.5"
           height="23.5"
           src="svg\projectDetail\ItemIcon.svg"
@@ -14,38 +15,44 @@
       </n-gi>
       <n-gi span="8">
         <!-- <router-link to="/document" style="text-decoration: none; color: black"> -->
-        <div display="inline" @click="toDoc()">{{ props.oneDoc.document_name }}</div>
+        <div display="inline">{{ props.oneDoc.document_name }}</div>
         <!-- </router-link> -->
       </n-gi>
       <n-gi span="1">
-        <el-icon @click="dialogEditVisible = true">
-          <Edit />
-        </el-icon>
+        <n-image
+          preview-disabled
+          @click="recoverDoc"
+          width="20"
+          src="svg\trash_svg\recover_file.svg"
+        />
       </n-gi>
       <n-gi span="1">
-        <el-icon @click="move_doc_to_bin()">
-          <Delete />
-        </el-icon>
+        <n-popconfirm>
+          <template #icon>
+            <n-icon>
+              <n-image
+                style="margin: 0px 0px 0px 0px"
+                height="20"
+                preview-disabled
+                src="svg\project_svg\remove_clue.svg"
+              />
+            </n-icon>
+          </template>
+          <template #trigger>
+            <el-icon>
+              <Delete />
+            </el-icon>
+          </template>
+          确定要永久删除文档吗？
+          <template #action>
+            <n-button size="small" @click="move_doc_from_bin()">
+              确定
+            </n-button>
+          </template>
+        </n-popconfirm>
       </n-gi>
     </n-grid>
   </div>
-
-  <!--文件名修改框-->
-  <el-dialog v-model="dialogEditVisible" title="重命名文档" draggable>
-    <el-form :model="file">
-      <el-form-item label="请输入新文档名称" :label-width="formLabelWidth">
-        <el-input v-model="file.name" autocomplete="off" />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="dialogEditVisible = false">取消</el-button>
-        <el-button type="primary" @click="editDoc()"
-          >确认</el-button
-        >
-      </span>
-    </template>
-  </el-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -72,45 +79,18 @@ const file = reactive({
 
 onBeforeMount(() => {
   file.name = props.oneDoc.document_name;
-  console.log(props.oneDoc)
+  console.log(props.oneDoc);
 });
 
-const editDoc = () => {
+const recoverDoc = () => {
   Doc.document_id = props.oneDoc.document_id;
-  Doc.document_name = file.name;
-  Doc.operation = "edit";
-  dialogEditVisible.value = false;
+  Doc.operation = "recover";
 };
 
-const move_doc_to_bin = () => {
-  ElMessageBox.confirm("确定将文件移入回收站？", "Confirm", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  })
-    .then(() => {
-      Doc.document_id = props.oneDoc.document_id;
-      Doc.operation = "delete";
-      dialogEditVisible.value = false;
-    })
-    .catch(() => {
-      // catch error
-    });
-  // Proto.ppage_id = props.oneProto.ppage_id;
-  // Proto.ppage_name = file.name;
-  // Proto.operation = "delete";
-  // dialogEditVisible.value = false;
+const move_doc_from_bin = () => {
+  Doc.document_id = props.oneDoc.document_id;
+  Doc.operation = "delete_complete";
 };
-
-const toDoc = () =>{
-  router.push({
-    name:"document",
-    params:{
-      doc_id:props.oneDoc.document_id,
-    }
-  })
-}
-
 
 type Props = {
   oneDoc?: {

@@ -6,13 +6,13 @@
         <el-col :span="12">
           <n-image preview-disabled
             style="top: 0px; left: -5px; width: 105%; margin-top: 10px"
-            src="svg\\homePage\\Union-left.svg"
+            src="svg\homePage\Union-left.svg"
           />
         </el-col>
         <el-col :span="12">
           <n-image preview-disabled
             style="top: 0px; margin-left: -5px; width: 105%; margin-top: 10px"
-            src="svg\\homePage\\Union-right.svg"
+            src="svg\homePage\Union-right.svg"
           />
         </el-col>
       </el-row>
@@ -29,19 +29,19 @@
           text-align: center;
         "
       >
-        <n-image preview-disabled src="svg\\homePage\\top.svg" />
+        <n-image preview-disabled src="svg\homePage\top.svg" />
       </div>
     </transition-group>
 
     <div class="background">
       <div style="position: absolute; left: 0; top: 2350px">
-        <n-image preview-disabled width="1600" src="svg\\homePage\\background1.svg" />
+        <n-image preview-disabled width="1600" src="svg\homePage\background1.svg" />
       </div>
       <div style="position: absolute; left: 80px; margin-top: 3730px">
-        <n-image preview-disabled src="svg\\homePage\\circle.svg" />
+        <n-image preview-disabled src="svg\homePage\circle.svg" />
       </div>
       <div style="position: absolute; left: 0px; margin-top: 3870px">
-        <n-image preview-disabled src="svg\\homePage\\leftRec.svg" />
+        <n-image preview-disabled src="svg\homePage\leftRec.svg" />
       </div>
       <div
         style="
@@ -51,7 +51,7 @@
           margin-left: -10px;
         "
       >
-        <n-image preview-disabled width="1640" src="svg\\homePage\\background2.svg" />
+        <n-image preview-disabled width="1640" src="svg\homePage\background2.svg" />
       </div>
     </div>
   </div>
@@ -63,7 +63,7 @@
           width="32"
           height="32"
           style="margin-top: 20px"
-          src="svg\\homePage\\Icon-1.svg"
+          src="svg\homePage\Icon-1.svg"
         />
       </n-gi>
       <n-gi span="4">
@@ -87,7 +87,7 @@
           width="20"
           height="20"
           style="margin-top: 20px"
-          src="svg\\homePage\\Group 84.svg"
+          src="svg\homePage\Group 84.svg"
         />
       </n-gi>
       <n-gi span="1">
@@ -95,7 +95,7 @@
           width="20"
           height="20"
           style="margin-top: 20px"
-          src="svg\\homePage\\Vector.svg"
+          src="svg\homePage\Vector.svg"
         />
       </n-gi>
       <n-gi span="1">
@@ -103,7 +103,7 @@
           width="20"
           height="20"
           style="margin-top: 20px"
-          src="svg\\homePage\\earth.svg"
+          src="svg\homePage\earth.svg"
         />
       </n-gi>
     </n-grid>
@@ -116,19 +116,19 @@
   <div class="page1">
     <div class="pic1">
       <!--style="position: absolute; top: 320px; left: 0px"-->
-      <n-image preview-disabled src="svg\\homePage\\Union.svg" />
+      <n-image preview-disabled src="svg\homePage\Union.svg" />
     </div>
     <div style="position: absolute; top: -30px; left: -180px" class="pic1">
-      <n-image preview-disabled width="90" height="90" src="svg\\homePage\\sphere.svg" />
+      <n-image preview-disabled width="90" height="90" src="svg\homePage\sphere.svg" />
     </div>
     <div style="position: absolute; top: 230px; left: 680px" class="pic1">
-      <n-image preview-disabled width="25" height="25" src="svg\\homePage\\sphere.svg" />
+      <n-image preview-disabled width="25" height="25" src="svg\homePage\sphere.svg" />
     </div>
     <div style="position: absolute; top: 270px; left: -630px" class="pic1">
-      <n-image preview-disabled width="60" height="60" src="svg\\homePage\\sphere.svg" />
+      <n-image preview-disabled width="60" height="60" src="svg\homePage\sphere.svg" />
     </div>
     <div style="position: absolute; top: 610px; left: 350px" class="pic1">
-      <n-image preview-disabled width="40" height="40" src="svg\\homePage\\sphere.svg" />
+      <n-image preview-disabled width="40" height="40" src="svg\homePage\sphere.svg" />
     </div>
     <div style="position: absolute; top: 710px; left: 1200px">
       <button @click="$router.push({path:'/logIn'})" class="headButton" style="background-color: #8dca8d">
@@ -143,7 +143,7 @@
       width="40"
       height="40"
       style="margin: auto"
-      src="svg\\homePage\\whiteStar.svg"
+      src="svg\homePage\whiteStar.svg"
     />
     <transition-group
       name="posts"
@@ -157,13 +157,13 @@
       width="40"
       height="40"
       style="margin: auto"
-      src="svg\\homePage\\whiteStar.svg"
+      src="svg\homePage\whiteStar.svg"
     />
   </div>
 
   <div class="page2">
     <div style="position: absolute; top: 60px; left: 1100px">
-      <n-image preview-disabled width="40" height="40" src="svg\\homePage\\blackStar.svg" />
+      <n-image preview-disabled width="40" height="40" src="svg\homePage\blackStar.svg" />
     </div>
     <div class="teamTitle" style="position: absolute; top: 70px; left: 0px">
       <span style="margin-left: -100px">让你的 </span
@@ -171,13 +171,13 @@
       <span style="color: #8dc18d; margin-left: 100px">更快更好 </span> 更易管理
     </div>
     <div style="position: absolute; top: 440px; left: 100px">
-      <n-image preview-disabled width="70" height="70" src="svg\\homePage\\sphere_red.svg" />
+      <n-image preview-disabled width="70" height="70" src="svg\homePage\sphere_red.svg" />
     </div>
     <div style="position: absolute; top: 360px; right: 130px">
       <n-image preview-disabled
         width="150"
         height="150"
-        src="svg\\homePage\\sphere_purple.svg"
+        src="svg\homePage\sphere_purple.svg"
       />
     </div>
     <div style="position: absolute; top: 340px; left: 0px; width: 100%">
@@ -191,7 +191,7 @@
             width="70"
             height="70"
             style="margin-left: 10px"
-            src="svg\\homePage\\teamIcon.svg"
+            src="svg\homePage\teamIcon.svg"
           />
           <div style="font-weight: 400; font-size: 30px; margin-left: 10px">
             创建团队
@@ -210,7 +210,7 @@
             width="70"
             height="70"
             style="margin-left: 10px"
-            src="svg\\homePage\\newIcon.svg"
+            src="svg\homePage\newIcon.svg"
           />
           <div style="font-weight: 400; font-size: 30px; margin-left: 10px">
             新建项目
@@ -233,7 +233,7 @@
             width="70"
             height="70"
             style="margin-left: 10px"
-            src="svg\\homePage\\changeIcon.svg"
+            src="svg\homePage\changeIcon.svg"
           />
           <div style="font-weight: 400; font-size: 30px; margin-left: 10px">
             切换团队
@@ -251,13 +251,13 @@
     </div>
 
     <div style="position: absolute; top: 380px; left: 22%; width: 100%">
-      <n-image preview-disabled width="300" src="svg\\homePage\\leftLine.svg" />
+      <n-image preview-disabled width="300" src="svg\homePage\leftLine.svg" />
     </div>
     <div style="position: absolute; top: 350px; left: 22%; width: 100%">
       <n-image preview-disabled
         width="300"
         style="margin-left: 465px"
-        src="svg\\homePage\\rightLine.svg"
+        src="svg\homePage\rightLine.svg"
       />
     </div>
   </div>
@@ -268,11 +268,11 @@
       <n-image preview-disabled
         width="942.5"
         style="margin-left: 465px"
-        src="svg\\homePage\\purple1.svg"
+        src="svg\homePage\purple1.svg"
       />
     </div>
     <div style="position: absolute; top: 40px; left: 850px">
-      <n-image preview-disabled src="svg\\homePage\upLine.svg" />
+      <n-image preview-disabled src="svg\homePage\upLine.svg" />
     </div>
     <div
       class="introContent"
@@ -294,40 +294,40 @@
       查看更多→
     </button>
     <div style="position: absolute; top: 230px; left: 180px">
-      <n-image preview-disabled src="svg\\homePage\\tagLine.svg" />
+      <n-image preview-disabled src="svg\homePage\tagLine.svg" />
     </div>
     <div class="introTitle" style="position: absolute; top: 200px; left: 200px">
       设计原型<br />
       <div style="color: #8dca8d">在线协同设计</div>
     </div>
     <div style="position: absolute; top: 270px; left: 440px">
-      <n-image preview-disabled src="svg\\homePage\\stroke.svg" />
+      <n-image preview-disabled src="svg\homePage\stroke.svg" />
     </div>
     <div style="position: absolute; top: 220px; left: 600px">
-      <n-image preview-disabled width="30" src="svg\\homePage\\purpleCircle.svg" />
+      <n-image preview-disabled width="30" src="svg\homePage\purpleCircle.svg" />
     </div>
     <div style="position: absolute; top: 450px; left: 180px">
-      <n-image preview-disabled src="svg\\homePage\\prototype.svg" />
+      <n-image preview-disabled src="svg\homePage\prototype.svg" />
     </div>
   </div>
 
   <!-- Fourth Page -->
   <div style="position: absolute; top: 3950px; right: 100px">
-    <n-image preview-disabled src="svg\\homePage\\sphere_red.svg" />
+    <n-image preview-disabled src="svg\homePage\sphere_red.svg" />
   </div>
   <div class="page4">
     <div style="position: absolute; top: 60px; left: -300px">
       <n-image preview-disabled
         width="1136"
         style="margin-left: 465px"
-        src="svg\\homePage\\purple2.svg"
+        src="svg\homePage\purple2.svg"
       />
     </div>
     <div style="position: absolute; top: 0px; right: 150px">
-      <n-image preview-disabled src="svg\\homePage\\tagLine.svg" />
+      <n-image preview-disabled src="svg\homePage\tagLine.svg" />
     </div>
     <div style="position: absolute; top: -20px; right: 580px">
-      <n-image preview-disabled width="30" src="svg\\homePage\\purpleCircle.svg" />
+      <n-image preview-disabled width="30" src="svg\homePage\purpleCircle.svg" />
     </div>
     <div
       class="introTitle"
@@ -337,13 +337,13 @@
       <div style="color: #8dca8d">项目文档分区</div>
     </div>
     <div style="position: absolute; top: 50px; right: 400px">
-      <n-image preview-disabled src="svg\\homePage\\stroke.svg" />
+      <n-image preview-disabled src="svg\homePage\stroke.svg" />
     </div>
     <div style="position: absolute; top: 340px; left: 300px">
-      <n-image preview-disabled src="svg\\homePage\\myProject.svg" />
+      <n-image preview-disabled src="svg\homePage\myProject.svg" />
     </div>
     <div style="position: absolute; top: 700px; right: 230px">
-      <n-image preview-disabled src="svg\\homePage\upLine.svg" />
+      <n-image preview-disabled src="svg\homePage\upLine.svg" />
     </div>
     <div
       class="introContent"
@@ -373,7 +373,7 @@
       <div class="slide">
         <n-grid x-gap="0" :cols="2" style="height: 100%">
           <n-gi style="margin: auto">
-            <n-image preview-disabled src="svg\\homePage\\project.svg" />
+            <n-image preview-disabled src="svg\homePage\project.svg" />
           </n-gi>
 
           <n-gi style="height: 100%; width: 100%">
@@ -381,7 +381,7 @@
               <n-image preview-disabled
                 width="70"
                 height="70"
-                src="svg\\homePage\\blackStar.svg"
+                src="svg\homePage\blackStar.svg"
               />
             </div>
             <div class="slideTag">项目筛选</div>
@@ -389,14 +389,14 @@
               <n-image preview-disabled
                 width="90"
                 height="90"
-                src="svg\\homePage\\sphere_red.svg"
+                src="svg\homePage\sphere_red.svg"
               />
             </div>
             <n-grid x-gap="0" :cols="2">
               <n-gi>
                 <n-image preview-disabled
                   style="position: relative; top: 140px; left: 50px"
-                  src="svg\\homePage\\sort.svg"
+                  src="svg\homePage\sort.svg"
                 />
                 <div
                   style="position: relative; top: 170px; left: 50px"
@@ -409,7 +409,7 @@
               <n-gi>
                 <n-image preview-disabled
                   style="position: relative; top: 140px; left: -80px"
-                  src="svg\\homePage\\search.svg"
+                  src="svg\homePage\search.svg"
                 />
                 <div
                   style="position: relative; top: 170px; left: -80px"
@@ -427,7 +427,7 @@
       <div class="slide">
         <n-grid x-gap="0" :cols="2" style="height: 100%">
           <n-gi style="margin: auto">
-            <n-image preview-disabled src="svg\\homePage\\uml.svg" />
+            <n-image preview-disabled src="svg\homePage\uml.svg" />
           </n-gi>
 
           <n-gi style="height: 100%; width: 100%">
@@ -435,7 +435,7 @@
               <n-image preview-disabled
                 width="70"
                 height="70"
-                src="svg\\homePage\\blackStar.svg"
+                src="svg\homePage\blackStar.svg"
               />
             </div>
             <div class="slideTag">UML图绘制</div>
@@ -443,14 +443,14 @@
               <n-image preview-disabled
                 width="90"
                 height="90"
-                src="svg\\homePage\\sphere_red.svg"
+                src="svg\homePage\sphere_red.svg"
               />
             </div>
             <n-grid x-gap="0" :cols="2">
               <n-gi>
                 <n-image preview-disabled
                   style="position: relative; top: 140px; left: 50px"
-                  src="svg\\homePage\\sort.svg"
+                  src="svg\homePage\sort.svg"
                 />
                 <div
                   style="position: relative; top: 170px; left: 50px"
@@ -463,7 +463,7 @@
               <n-gi>
                 <n-image preview-disabled
                   style="position: relative; top: 140px; left: -80px"
-                  src="svg\\homePage\\search.svg"
+                  src="svg\homePage\search.svg"
                 />
                 <div
                   style="position: relative; top: 170px; left: -80px"
@@ -481,7 +481,7 @@
       <div class="slide">
         <n-grid x-gap="0" :cols="2" style="height: 100%">
           <n-gi style="margin: auto">
-            <n-image preview-disabled src="svg\\homePage\\trash.svg" />
+            <n-image preview-disabled src="svg\homePage\trash.svg" />
           </n-gi>
 
           <n-gi style="height: 100%; width: 100%">
@@ -489,7 +489,7 @@
               <n-image preview-disabled
                 width="70"
                 height="70"
-                src="svg\\homePage\\blackStar.svg"
+                src="svg\homePage\blackStar.svg"
               />
             </div>
             <div class="slideTag" style="left: 130px">回收站</div>
@@ -497,14 +497,14 @@
               <n-image preview-disabled
                 width="90"
                 height="90"
-                src="svg\\homePage\\sphere_red.svg"
+                src="svg\homePage\sphere_red.svg"
               />
             </div>
             <n-grid x-gap="0" :cols="2">
               <n-gi>
                 <n-image preview-disabled
                   style="position: relative; top: 140px; left: 90px"
-                  src="svg\\homePage\\trash1.svg"
+                  src="svg\homePage\trash1.svg"
                 />
                 <div
                   style="position: relative; top: 170px; left: 90px"
@@ -517,7 +517,7 @@
               <n-gi>
                 <n-image preview-disabled
                   style="position: relative; top: 140px; left: -40px"
-                  src="svg\\homePage\\trash2.svg"
+                  src="svg\homePage\trash2.svg"
                 />
                 <div
                   style="position: relative; top: 170px; left: -40px"
@@ -536,7 +536,7 @@
 
   <!-- Footer -->
   <div style="position: absolute; top: 6220px; width: 100%; text-align: center;" >
-    <n-image preview-disabled src="svg\\homePage\\bottomLabel.svg" />
+    <n-image preview-disabled src="svg\homePage\bottomLabel.svg" />
   </div>
   <div style="position: absolute; top: 6570px;  width: 100%; text-align: center;">
     <button @click="$router.push({path:'/signUp'})" class="headButton" style="background-color:white; color:#8dc18d">进入注册</button>
