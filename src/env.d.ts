@@ -15,3 +15,13 @@ declare module 'shortid'
 declare module 'vue-fabric'
 declare module 'y-websocket'
 declare module 'vue-tree-list'
+declare module  'file-saver'
+declare module  'pizzip'
+
+declare module  'pizzip/utils'
+
+declare module 'file-saver'
+
+declare module 'docxtemplater-image-module-free'
+declare module  "html-docx-js/dist/html-docx"
+declare module "jspdf"

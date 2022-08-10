@@ -13,13 +13,16 @@
             </n-icon>
           团队管理</div>
       </n-gi>
-      <n-gi span="2">
+      <n-gi span="1">
+        <tk-select selected="请选择">
+          <template #selectDropDown>
+            <tk-select-item value="最新案例">最新案例</tk-select-item>
+            <tk-select-item value="最热案例">最热案例</tk-select-item>
+          </template>
+        </tk-select>
       </n-gi>
-      <n-gi span="3">
-        <el-button @click="handleClick()" class="add_group">
-          <n-image src="svg\group_svg\add.svg" class="add_group_img"/>
-          <span class="add_group_word">新建团队</span>
-        </el-button>
+      <n-gi span="4">
+
       </n-gi>
       <!-- v-model:value="" -->
       <n-gi span="5">
@@ -89,7 +92,7 @@
     <div v-for="(member, index) in members">
       <Bar :key="member.member_id" :oneMember="member"></Bar>
     </div >
-
+    
     <!-- <ul class="group_mem">
       <li v-for="(todo, index) in todos" :key="todo.name">
         <div class="person">
@@ -151,11 +154,12 @@ import Bar from "../../components/member.vue";
 import axios from "axios";
 import { useMemberStore } from "../../store/Member";
 import { useUserStore } from "../../store/User";
+import { useGroupStore } from '../../store/Group'
 import { useDialog,InputInst, useMessage } from "naive-ui";
 import { useRouter } from "vue-router"
 
 const router = useRouter();
-
+const Group = useGroupStore();
 const Member = useMemberStore();
 const message = useMessage();
 const User = useUserStore();
@@ -173,12 +177,6 @@ onBeforeMount(() => {
   console.log("1");
 });
 
-const handleClick = () => {
-  router.push({
-    path: 'NewGroup',
-  })
-}
-
 const invite_member = () =>{
   axios({
     url: axios.defaults.baseURL + "/group/invite_member",
@@ -188,13 +186,13 @@ const invite_member = () =>{
       "Authorization": User.token
     },
     data: {
-      group_id: one_group_id,
+      group_id: Group.id,
       username: form.name
     },
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-
+        
         return data1;
       },
     ],
@@ -227,7 +225,7 @@ Member.$subscribe((mutation, state)=>{
           "Authorization": User.token
         },
         data: {
-          group_id: one_group_id,
+          group_id: Group.id,
           user_id: Member.user_id
         },
         transformRequest: [
@@ -279,7 +277,7 @@ Member.$subscribe((mutation, state)=>{
           "Authorization": User.token
         },
         data: {
-          group_id: one_group_id,
+          group_id: Group.id,
           status: 1,
           user_id: Member.user_id
         },
@@ -316,7 +314,7 @@ const getMembers = (clear: boolean = true) => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-
+        
         return data1;
       },
     ],
@@ -347,12 +345,12 @@ const getMembers = (clear: boolean = true) => {
               "Authorization": User.token
             },
             data: {
-              group_id: one_group_id,
+              group_id: Group.id,
             },
             transformRequest: [
               function (data, headers) {
                 let data1 = JSON.stringify(data);
-
+                
                 return data1;
               },
             ],
@@ -384,9 +382,9 @@ const getMembers = (clear: boolean = true) => {
           });
 
         }
-
+         
         // User.Name=modelRef.value.name,
-        // User.Id=response.data.data.user_id,
+        // User.Id=response.data.data.user_id, 
         }
     } else {
     }
@@ -623,31 +621,6 @@ const getMembers = (clear: boolean = true) => {
   margin-left: 10px;
 }
 
-.add_group{
-  height: 30px !important;
-  border: none !important;
-  background-color: transparent !important;
-}
 
-.add_group_img{
-  height: 30px;
-  width: 30px;
-}
-
-.add_group_word{
-  margin-left: 32px;
-  color: #000000;
-  font-family: Inria Sans;
-  font-weight: bold;
-  font-size: 18px;
-  line-height: 24px;
-  letter-spacing: 0px;
-  text-align: left;
-  position: absolute;
-}
-
-.add_group_word:hover{
-  color: #F5B544 !important;
-}
 
 </style>

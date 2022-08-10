@@ -23,7 +23,7 @@ font-style: normal;
 font-weight: 700;
 font-size: 32px;
 line-height: 34px;
-color: #000000;">多人文档</div>
+            color: #000000;">多人文档</div>
                 </n-gi>
                 <n-gi span="10"></n-gi>
                 <n-gi span="15">
@@ -41,32 +41,30 @@ color: #000000;">多人文档</div>
                     </n-space>
                 </n-gi>
                 <!-- <n-gi></n-gi> -->
-                <n-gi span="3">
+                <n-gi span="1">
 
                 </n-gi>
-                <n-gi span="2">
+                <n-gi span="7">
                     <n-space>
-                        <n-button bordered type="info" strong :disabled="ProjNotChosed" v-on:click="saveDesign"
+                        <n-button round type="info" strong :disabled="ProjNotChosed" v-on:click="saveDesign"
                             @click="() => { showModal = true }">新建文档</n-button>
                         <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
                     </n-space>
                 </n-gi>
-                <n-gi span="5"></n-gi>
-                <n-gi span="2">
-                    <n-space>
-                        <n-button bordered type="info" strong :disabled="ProjNotChosed" v-on:click="saveDesign"
-                            @click="() => { showModal = true }">导出文档</n-button>
-                        <!-- <n-button v-on:click="exportHtml">Export HTML</n-button> -->
+                <n-gi span="1"></n-gi>
+                <n-gi span="10">
+                     <n-space vertical>
+                            <n-select v-model:value="docValue" :options="options"  :loading="Modelloading"
+                                placeholder="更多模板" @update:value="enterDoc" class="choose selectP" />
                     </n-space>
                 </n-gi>
-                <n-gi span="5">
+                <n-gi span="1">
                 </n-gi>
 
                     <n-gi span="10">
                         <n-space vertical>
-
-                            <n-select v-model:value="docValue" :options="options" remote :loading="projLoading"
-                                placeholder="更多模板" @update:value="enterDoc" class="choose selectP" />
+                            <n-select v-model:value="outMethod" :options="outOptions" :loading="outputing"
+                                placeholder="导出文档" @update:value="output" class="choose selectP" />
                         </n-space>
                       
                     </n-gi>
@@ -164,6 +162,7 @@ color: #000000;">多人文档</div>
             <router-view></router-view>
         </n-layout>
     </div>
+
 </template>
 
 <script setup lang="ts">
@@ -179,6 +178,8 @@ import { useMessage } from 'naive-ui'
 import { useRouter, useRoute } from 'vue-router'
 import projectDetailVue from '../projectDetail/projectDetail.vue'
 import { useProjectStore } from '../../store/Project'
+import { useMsgStore } from '../../store/Msg'
+const Msg=useMsgStore()
 // import projectVue from '../../components/project.vue'
 const Project=useProjectStore()
 const route = useRoute()
@@ -187,6 +188,8 @@ const message = useMessage()
 const Group = useGroupStore()
 const User = useUserStore()
 const options = ref<SelectOption[]>([])
+const outMethod=ref("")
+const outOptions = ref<SelectOption[]>([])
 const projoptions = ref<SelectOption[]>([])
 const docChosed = ref(false)
 const docId = ref(-1)
@@ -196,6 +199,17 @@ const projLoading = ref(true)
 const showModal = ref(false)
 // const ProjNotChosed=ref(true)
 const ProjNotChosed = ref(false)
+outOptions.value.push({
+    label:"word",
+    value:1
+})
+const output=()=>{
+    console.log(outMethod.value)
+    if(Number(outMethod.value)==1){
+        Msg.Dopt="word"
+        // console.log("yes")
+    }
+}
 
 const doc = reactive({
     id: -1,

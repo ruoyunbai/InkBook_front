@@ -291,9 +291,11 @@ import { useDetailStore } from "../../store/ProjectDetail";
 import { usePrototypeStore } from "../../store/prototype";
 import { useUmlStore } from "../../store/Uml";
 import { useDocumentStore } from "../../store/Document";
+import { useGroupStore } from "../../store/Group";
 
 import { useRouter } from "vue-router"
 import { useRoute } from "vue-router"
+
 const route = useRoute();
 const router = useRouter();
 
@@ -303,6 +305,7 @@ const Detail = useDetailStore();
 const Proto = usePrototypeStore();
 const Uml = useUmlStore();
 const Doc = useDocumentStore();
+const Group = useGroupStore();
 const message = useMessage();
 
 const protoNewVisible = ref(false);
@@ -450,9 +453,9 @@ const getUml = (clear: boolean = true) => {
         let tmp = reactive({
           uml_id: response.data.umls[i].uml_id,
           uml_name: response.data.umls[i].uml_name,
-          uml_url: response.data.umls[i].uml_url,
-          proj_id: response.data.umls[i].proj_id,
-          status: response.data.umls[i].status,
+          // uml_url: response.data.umls[i].uml_url,
+          // proj_id: response.data.umls[i].proj_id,
+          // status: response.data.umls[i].status,
         });
         console.log("UML ID" + tmp.uml_id + " " + tmp.uml_name);
         umls.push(tmp);
@@ -493,12 +496,11 @@ const getDocument = (clear: boolean = true) => {
       if (clear) while (documents.length != 0) documents.pop();
       for (i = 0; i < docNum; i++) {
         let tmp = reactive({
-          count: response.data.documents[i].count,
           document_id: response.data.documents[i].document_id,
           document_name: response.data.documents[i].document_name,
-          document_url: response.data.documents[i].document_url,
-          proj_id: response.data.documents[i].proj_id,
-          status: response.data.documents[i].status,
+          // document_url: response.data.documents[i].document_url,
+          // proj_id: response.data.documents[i].proj_id,
+          // status: response.data.documents[i].status,
         });
         console.log("document_id" + tmp.document_id + " " + tmp.document_name);
         documents.push(tmp);
@@ -818,6 +820,7 @@ const searchFile = () => {
       Authorization: User.token,
     },
     data: {
+      group_id: Group.id,
       name: input.value,
     },
     transformRequest: [
@@ -829,7 +832,7 @@ const searchFile = () => {
   }).then(function (response) {
     // 处理成功情况
     console.log(response);
-    // console.log("input: "+input.value);
+    console.log("全局变量Groupid:"+Group.id.toString());
     while (sprototypes.length != 0) sprototypes.pop();
     while (sumls.length != 0) sumls.pop();
     while (sdocuments.length != 0) sdocuments.pop();
