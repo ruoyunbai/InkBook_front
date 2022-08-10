@@ -9,7 +9,7 @@
         <n-image preview-disabled
           width="26.5"
           height="23.5"
-          src="svg\\主页svg\\projectDetail\\ItemIcon.svg"
+          src="svg\projectDetail\ItemIcon.svg"
         />
       </n-gi>
       <n-gi span="8">
