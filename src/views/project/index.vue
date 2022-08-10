@@ -634,7 +634,7 @@ const getCreProject = (clear: boolean = true) => {
       count = response.data?.count;
       console.log(response.data);
       let i = 0;
-      if (clear) while (projects.length != 0) projects.pop();
+      if (clear) while (creprojects.length != 0) creprojects.pop();
       if (response.data != null)
       one_group_id = response.data.groups[0].group_id;
       console.log("one_group_id" + one_group_id);
@@ -724,6 +724,7 @@ const project_create = () => {
     if (response.data?.success) {
       message.success("创建成功");
       getProject();
+      getCreProject();
       console.log("2");
       dialogCreateVisible.value = false;
 
