@@ -1,13 +1,12 @@
 <template>
   <div class="item">
     <n-grid
-      class="item"
       x-gap="0"
       :cols="11"
       style="padding-top: 5px; vertical-align: middle"
     >
       <n-gi span="1">
-        <n-image
+        <n-image preview-disabled
           width="26.5"
           height="23.5"
           src="svg\\主页svg\\projectDetail\\ItemIcon.svg"
@@ -74,10 +73,12 @@ const file = reactive({
 
 onBeforeMount(() => {
   file.name = props.oneProto.prototype_name;
+  console.log(props.oneProto);
 });
 
 const editProto = () => {
-  Proto.ppage_id = props.oneProto.ppage_id;
+  Proto.ppage_id = props.oneProto.prototype_id;
+  // console.log("in son id:" + props.oneProto.prototype_id + " write:" + Proto.ppage_id);
   Proto.ppage_name = file.name;
   Proto.operation = "edit";
   dialogEditVisible.value = false;
@@ -90,8 +91,7 @@ const move_proto_to_bin = () => {
     type: "warning",
   })
     .then(() => {
-      Proto.ppage_id = props.oneProto.ppage_id;
-      Proto.ppage_name = file.name;
+      Proto.ppage_id = props.oneProto.prototype_id;
       Proto.operation = "delete";
       dialogEditVisible.value = false;
     })

@@ -72,6 +72,8 @@ import axios from 'axios';
 import { SelectOption } from 'naive-ui'
 import { useUserStore } from '../../store/User'
 import {useMessage} from 'naive-ui'
+import { useGroupStore } from '../../store/Group';
+const Group=useGroupStore()
 const message=useMessage()
 
 const createName = ref("")
@@ -126,14 +128,14 @@ const getProjs = () => {
       "Authorization": User.token
     },
     data: {
-      group_id: 1,
+      group_id: Group.id,
       is_desc: true,
       order_by: 0
     },
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        console.log(data1);
+        
         return data1;
       },
     ],
@@ -196,7 +198,7 @@ const getPage = () => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        // console.log(data1);
+        // 
         return data1;
       },
     ],
@@ -249,7 +251,7 @@ const getPPages = (set:boolean=false) => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        // console.log(data1);
+        // 
         return data1;
       },
     ],
@@ -276,7 +278,7 @@ const getPPages = (set:boolean=false) => {
       }
       
       if(set){
-        pageId.value=optionsPage.value[optionsPage.value.length-1].value
+        pageId.value=optionsPage.value[0].value
       }
     }
     pageNotChosed.value = false
@@ -432,7 +434,7 @@ const createDesign = () => {
       design: design
     }
     createJson(JSON.stringify(t))
-  
+
     // console.log(JSON.stringify(design))
     // a=design
   });

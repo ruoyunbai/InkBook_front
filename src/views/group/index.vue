@@ -9,20 +9,17 @@
 
         <div id="group_name">
           <n-icon>
-              <n-image src="svg\project_svg\group_home.svg" />
+              <n-image src="svg\project_svg\home.svg" />
             </n-icon>
           团队管理</div>
       </n-gi>
-      <n-gi span="1">
-        <tk-select selected="请选择">
-          <template #selectDropDown>
-            <tk-select-item value="最新案例">最新案例</tk-select-item>
-            <tk-select-item value="最热案例">最热案例</tk-select-item>
-          </template>
-        </tk-select>
+      <n-gi span="2">
       </n-gi>
-      <n-gi span="4">
-
+      <n-gi span="3">
+        <el-button @click="handleClick()" class="add_group">
+          <n-image src="svg\group_svg\add.svg" class="add_group_img"/>
+          <span class="add_group_word">新建团队</span>
+        </el-button>
       </n-gi>
       <!-- v-model:value="" -->
       <n-gi span="5">
@@ -50,6 +47,9 @@
     </n-grid>
   </div>
   <div id="group_title">
+    <n-icon>
+      <n-image src="svg\project_svg\list.svg" />
+    </n-icon>
     全部成员
   </div>
   <div id="group_mid">
@@ -89,7 +89,7 @@
     <div v-for="(member, index) in members">
       <Bar :key="member.member_id" :oneMember="member"></Bar>
     </div >
-    
+
     <!-- <ul class="group_mem">
       <li v-for="(todo, index) in todos" :key="todo.name">
         <div class="person">
@@ -173,6 +173,12 @@ onBeforeMount(() => {
   console.log("1");
 });
 
+const handleClick = () => {
+  router.push({
+    path: 'NewGroup',
+  })
+}
+
 const invite_member = () =>{
   axios({
     url: axios.defaults.baseURL + "/group/invite_member",
@@ -188,7 +194,7 @@ const invite_member = () =>{
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        console.log(data1);
+
         return data1;
       },
     ],
@@ -264,6 +270,32 @@ Member.$subscribe((mutation, state)=>{
         getMembers();
       })
       Member.operation="";
+    }else if(Member.operation=="quit_manager"){
+      axios({
+        url: axios.defaults.baseURL + "/group/set_member_status",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          group_id: one_group_id,
+          status: 1,
+          user_id: Member.user_id
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("response"+Member.user_id);
+        console.log(response)
+        getMembers();
+      })
+      Member.operation="";
     }
 
 
@@ -284,7 +316,7 @@ const getMembers = (clear: boolean = true) => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        console.log(data1);
+
         return data1;
       },
     ],
@@ -320,7 +352,7 @@ const getMembers = (clear: boolean = true) => {
             transformRequest: [
               function (data, headers) {
                 let data1 = JSON.stringify(data);
-                console.log(data1);
+
                 return data1;
               },
             ],
@@ -352,9 +384,9 @@ const getMembers = (clear: boolean = true) => {
           });
 
         }
-         
+
         // User.Name=modelRef.value.name,
-        // User.Id=response.data.data.user_id, 
+        // User.Id=response.data.data.user_id,
         }
     } else {
     }
@@ -457,7 +489,7 @@ const getMembers = (clear: boolean = true) => {
   font-family: Inria Sans;
   font-weight: bold;
   font-size: 30px;
-  line-height: 24px;
+  line-height: 34px;
   letter-spacing: 0px;
   text-align: left;
   position: absolute;
@@ -465,7 +497,7 @@ const getMembers = (clear: boolean = true) => {
 
 #group_title{
   height: 34px;
-  width: 96px;
+  width: 196px;
   margin-left: 90px;
   margin-bottom: 10px;
   color: #000000;
@@ -591,6 +623,31 @@ const getMembers = (clear: boolean = true) => {
   margin-left: 10px;
 }
 
+.add_group{
+  height: 30px !important;
+  border: none !important;
+  background-color: transparent !important;
+}
 
+.add_group_img{
+  height: 30px;
+  width: 30px;
+}
+
+.add_group_word{
+  margin-left: 32px;
+  color: #000000;
+  font-family: Inria Sans;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: left;
+  position: absolute;
+}
+
+.add_group_word:hover{
+  color: #F5B544 !important;
+}
 
 </style>

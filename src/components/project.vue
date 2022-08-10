@@ -3,7 +3,8 @@
     <div class="user" style="background:#EDF5ED;margin:15px 25px 15px 15px" >
         <n-space vertical>
             <n-space justify="end">
-                <n-image style="margin:15px 15px 10px 10px" height="25" preview-disabled @click="proj_copy()" src="svg\project_svg\copy.svg"/>
+                <n-image style="margin:15px 0px 10px 0px" height="25" preview-disabled @click="proj_top()" src="svg\project_svg\top.svg"/>
+                <n-image style="margin:15px 10px 10px 0px" height="25" preview-disabled @click="proj_copy()" src="svg\project_svg\copy.svg"/>
             </n-space>
             <p class="name"  style="margin:0px 10px 10px 30px">{{props.oneProject.proj_name}}</p>
             <p class="state" style="margin:0px 10px 10px 30px">{{props.oneProject.proj_info}}</p>
@@ -146,6 +147,12 @@ const move_proj_to_bin = () =>{
 const proj_copy= () =>{
     Project.proj_id=props.oneProject.proj_id;
     Project.operation="proj_copy";
+}
+
+const proj_top= () =>{
+    Project.proj_id=props.oneProject.proj_id;
+    Project.top=2;
+    Project.operation="proj_top";
 }
 
 const toDetail = () =>{

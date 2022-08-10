@@ -28,7 +28,6 @@
                 color="#F5B544"
                 size="large"
                 style="border-radius: 5px 5px 5px 20px; width: 120px;height: 40px;"
-                @click="handleClick()"
             >
               <p class="buttonText3">编辑个人信息</p>
             </n-button>
@@ -91,6 +90,7 @@ import { useDialog, NInput } from "naive-ui";
 import axios from "axios";
 import { InputInst, useMessage } from "naive-ui";
 import { useRoute } from "vue-router"
+import { useRouter} from 'vue-router'
 
 import { useUserStore } from "../../store/User";
 const User = useUserStore();
@@ -117,7 +117,6 @@ const get_info = () =>{
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        console.log(data1);
         return data1;
       },
     ],
@@ -137,6 +136,7 @@ const get_info = () =>{
     console.log(response.data);
   });
 }
+
 
 </script>
 
@@ -326,7 +326,7 @@ onMounted(() => {
         transformRequest: [
           function (data, headers) {
             let data1 = JSON.stringify(data);
-            console.log(data1);
+
             return data1;
           },
         ],

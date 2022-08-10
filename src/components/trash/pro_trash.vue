@@ -12,7 +12,7 @@
                 size="large"
                 color="#DADADA"
                 ghost
-                @click="move_out()"
+                @click="recover_proj()"
             >
                 <template #icon>
                     <n-image preview-disabled src="svg\project_svg\toDetail.svg">
@@ -23,21 +23,37 @@
                 <!-- </router-link> -->
             </n-button>
 
-            <n-button
-                round
-                size="large"
-                color="#DADADA"
-                ghost
-                style="margin:0px 10px 10px 10px"
-                @click="move_proj_to_bin()"
-            >
-                <template #icon>
-                    <n-image preview-disabled src="svg\project_svg\dele.svg">
-                    </n-image>
-                </template>
-                <p class="buttonText2"
-                >删除项目</p>
-            </n-button>
+            <!--操作的弹出确认-->
+            <n-popconfirm>
+              <template #icon>
+                <n-icon>
+                  <n-image style="margin:0px 0px 0px 0px" height="20" preview-disabled  src="svg\project_svg\remove_clue.svg" />
+                </n-icon>
+              </template>
+              <template #trigger>
+                  <n-button
+                  round
+                  size="large"
+                  color="#DADADA"
+                  ghost
+                  style="margin:0px 10px 10px 10px"
+                    >
+                        <template #icon>
+                            <n-image preview-disabled src="svg\project_svg\dele.svg">
+                            </n-image>
+                        </template>
+                        <p class="buttonText2"
+                        >删除项目</p>
+                    </n-button>
+              </template>
+              确定要永久删除项目吗？
+              <template #action>
+                <n-button size="small" @click="move_proj_to_bin()">
+                  确定
+                </n-button>
+              </template>
+            </n-popconfirm>
+
         </n-space>
     </div>
 
@@ -83,6 +99,11 @@ const Project = useProjectStore();
 const move_proj_to_bin = () =>{
   Project.proj_id=props.oneProject.proj_id;
   Project.operation="delete_proj";
+}
+
+const recover_proj = () =>{
+  Project.proj_id=props.oneProject.proj_id;
+  Project.operation="recover_proj";
 }
 
 type Props = {

@@ -178,7 +178,7 @@ const handleValidateButtonClick = (e: MouseEvent) => {
         transformRequest: [
           function (data, headers) {
             let data1 = JSON.stringify(data);
-            console.log(data1);
+            
             return data1;
           },
         ],
@@ -192,6 +192,7 @@ const handleValidateButtonClick = (e: MouseEvent) => {
           User.token=response.data.token
           if(modelRef.value.name!=null)
           User.Name= modelRef.value.name
+          User.Id=response.data.user.user_id
           localStorage.setItem("Login","true")
           router.push('/')
           // axios({
@@ -207,7 +208,7 @@ const handleValidateButtonClick = (e: MouseEvent) => {
           //   transformRequest: [
           //     function (data, headers) {
           //       let data1 = JSON.stringify(data);
-          //       console.log(data1);
+          //       
           //       return data1;
           //     },
           //   ],

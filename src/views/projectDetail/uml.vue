@@ -1,13 +1,12 @@
 <template>
   <div class="item">
     <n-grid
-      class="item"
       x-gap="0"
       :cols="11"
       style="padding-top: 5px; vertical-align: middle"
     >
       <n-gi span="1">
-        <n-image
+        <n-image preview-disabled
           width="26.5"
           height="23.5"
           src="svg\\主页svg\\projectDetail\\ItemIcon.svg"
@@ -39,7 +38,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogEditVisible = false">取消</el-button>
-        <el-button type="primary" @click="dialogEditVisible = false"
+        <el-button type="primary" @click="editUml"
           >确认</el-button
         >
       </span>
@@ -71,11 +70,13 @@ const file = reactive({
 
 onBeforeMount(() => {
   file.name = props.oneUML.uml_name;
+  console.log(props.oneUML);
 });
 
 const editUml = () => {
-  UML.uml_id = props.oneProto.ppage_id;
+  UML.uml_id = props.oneUML.uml_id;
   UML.uml_name = file.name;
+  //console.log("UML_id"+UML.uml_id);
   UML.operation = "edit";
   dialogEditVisible.value = false;
 };
@@ -87,8 +88,7 @@ const move_uml_to_bin = () => {
     type: "warning",
   })
     .then(() => {
-      UML.uml_id = props.oneProto.ppage_id;
-      UML.uml_name = file.name;
+      UML.uml_id = props.oneUML.uml_id;
       UML.operation = "delete";
       dialogEditVisible.value = false;
     })
