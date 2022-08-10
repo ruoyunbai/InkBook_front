@@ -42,14 +42,14 @@
                             @mouseenter="data.show=true">
                                 <!-- <n-space> -->
                                     <div>
-                                       
+
                                 <n-image v-if="!data.isDir" preview-disabled src="svg\doc\documents.svg"
                                     style="padding:0;margin:0"></n-image>
 
                                 <n-image v-if="data.isDir" preview-disabled src="svg\doc\doc.svg"
                                     style="padding:0;margin:0"></n-image>
                                     </div>
-                                    
+
                                 <span v-if="!data.renaming" style="padding:0;margin:0;position:relative;"> {{ node.label }}</span>
                                 <n-input @blur="endRename(data)" v-model:value="newName" v-if="data.renaming" size="small"></n-input>
 
@@ -58,26 +58,26 @@
                                 <span v-show="data.show" style=" position: absolute;right: 0px;">
                                 <!-- 添加文件夹 -->
                                     <n-image preview-disabled v-if="!data.inputingDir&&!data.inputingDoc&&!data.renaming&&!(data.isProj)&&data.isDir" @click.stop="appendDir(data)"
-                                        src="svg\doc\dir+.svg"></n-image>
+                                        src="svg\doc\dir+.svg" style="width: 18px; height: 18px; margin-left: 2px"></n-image>
                                     <n-input v-model:value="newDirName"  @blur="endAddDir(data)" v-if="data.inputingDir" size="small"></n-input>
-                               
+
                                <!-- 添加文件 -->
                                     <n-image preview-disabled v-if="data.isDir && !data.inputingDir&&!data.inputingDoc&&!data.renaming" @click.stop="appendDoc(data)"
-                                        src="svg\doc\doc+.svg"></n-image>
+                                        src="svg\doc\doc+.svg" style="width: 18px; height: 18px; margin-left: 2px"></n-image>
                                     <n-input v-model:value="newDocName"  @blur="endAddDoc(data)" v-if="data.inputingDoc" size="small"></n-input>
-                               
+
                                <!-- rename -->
-                                    <n-image 
-                                    preview-disabled v-if="!(data.isProj&&data.isDir&&(data.level==1||data.level==2))&&!data.isRoot&&!data.inputingDir&&!data.inputingDoc&&!data.renaming" 
+                                    <n-image
+                                    preview-disabled v-if="!(data.isProj&&data.isDir&&(data.level==1||data.level==2))&&!data.isRoot&&!data.inputingDir&&!data.inputingDoc&&!data.renaming"
                                     @click.stop="()=>{data.renaming=true}"
-                                        src="svg\doc\rename.svg">
+                                        src="svg\doc\rename.svg" style="width: 17px; height: 17px; margin-left: 2px">
                                     </n-image>
 
                                 <!-- delete -->
                                     <n-image preview-disabled  @click.stop="remove(node, data)"
                                     v-if="!(data.isProj&&data.isDir&&(data.level==1||data.level==2))&&!data.isRoot&&!data.inputingDir&&!data.inputingDoc&&!data.renaming"
                                     width="20"
-                                        src="svg\group_svg\trash.svg"></n-image>
+                                        src="svg\doc\trash.svg" style="width: 17px; height: 17px; margin-left: 2px"></n-image>
 
                                 </span>
 
@@ -259,7 +259,7 @@ const createTree = (src: any,isProj=false,level=0) => {
             for (let i = 0; i < src.contained_files?.length; i++) {
                 // console.log("contained",src.contained_files[i])
                 // console.log(createTree(src.contained_files[i]))
-                
+
                 t.children.push(createTree(src.contained_files[i],tis,level+1))
                 // t.children.push(undefined)
             }
@@ -281,7 +281,7 @@ const endRename=(data:Tree)=>{
         data: {
             document_name:newName.value,
             document_id:data.id,
-            
+
         },
         transformRequest: [
             function (data, headers) {
@@ -303,7 +303,7 @@ const endRename=(data:Tree)=>{
 }
 const endAddDoc=(data:Tree)=>{
     data.inputingDoc=false
-    const newChild = { 
+    const newChild = {
         inputingDir:false,inputingDoc:false,renaming:false,
         isProj:data.isProj,
         level:data.level+1,
@@ -350,9 +350,9 @@ const appendDoc = (data: Tree) => {
 }
 
 const endAddDir=(data:Tree)=>{
-    
+
     data.inputingDir=false
-        const newChild = { 
+        const newChild = {
         inputingDir:false,inputingDoc:false,renaming:false,
         isProj:data.isProj,
         level:data.level+1,
@@ -391,7 +391,7 @@ const endAddDir=(data:Tree)=>{
             message.success(response.data?.message)
         }
     })
-   
+
 }
 const appendDir = (data: Tree) => {
     data.inputingDir = true
@@ -412,7 +412,7 @@ const remove = (node: Node, data: Tree) => {
             "Authorization": User.token
         },
         data: {
-            document_id:data.id,         
+            document_id:data.id,
         },
         transformRequest: [
             function (data, headers) {
@@ -424,7 +424,7 @@ const remove = (node: Node, data: Tree) => {
         // 处理成功情况
         console.log("addDIR",response)
         if (response.data?.success) {
-    
+
             message.success(response.data?.message)
         }
     })
@@ -445,7 +445,7 @@ const dataSource = ref<Tree[]>([])
     padding-right: 8px;
 }
 </style>
- 
+
 
 <style>
 .tree {
