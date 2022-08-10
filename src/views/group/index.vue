@@ -9,7 +9,7 @@
 
         <div id="group_name">
           <n-icon>
-              <n-image src="svg\project_svg\group_home.svg" />
+              <n-image src="svg\project_svg\home.svg" />
             </n-icon>
           团队管理</div>
       </n-gi>
@@ -50,6 +50,9 @@
     </n-grid>
   </div>
   <div id="group_title">
+    <n-icon>
+      <n-image src="svg\project_svg\list.svg" />
+    </n-icon>
     全部成员
   </div>
   <div id="group_mid">
@@ -483,7 +486,7 @@ const getMembers = (clear: boolean = true) => {
   font-family: Inria Sans;
   font-weight: bold;
   font-size: 30px;
-  line-height: 24px;
+  line-height: 34px;
   letter-spacing: 0px;
   text-align: left;
   position: absolute;
@@ -491,7 +494,7 @@ const getMembers = (clear: boolean = true) => {
 
 #group_title{
   height: 34px;
-  width: 96px;
+  width: 196px;
   margin-left: 90px;
   margin-bottom: 10px;
   color: #000000;
