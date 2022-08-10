@@ -12,7 +12,7 @@
       <div class="card_body">
         <div class="body_left">
           <n-space vertical align="center">
-            <n-avatar :size="90" :src="Ava" style="border-radius: 10px"></n-avatar>
+            <n-avatar :size="90" :src="User.avatar" style="border-radius: 10px"></n-avatar>
             <span class="NAME">{{ User.Name }}</span>
 <!--            <n-button-->
 <!--                color="#F5B544"-->
@@ -126,7 +126,7 @@ const newSex= ref("")
 const newMail= ref("")
 const changeAvatar=(res:any)=>{
               // console.log(res)
-              User.avatar='https://inkbook.mina.moe/media/avatar/'+res.avatar_url
+              User.avatar='https://inkbook.mina.moe/media/avatars/'+res.avatar_url
       }
 const modify_info = ()=>{
 

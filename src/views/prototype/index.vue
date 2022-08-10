@@ -172,7 +172,8 @@ const loadModel = () => {
   let modelName = modelValue.value
   modelValue.value=null
   axios({
-    url: 'http://127.0.0.1:3000/json/' + modelName + '.json',
+    url:"https://inkbook.mina.moe/json/"+ modelName + '.json',
+    // url: 'http://127.0.0.1:3000/json/' + modelName + '.json',
     method: "post",
     headers: {
       "Content-Type": "application/json",

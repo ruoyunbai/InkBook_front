@@ -11,7 +11,7 @@ export const useUserStore = defineStore( Names.User,{
             Login:false,
             token:"",
             Id:0,
-            avatar:"http://43.138.77.133:81/media/avatars/default.jpg",
+            avatar:"svg\\主页svg\\Avatar.svg",
             level:1,
             isadmin:false
         }
