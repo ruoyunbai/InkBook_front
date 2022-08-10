@@ -140,7 +140,7 @@ const routes: Array<RouteRecordRaw> = [
             },
             {
                 name: 'projectDetail',
-                path: "/projectDetail",
+                path: "/projectDetail/:proj_id",
                 component: () => import('../views/projectDetail/projectDetail.vue'),
                 meta: {
                     title: "项目详情",
