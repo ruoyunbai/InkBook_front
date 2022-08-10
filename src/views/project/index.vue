@@ -626,6 +626,33 @@ Project.$subscribe((mutation, state)=>{
         getProject();
       })
       Project.operation="";
+    }else if(Project.operation=="proj_top"){
+      axios({
+        url: axios.defaults.baseURL + "/proj/update_proj",
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": User.token
+        },
+        data: {
+          proj_id: Project.proj_id,
+          proj_info: Project.proj_info,
+          proj_name: Project.proj_name,
+          top:2
+        },
+        transformRequest: [
+          function (data, headers) {
+            let data1 = JSON.stringify(data);
+            return data1;
+          },
+        ],
+      }).then(function (response) {
+        // 处理成功情况
+        console.log("!!!!!! ");
+        console.log(response);
+        getProject();
+      })
+      Project.operation="";
     }
 })
 
