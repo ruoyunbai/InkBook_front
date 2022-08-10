@@ -7,7 +7,7 @@
       style="padding-top: 5px; vertical-align: middle"
     >
       <n-gi span="1">
-        <n-image
+        <n-image preview-disabled
           width="26.5"
           height="23.5"
           src="svg\\主页svg\\projectDetail\\ItemIcon.svg"
@@ -72,11 +72,12 @@ const file = reactive({
 });
 
 onBeforeMount(() => {
-  file.name = props.oneDoc.uml_name;
+  file.name = props.oneDoc.document_name;
+  console.log(props.oneDoc)
 });
 
 const editDoc = () => {
-  Doc.document_id = props.oneProto.ppage_id;
+  Doc.document_id = props.oneDoc.document_id;
   Doc.document_name = file.name;
   Doc.operation = "edit";
   dialogEditVisible.value = false;
@@ -89,8 +90,7 @@ const move_doc_to_bin = () => {
     type: "warning",
   })
     .then(() => {
-      Doc.document_id = props.oneProto.ppage_id;
-      Doc.document_name = file.name;
+      Doc.document_id = props.oneDoc.document_id;
       Doc.operation = "delete";
       dialogEditVisible.value = false;
     })
