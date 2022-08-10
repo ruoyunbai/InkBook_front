@@ -133,7 +133,7 @@ const getProjs = () => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        console.log(data1);
+        
         return data1;
       },
     ],
@@ -196,7 +196,7 @@ const getPage = () => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        // console.log(data1);
+        // 
         return data1;
       },
     ],
@@ -249,7 +249,7 @@ const getPPages = (set:boolean=false) => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        // console.log(data1);
+        // 
         return data1;
       },
     ],

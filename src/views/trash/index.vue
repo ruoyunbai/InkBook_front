@@ -135,7 +135,7 @@ const getProject_in_bin = (clear: boolean = true) => {
     transformRequest: [
       function (data, headers) {
         let data1 = JSON.stringify(data);
-        console.log(data1);
+        
         return data1;
       },
     ],
@@ -162,7 +162,7 @@ const getProject_in_bin = (clear: boolean = true) => {
         transformRequest: [
           function (data, headers) {
             let data1 = JSON.stringify(data);
-            console.log(data1);
+            
             return data1;
           },
         ],

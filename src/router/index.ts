@@ -118,6 +118,25 @@ const routes: Array<RouteRecordRaw> = [
                     title: "首页",
                     transition: "animate__bounceIn"
                 },
+                children: [{
+                    name: 'docCContent',
+                    path: "",
+                    component: () => import('../views/docContent/index.vue'),
+                    meta: {
+                        title: "首页",
+                        transition: "animate__bounceIn"
+                    },
+                    
+                },{
+                    name: 'docCContent0',
+                    path: "content",
+                    component: () => import('../views/docContent/index0.vue'),
+                    meta: {
+                        title: "首页",
+                        transition: "animate__bounceIn"
+                    },
+                }
+                ]
             },
             {
                 name: 'projectDetail',
