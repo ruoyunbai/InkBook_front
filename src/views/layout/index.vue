@@ -419,6 +419,9 @@ onBeforeMount(() => {
         console.log(response.data);
 
         if (response.data?.success) {
+            if(response.data?.count==0){
+
+            }else{
             let d = response.data?.groups
             for (let i = 0; i < response.data?.count; i++) {
                 groupOptions.push({
@@ -442,6 +445,7 @@ onBeforeMount(() => {
             if (Group.id == -1 || Group.id == null) {
                 groupValue.value = d[0].group_name
                 Group.id = d[0].group_id
+            }
             }
         }
     })

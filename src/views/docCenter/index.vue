@@ -34,18 +34,44 @@
             <n-space vertical :size="12">
                 <div class="custom-tree-container">
              
-                    <el-tree draggable :data="dataSource" node-key="id" default-expand-all
+                    <el-tree 
+                    
+                    highlight-current="true"
+                    @node-click="enterDoc"
+                    draggable :data="dataSource" node-key="id" default-expand-all
                         :expand-on-click-node="false">
                         <template #default="{ node, data }">
                             <span class="custom-tree-node">
-                                <span>{{ node.label }}</span>
-                                <span>{{ node.id }}</span>
+                                <!-- <n-space> -->
+                                <n-image v-if="!data.isDir" preview-disabled
+                                src="svg\doc\documents.svg"
+                                style="padding:0;margin:0"
+                                ></n-image>
+                                <n-image v-if="data.isDir" preview-disabled
+                                src="svg\doc\doc.svg"
+                                style="padding:0;margin:0"
+                                ></n-image>
+                               <span
+                               style="padding:0;margin:0;position:relative;"> {{ node.label }}</span>
+                                <n-input  @blur="" v-if="data.inputingDir" size="small">12</n-input>
+                                
+                                <!-- <span>{{ node.id }}</span> -->
                                 <!-- <span>{{data}}</span> -->
-                                <span v-if="data.type1 == '10'">
-                                    <a @click="append(data)"> Append </a>
+                                <span v-if="data.label!='项目文档区'">
+                                    <a v-if="data.isDir&&!data.inputingDir"  @click="appendDir(data)"> 添加文件夹 </a>
+                                    <n-input  @blur="" v-if="data.inputingDir" size="small">12</n-input>
+                                    
+                                    <a v-if="data.isDir&&!data.inputingDoc" @click="appendDoc(data)"> 添加文档 </a>
+                                    <n-input  @blur="" v-if="data.inputingDoc" size="small">12</n-input>
+                                    
+                                    <a v-if="data.isDir&&!data.inputingDoc" @click="appendDoc(data)"> 改名 </a>
+                
                                     <a style="margin-left: 8px" @click="remove(node, data)"> Delete </a>
-                                </span>
-                            </span>
+                                   
+                </span>
+
+                                <!-- </n-space> -->
+                           </span>
                         </template>
                     </el-tree>
                 </div>
@@ -105,6 +131,10 @@ import type Node from 'element-plus/es/components/tree/src/model/node'
 import axios from 'axios'
 import {useUserStore} from  '../../store/User'
 import {useGroupStore} from '../../store/Group'
+import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
+const route=useRoute()
+const router=useRouter()
 
 const User=useUserStore()
 const Group=useGroupStore()
@@ -112,13 +142,37 @@ const showModal = ref(false)
 const createName = ref("")
 interface Tree {
     id: number
-    name: string
+    name?: string
     label: string
     type1?: string
     children?: Tree[]|null|undefined
+    isDir:boolean
+    inputingDir?:boolean
+    inputingDoc?:boolean
+    renaming?:boolean
 }
 let id = 1000
+const doc={
+    id:-1,
+    name:""
+}
+const enterDoc=(tar: { id: number; label: string },node: any,event: any)=>{
+    console.log(tar,node,event)
+    doc.id=tar.id
+    doc.name=tar.label
+    if (route.name === "docCContent") {
+        router.push({
+            name: "docCContent0",
+            params: doc
+        })
+    } else {
+        router.push({
+            name: "docCContent",
+            params: doc
+        })
+    }
 
+}
 onBeforeMount(() => {
     axios({
         url: axios.defaults.baseURL + "/doc/get_doc_files",
@@ -154,17 +208,21 @@ const createTree=(src:any)=>{
         id:-1,
         label:"",
         name:"tre",
-        children:null
+        children:null,
+        isDir:false
     }
     t.id=src.file_id
     t.label=src.file_name
-
+    t.isDir=src.is_dir==1?true:false
+    t.inputingDir=false
+    t.inputingDoc=false
+    t.renaming=false
     if(src!=null){
         t.children=[]
         if(src.contained_files!=null)
         for(let i=0;i<src.contained_files?.length;i++){
-            console.log("contained",src.contained_files[i])
-            console.log(createTree(src.contained_files[i]))
+            // console.log("contained",src.contained_files[i])
+            // console.log(createTree(src.contained_files[i]))
             t.children.push(createTree(src.contained_files[i]))
             // t.children.push(undefined)
         }
@@ -172,13 +230,23 @@ const createTree=(src:any)=>{
     return t
 }
 
-const append = (data: Tree) => {
+const appendDoc = (data: Tree) => {
 
-    const newChild = { id: id++, label: 'testtest', children: [] }
+    const newChild = { id: id++, label: 'new', children: [],isDir:false }
     if (!data.children) {
         data.children = []
     }
     data.children.push(newChild)
+   
+    dataSource.value = [...dataSource.value]
+}
+const appendDir = (data: Tree) => {
+    const newChild = { id: id++, label: 'new', children: [],isDir:true }
+    if (!data.children) {
+        data.children = []
+    }
+    data.children.push(newChild)
+     data.inputingDir=true
     dataSource.value = [...dataSource.value]
 }
 
@@ -201,7 +269,7 @@ const dataSource = ref<Tree[]>([])
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     font-size: 14px;
     padding-right: 8px;
 }

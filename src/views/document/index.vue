@@ -307,6 +307,7 @@ onMounted(() => {
 
 })
 onBeforeMount(() => {
+    // if(Group.id==-1)
     if(Project.proj_id==-1)
         getProjs(true)
     else{
